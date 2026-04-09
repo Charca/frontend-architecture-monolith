@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.js";
 
 @layer base {
   * {
@@ -18,8 +17,6 @@
   }
 }
 
-@layer utilities {
-  .table-cell-muted {
+@utility table-cell-muted {
     @apply text-sm text-muted-foreground;
-  }
 }
