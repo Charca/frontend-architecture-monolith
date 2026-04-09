@@ -1,0 +1,77 @@
+import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { fetchDiscounts } from "@/api/discounts";
+import { LoadingState } from "@/components/feedback/loading-state";
+import { PageHeader } from "@/components/shared/page-header";
+import { StatusBadge } from "@/components/shared/status-badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatDate } from "@/lib/utils";
+
+function formatDiscountValue(type: string, value: number) {
+  if (type === "percentage") return `${value}%`;
+  if (type === "fixed_amount") return `$${value}`;
+  return "Free shipping";
+}
+
+export default function DiscountsPage() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["discounts"],
+    queryFn: fetchDiscounts,
+  });
+
+  if (isLoading || !data) {
+    return <LoadingState label="Loading discounts..." />;
+  }
+
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Discounts"
+        description="Manage promotional codes and scheduled offers."
+        actions={
+          <Link to="/discounts/new">
+            <Button>Create discount</Button>
+          </Link>
+        }
+      />
+      <Card>
+        <CardContent className="pt-6">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Code</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Value</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Usage</TableHead>
+                <TableHead>Start</TableHead>
+                <TableHead>End</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.map((discount) => (
+                <TableRow key={discount.id}>
+                  <TableCell>
+                    <Link to="/discounts/$discountId" params={{ discountId: discount.id }} className="font-medium text-primary hover:underline">
+                      {discount.code}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{discount.type.replace("_", " ")}</TableCell>
+                  <TableCell>{formatDiscountValue(discount.type, discount.value)}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={discount.active ? "active" : "inactive"} />
+                  </TableCell>
+                  <TableCell>{discount.usageCount}</TableCell>
+                  <TableCell>{formatDate(discount.startDate)}</TableCell>
+                  <TableCell>{formatDate(discount.endDate)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

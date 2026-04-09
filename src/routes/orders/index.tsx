@@ -1,0 +1,81 @@
+import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { fetchOrders } from "@/api/orders";
+import { EmptyState } from "@/components/feedback/empty-state";
+import { LoadingState } from "@/components/feedback/loading-state";
+import { PageHeader } from "@/components/shared/page-header";
+import { StatusBadge } from "@/components/shared/status-badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Select } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatCurrency, formatDate } from "@/lib/utils";
+
+export default function OrdersPage() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["orders"],
+    queryFn: fetchOrders,
+  });
+  const [status, setStatus] = useState("all");
+
+  const filtered = useMemo(
+    () => (data ?? []).filter((order) => status === "all" || order.status === status),
+    [data, status],
+  );
+
+  if (isLoading) {
+    return <LoadingState label="Loading orders..." />;
+  }
+
+  return (
+    <div className="space-y-6">
+      <PageHeader title="Orders" description="Review order flow, fulfillment status, and customer purchases." />
+      <Card>
+        <CardContent className="space-y-4 pt-6">
+          <div className="max-w-xs">
+            <Select value={status} onChange={(event) => setStatus(event.target.value)}>
+              <option value="all">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="fulfilled">Fulfilled</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="refunded">Refunded</option>
+            </Select>
+          </div>
+          {filtered.length ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Order</TableHead>
+                  <TableHead>Customer</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Total</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell>
+                      <Link to="/orders/$orderId" params={{ orderId: order.id }} className="font-medium text-primary hover:underline">
+                        {order.orderNumber}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{order.customerName}</TableCell>
+                    <TableCell className="table-cell-muted">{formatDate(order.date)}</TableCell>
+                    <TableCell>
+                      <StatusBadge status={order.status} />
+                    </TableCell>
+                    <TableCell>{formatCurrency(order.total)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <EmptyState title="No orders in this status" description="Try a different status filter." />
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
