@@ -26,6 +26,7 @@ let products: Product[] = [
     sku: "TSH-001",
     category: "Apparel",
     description: "Soft cotton tee designed for daily wear.",
+    kind: "standard",
     price: 32,
     status: "active",
     inventory: 118,
@@ -42,6 +43,7 @@ let products: Product[] = [
     sku: "HDY-002",
     category: "Apparel",
     description: "Midweight fleece hoodie with brushed interior.",
+    kind: "standard",
     price: 68,
     status: "active",
     inventory: 42,
@@ -58,6 +60,7 @@ let products: Product[] = [
     sku: "BAG-003",
     category: "Accessories",
     description: "Structured tote with inside pocket and reinforced straps.",
+    kind: "standard",
     price: 28,
     status: "active",
     inventory: 81,
@@ -73,6 +76,7 @@ let products: Product[] = [
     sku: "HOM-004",
     category: "Home",
     description: "Hand-finished mug in a matte glaze.",
+    kind: "standard",
     price: 24,
     status: "active",
     inventory: 25,
@@ -88,6 +92,7 @@ let products: Product[] = [
     sku: "ACC-005",
     category: "Accessories",
     description: "Lightweight five-panel cap with adjustable closure.",
+    kind: "standard",
     price: 30,
     status: "active",
     inventory: 17,
@@ -103,6 +108,7 @@ let products: Product[] = [
     sku: "STN-006",
     category: "Stationery",
     description: "Lay-flat dotted notebook with recycled stock.",
+    kind: "standard",
     price: 18,
     status: "draft",
     inventory: 54,
@@ -118,6 +124,7 @@ let products: Product[] = [
     sku: "APP-007",
     category: "Apparel",
     description: "Cushioned ribbed socks sold as a two-pack.",
+    kind: "standard",
     price: 16,
     status: "active",
     inventory: 92,
@@ -134,6 +141,7 @@ let products: Product[] = [
     sku: "HOM-008",
     category: "Home",
     description: "Powder-coated desk lamp with warm light tone.",
+    kind: "standard",
     price: 84,
     status: "active",
     inventory: 12,
@@ -149,6 +157,7 @@ let products: Product[] = [
     sku: "OUT-009",
     category: "Outdoor",
     description: "Double-wall stainless bottle with leakproof lid.",
+    kind: "standard",
     price: 36,
     status: "active",
     inventory: 63,
@@ -164,6 +173,7 @@ let products: Product[] = [
     sku: "HOM-010",
     category: "Home",
     description: "Soft wool blend throw blanket in neutral tones.",
+    kind: "standard",
     price: 96,
     status: "archived",
     inventory: 8,
@@ -179,6 +189,7 @@ let products: Product[] = [
     sku: "ACC-011",
     category: "Accessories",
     description: "Slim vegetable-tanned card holder with four slots.",
+    kind: "standard",
     price: 48,
     status: "active",
     inventory: 37,
@@ -194,6 +205,7 @@ let products: Product[] = [
     sku: "HOM-012",
     category: "Home",
     description: "Medium ceramic planter with drainage tray.",
+    kind: "standard",
     price: 42,
     status: "active",
     inventory: 29,
@@ -201,6 +213,42 @@ let products: Product[] = [
     variants: [
       { id: "var_26", name: "Moss", sku: "HOM-012-MOS", price: 42, inventory: 14, status: "healthy" },
       { id: "var_27", name: "Sand", sku: "HOM-012-SND", price: 44, inventory: 15, status: "healthy" },
+    ],
+  },
+  {
+    id: "prod_13",
+    name: "Weekend Carry Kit",
+    sku: "KIT-013",
+    category: "Bundles",
+    description: "A merchandised bundle built from the tote, travel bottle, and trail cap.",
+    kind: "bundle",
+    price: 88,
+    status: "active",
+    inventory: 17,
+    collectionIds: ["col_3", "col_4"],
+    variants: [],
+    bundleComponents: [
+      { productId: "prod_3", productName: "Canvas Tote", quantity: 1 },
+      { productId: "prod_5", productName: "Trail Cap", quantity: 1 },
+      { productId: "prod_9", productName: "Travel Bottle", quantity: 1 },
+    ],
+  },
+  {
+    id: "prod_14",
+    name: "Desk Reset Bundle",
+    sku: "KIT-014",
+    category: "Bundles",
+    description: "A higher-AOV bundle pairing the lamp, notebook, and planter.",
+    kind: "bundle",
+    price: 132,
+    status: "active",
+    inventory: 12,
+    collectionIds: ["col_2"],
+    variants: [],
+    bundleComponents: [
+      { productId: "prod_8", productName: "Desk Lamp", quantity: 1 },
+      { productId: "prod_6", productName: "Minimal Notebook", quantity: 1 },
+      { productId: "prod_12", productName: "Ceramic Planter", quantity: 1 },
     ],
   },
 ];
@@ -290,13 +338,13 @@ let orders: Order[] = ([
   { id: "ord_10", orderNumber: "#1010", customerId: "cust_10", customerName: "Lucas King", date: "2026-04-03", status: "refunded", paymentStatus: "refunded", total: 36, notes: "Refunded due to damaged package.", shippingAddress: { name: "Lucas King", line1: "501 Maple Ave", city: "Atlanta", region: "GA", postalCode: "30303", country: "USA" }, lineItems: [{ id: "li_21", productId: "prod_9", productName: "Travel Bottle", quantity: 1, price: 36 }] },
   { id: "ord_11", orderNumber: "#1011", customerId: "cust_1", customerName: "Ava Johnson", date: "2026-04-02", status: "fulfilled", paymentStatus: "paid", total: 128, notes: "Restock request.", shippingAddress: { name: "Ava Johnson", line1: "44 Market Street", city: "San Francisco", region: "CA", postalCode: "94105", country: "USA" }, lineItems: [{ id: "li_22", productId: "prod_1", productName: "Everyday Tee", quantity: 4, price: 32 }] },
   { id: "ord_12", orderNumber: "#1012", customerId: "cust_2", customerName: "Liam Carter", date: "2026-04-02", status: "processing", paymentStatus: "paid", total: 84, notes: "Requested delayed shipping.", shippingAddress: { name: "Liam Carter", line1: "892 Cedar Ave", city: "Portland", region: "OR", postalCode: "97205", country: "USA" }, lineItems: [{ id: "li_23", productId: "prod_8", productName: "Desk Lamp", quantity: 1, price: 84 }] },
-  { id: "ord_13", orderNumber: "#1013", customerId: "cust_5", customerName: "Emma Davis", date: "2026-04-01", status: "fulfilled", paymentStatus: "paid", total: 64, notes: "Bundle order.", shippingAddress: { name: "Emma Davis", line1: "12 Orange Lane", city: "Austin", region: "TX", postalCode: "73301", country: "USA" }, lineItems: [{ id: "li_24", productId: "prod_1", productName: "Everyday Tee", quantity: 2, price: 32 }] },
+  { id: "ord_13", orderNumber: "#1013", customerId: "cust_5", customerName: "Emma Davis", date: "2026-04-01", status: "fulfilled", paymentStatus: "paid", total: 88, notes: "Bundle order.", shippingAddress: { name: "Emma Davis", line1: "12 Orange Lane", city: "Austin", region: "TX", postalCode: "73301", country: "USA" }, lineItems: [{ id: "li_24", productId: "prod_13", productName: "Weekend Carry Kit", quantity: 1, price: 88 }] },
   { id: "ord_14", orderNumber: "#1014", customerId: "cust_6", customerName: "James Wilson", date: "2026-04-01", status: "pending", paymentStatus: "pending", total: 58, notes: "Waiting on card retry.", shippingAddress: { name: "James Wilson", line1: "610 Harbor St", city: "Boston", region: "MA", postalCode: "02108", country: "USA" }, lineItems: [{ id: "li_25", productId: "prod_3", productName: "Canvas Tote", quantity: 1, price: 28 }, { id: "li_26", productId: "prod_6", productName: "Minimal Notebook", quantity: 1, price: 18 }, { id: "li_27", productId: "prod_7", productName: "Cloud Socks", quantity: 1, price: 16 }] },
   { id: "ord_15", orderNumber: "#1015", customerId: "cust_4", customerName: "Noah Martinez", date: "2026-03-31", status: "fulfilled", paymentStatus: "paid", total: 300, notes: "Retail floor replenishment.", shippingAddress: { name: "Noah Martinez", line1: "710 Commerce Blvd", city: "Denver", region: "CO", postalCode: "80202", country: "USA" }, lineItems: [{ id: "li_28", productId: "prod_5", productName: "Trail Cap", quantity: 10, price: 30 }] },
   { id: "ord_16", orderNumber: "#1016", customerId: "cust_8", customerName: "Benjamin Hall", date: "2026-03-30", status: "fulfilled", paymentStatus: "paid", total: 72, notes: "Discount code applied.", shippingAddress: { name: "Benjamin Hall", line1: "245 Birch Dr", city: "Phoenix", region: "AZ", postalCode: "85004", country: "USA" }, lineItems: [{ id: "li_29", productId: "prod_9", productName: "Travel Bottle", quantity: 2, price: 36 }] },
   { id: "ord_17", orderNumber: "#1017", customerId: "cust_9", customerName: "Olivia Young", date: "2026-03-29", status: "fulfilled", paymentStatus: "paid", total: 84, notes: "Gift purchase.", shippingAddress: { name: "Olivia Young", line1: "980 King Street", city: "Miami", region: "FL", postalCode: "33101", country: "USA" }, lineItems: [{ id: "li_30", productId: "prod_8", productName: "Desk Lamp", quantity: 1, price: 84 }] },
   { id: "ord_18", orderNumber: "#1018", customerId: "cust_10", customerName: "Lucas King", date: "2026-03-28", status: "fulfilled", paymentStatus: "paid", total: 48, notes: "Upsell from newsletter campaign.", shippingAddress: { name: "Lucas King", line1: "501 Maple Ave", city: "Atlanta", region: "GA", postalCode: "30303", country: "USA" }, lineItems: [{ id: "li_31", productId: "prod_11", productName: "Leather Card Holder", quantity: 1, price: 48 }] },
-  { id: "ord_19", orderNumber: "#1019", customerId: "cust_3", customerName: "Mia Thompson", date: "2026-03-28", status: "processing", paymentStatus: "paid", total: 120, notes: "Home refresh bundle.", shippingAddress: { name: "Mia Thompson", line1: "19 Pine Road", city: "Seattle", region: "WA", postalCode: "98101", country: "USA" }, lineItems: [{ id: "li_32", productId: "prod_4", productName: "Stoneware Mug", quantity: 2, price: 24 }, { id: "li_33", productId: "prod_12", productName: "Ceramic Planter", quantity: 1, price: 42 }, { id: "li_34", productId: "prod_6", productName: "Minimal Notebook", quantity: 1, price: 18 }] },
+  { id: "ord_19", orderNumber: "#1019", customerId: "cust_3", customerName: "Mia Thompson", date: "2026-03-28", status: "processing", paymentStatus: "paid", total: 132, notes: "Home refresh bundle.", shippingAddress: { name: "Mia Thompson", line1: "19 Pine Road", city: "Seattle", region: "WA", postalCode: "98101", country: "USA" }, lineItems: [{ id: "li_32", productId: "prod_14", productName: "Desk Reset Bundle", quantity: 1, price: 132 }] },
   { id: "ord_20", orderNumber: "#1020", customerId: "cust_7", customerName: "Sophia Lee", date: "2026-03-27", status: "fulfilled", paymentStatus: "paid", total: 96, notes: "Second order after first purchase.", shippingAddress: { name: "Sophia Lee", line1: "82 River St", city: "Chicago", region: "IL", postalCode: "60601", country: "USA" }, lineItems: [{ id: "li_35", productId: "prod_10", productName: "Wool Blanket", quantity: 1, price: 96 }] },
 ] as OrderSeed[]).map((order, index) => ({
   ...order,
@@ -354,7 +402,25 @@ function deriveInventoryStatus(stockQuantity: number, reorderThreshold: number) 
   return "healthy";
 }
 
+function getBundleInventory(product: Product) {
+  if (product.kind !== "bundle" || !product.bundleComponents?.length) return product.inventory;
+
+  return product.bundleComponents.reduce((lowest, component) => {
+    const sourceProduct = products.find((entry) => entry.id === component.productId);
+    if (!sourceProduct) return 0;
+    const availableBundles = Math.floor(sourceProduct.inventory / component.quantity);
+    return Math.min(lowest, availableBundles);
+  }, Number.POSITIVE_INFINITY);
+}
+
 function summarizeProduct(product: Product): Product {
+  if (product.kind === "bundle") {
+    return {
+      ...product,
+      inventory: Number.isFinite(getBundleInventory(product)) ? getBundleInventory(product) : 0,
+    };
+  }
+
   if (!product.variants.length) return product;
 
   return {
@@ -408,7 +474,7 @@ export function getDashboardSummary(): DashboardSummary {
 
 export function listProducts() {
   return clone(products.map((product) => ({
-    ...product,
+    ...summarizeProduct(product),
     collections: product.collectionIds.flatMap((collectionId) => {
       const collection = collections.find((entry) => entry.id === collectionId);
       return collection ? [collection] : [];
@@ -420,7 +486,7 @@ export function getProduct(id: string) {
   const product = products.find((entry) => entry.id === id);
   if (!product) return null;
   return clone({
-    ...product,
+    ...summarizeProduct(product),
     collections: product.collectionIds.flatMap((collectionId) => {
       const collection = collections.find((entry) => entry.id === collectionId);
       return collection ? [collection] : [];

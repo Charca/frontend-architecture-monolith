@@ -5,6 +5,7 @@ export type PaymentStatus = "paid" | "pending" | "refunded";
 export type DiscountType = "percentage" | "fixed_amount" | "free_shipping";
 export type CustomerSegment = "VIP" | "Wholesale" | "At Risk" | "New" | "Repeat";
 export type ShipmentStatus = "label_created" | "in_transit" | "delivered" | "delayed";
+export type ProductKind = "standard" | "bundle";
 
 export interface ProductVariant {
   id: string;
@@ -21,18 +22,26 @@ export interface Collection {
   description: string;
 }
 
+export interface BundleComponent {
+  productId: string;
+  productName: string;
+  quantity: number;
+}
+
 export interface Product {
   id: string;
   name: string;
   sku: string;
   category: string;
   description: string;
+  kind: ProductKind;
   price: number;
   status: ProductStatus;
   inventory: number;
   collectionIds: string[];
   collections?: Collection[];
   variants: ProductVariant[];
+  bundleComponents?: BundleComponent[];
 }
 
 export interface InventoryItem {

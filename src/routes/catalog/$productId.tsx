@@ -27,6 +27,15 @@ function updateVariantField(
   };
 }
 
+function updateBundleComponentQuantity(product: Product, productId: string, quantity: number) {
+  return {
+    ...product,
+    bundleComponents: (product.bundleComponents ?? []).map((component) =>
+      component.productId === productId ? { ...component, quantity } : component,
+    ),
+  };
+}
+
 export default function ProductDetailPage() {
   const { productId } = useParams({ from: "/catalog/$productId" });
   const queryClient = useQueryClient();
@@ -89,6 +98,17 @@ export default function ProductDetailPage() {
                 <Input id="category" value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="kind">Kind</Label>
+                <Select
+                  id="kind"
+                  value={form.kind}
+                  onChange={(event) => setForm({ ...form, kind: event.target.value as Product["kind"] })}
+                >
+                  <option value="standard">Standard</option>
+                  <option value="bundle">Bundle</option>
+                </Select>
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="price">Price</Label>
                 <Input
                   id="price"
@@ -129,64 +149,101 @@ export default function ProductDetailPage() {
                 {(form.collections ?? []).map((collection) => collection.name).join(", ") || "No collections assigned"}
               </div>
             </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
+            {form.kind === "bundle" ? (
+              <div className="space-y-3">
                 <div>
-                  <Label>Variants</Label>
+                  <Label>Bundle Components</Label>
                   <p className="text-sm text-muted-foreground">
-                    Variant price and inventory now live alongside parent summary fields.
+                    Bundle inventory is derived from component stock, not from a dedicated bundle location.
                   </p>
                 </div>
-              </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Variant</TableHead>
-                    <TableHead>SKU</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Inventory</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {form.variants.map((variant) => (
-                    <TableRow key={variant.id}>
-                      <TableCell>
-                        <Input
-                          value={variant.name}
-                          onChange={(event) => setForm(updateVariantField(form, variant.id, "name", event.target.value))}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Input
-                          value={variant.sku}
-                          onChange={(event) => setForm(updateVariantField(form, variant.id, "sku", event.target.value))}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={variant.price}
-                          onChange={(event) =>
-                            setForm(updateVariantField(form, variant.id, "price", Number(event.target.value)))
-                          }
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={variant.inventory}
-                          onChange={(event) =>
-                            setForm(updateVariantField(form, variant.id, "inventory", Number(event.target.value)))
-                          }
-                        />
-                      </TableCell>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Component</TableHead>
+                      <TableHead>Quantity</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {(form.bundleComponents ?? []).map((component) => (
+                      <TableRow key={component.productId}>
+                        <TableCell>{component.productName}</TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            min="1"
+                            value={component.quantity}
+                            onChange={(event) =>
+                              setForm(updateBundleComponentQuantity(form, component.productId, Number(event.target.value)))
+                            }
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : null}
+            {form.kind === "standard" ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Variants</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Variant price and inventory now live alongside parent summary fields.
+                    </p>
+                  </div>
+                </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Variant</TableHead>
+                      <TableHead>SKU</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Inventory</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {form.variants.map((variant) => (
+                      <TableRow key={variant.id}>
+                        <TableCell>
+                          <Input
+                            value={variant.name}
+                            onChange={(event) => setForm(updateVariantField(form, variant.id, "name", event.target.value))}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            value={variant.sku}
+                            onChange={(event) => setForm(updateVariantField(form, variant.id, "sku", event.target.value))}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            min="0"
+                            value={variant.price}
+                            onChange={(event) =>
+                              setForm(updateVariantField(form, variant.id, "price", Number(event.target.value)))
+                            }
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            min="0"
+                            value={variant.inventory}
+                            onChange={(event) =>
+                              setForm(updateVariantField(form, variant.id, "inventory", Number(event.target.value)))
+                            }
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : null}
             <div className="flex justify-end">
               <Button type="submit" disabled={mutation.isPending}>
                 {mutation.isPending ? "Saving..." : "Save product"}

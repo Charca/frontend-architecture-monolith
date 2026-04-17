@@ -70,6 +70,7 @@ export default function CatalogPage() {
                   <TableHead>Product</TableHead>
                   <TableHead>SKU</TableHead>
                   <TableHead>Category</TableHead>
+                  <TableHead>Kind</TableHead>
                   <TableHead>Variants</TableHead>
                   <TableHead>Price</TableHead>
                   <TableHead>Status</TableHead>
@@ -91,6 +92,7 @@ export default function CatalogPage() {
                     </TableCell>
                     <TableCell className="table-cell-muted">{product.sku}</TableCell>
                     <TableCell>{product.category}</TableCell>
+                    <TableCell className="capitalize">{product.kind}</TableCell>
                     <TableCell>{product.variants.length}</TableCell>
                     <TableCell>{formatCurrency(product.price)}</TableCell>
                     <TableCell>
