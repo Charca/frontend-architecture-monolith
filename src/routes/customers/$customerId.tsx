@@ -72,6 +72,10 @@ export default function CustomerDetailPage() {
                 <span>{data.email}</span>
               </div>
               <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Segment</span>
+                <StatusBadge status={data.segment} />
+              </div>
+              <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Tags</span>
                 <span>{data.tags.join(", ")}</span>
               </div>

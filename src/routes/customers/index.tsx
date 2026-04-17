@@ -5,8 +5,10 @@ import { fetchCustomers } from "@/api/customers";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { StatusBadge } from "@/components/shared/status-badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -16,13 +18,16 @@ export default function CustomersPage() {
     queryFn: fetchCustomers,
   });
   const [search, setSearch] = useState("");
+  const [segment, setSegment] = useState("all");
 
   const filtered = useMemo(
     () =>
-      (data ?? []).filter((customer) =>
-        `${customer.name} ${customer.email}`.toLowerCase().includes(search.toLowerCase()),
-      ),
-    [data, search],
+      (data ?? []).filter((customer) => {
+        const matchesSearch = `${customer.name} ${customer.email}`.toLowerCase().includes(search.toLowerCase());
+        const matchesSegment = segment === "all" || customer.segment === segment;
+        return matchesSearch && matchesSegment;
+      }),
+    [data, search, segment],
   );
 
   if (isLoading) {
@@ -34,8 +39,16 @@ export default function CustomersPage() {
       <PageHeader title="Customers" description="Browse customer records, spend, and order activity." />
       <Card>
         <CardContent className="space-y-4 pt-6">
-          <div className="max-w-sm">
+          <div className="grid gap-4 md:grid-cols-[minmax(0,1fr),220px]">
             <Input placeholder="Search by customer name or email" value={search} onChange={(event) => setSearch(event.target.value)} />
+            <Select value={segment} onChange={(event) => setSegment(event.target.value)}>
+              <option value="all">All segments</option>
+              <option value="VIP">VIP</option>
+              <option value="Wholesale">Wholesale</option>
+              <option value="At Risk">At Risk</option>
+              <option value="New">New</option>
+              <option value="Repeat">Repeat</option>
+            </Select>
           </div>
           {filtered.length ? (
             <Table>
@@ -43,6 +56,7 @@ export default function CustomersPage() {
                 <TableRow>
                   <TableHead>Customer</TableHead>
                   <TableHead>Email</TableHead>
+                  <TableHead>Segment</TableHead>
                   <TableHead>Tags</TableHead>
                   <TableHead>Lifetime Spend</TableHead>
                   <TableHead>Joined</TableHead>
@@ -57,6 +71,9 @@ export default function CustomersPage() {
                       </Link>
                     </TableCell>
                     <TableCell className="table-cell-muted">{customer.email}</TableCell>
+                    <TableCell>
+                      <StatusBadge status={customer.segment} />
+                    </TableCell>
                     <TableCell>{customer.tags.join(", ")}</TableCell>
                     <TableCell>{formatCurrency(customer.lifetimeSpend)}</TableCell>
                     <TableCell>{formatDate(customer.joinedAt)}</TableCell>
