@@ -1,5 +1,6 @@
 import type {
   AnalyticsOverview,
+  Collection,
   Customer,
   DashboardSummary,
   Discount,
@@ -11,6 +12,13 @@ import type {
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
+const collections: Collection[] = [
+  { id: "col_1", name: "Spring Layers", description: "Lightweight apparel and accessories for shoulder season drops." },
+  { id: "col_2", name: "Desk Refresh", description: "Home office items with higher AOV and gifting appeal." },
+  { id: "col_3", name: "Weekend Carry", description: "Everyday bags, bottles, and mobile essentials." },
+  { id: "col_4", name: "Wholesale Favorites", description: "Consistent performers often reordered by wholesale buyers." },
+];
+
 let products: Product[] = [
   {
     id: "prod_1",
@@ -21,6 +29,12 @@ let products: Product[] = [
     price: 32,
     status: "active",
     inventory: 118,
+    collectionIds: ["col_1", "col_4"],
+    variants: [
+      { id: "var_1", name: "Heather Gray / S", sku: "TSH-001-GRY-S", price: 32, inventory: 34, status: "healthy" },
+      { id: "var_2", name: "Heather Gray / M", sku: "TSH-001-GRY-M", price: 32, inventory: 46, status: "healthy" },
+      { id: "var_3", name: "Heather Gray / L", sku: "TSH-001-GRY-L", price: 34, inventory: 38, status: "healthy" },
+    ],
   },
   {
     id: "prod_2",
@@ -31,6 +45,12 @@ let products: Product[] = [
     price: 68,
     status: "active",
     inventory: 42,
+    collectionIds: ["col_1"],
+    variants: [
+      { id: "var_4", name: "Bone / M", sku: "HDY-002-BNE-M", price: 68, inventory: 16, status: "healthy" },
+      { id: "var_5", name: "Bone / L", sku: "HDY-002-BNE-L", price: 68, inventory: 14, status: "low" },
+      { id: "var_6", name: "Graphite / XL", sku: "HDY-002-GPH-XL", price: 72, inventory: 12, status: "low" },
+    ],
   },
   {
     id: "prod_3",
@@ -41,6 +61,11 @@ let products: Product[] = [
     price: 28,
     status: "active",
     inventory: 81,
+    collectionIds: ["col_3", "col_4"],
+    variants: [
+      { id: "var_7", name: "Natural", sku: "BAG-003-NAT", price: 28, inventory: 51, status: "healthy" },
+      { id: "var_8", name: "Olive", sku: "BAG-003-OLV", price: 30, inventory: 30, status: "healthy" },
+    ],
   },
   {
     id: "prod_4",
@@ -51,6 +76,11 @@ let products: Product[] = [
     price: 24,
     status: "active",
     inventory: 25,
+    collectionIds: ["col_2"],
+    variants: [
+      { id: "var_9", name: "Sand", sku: "HOM-004-SND", price: 24, inventory: 13, status: "healthy" },
+      { id: "var_10", name: "Charcoal", sku: "HOM-004-CHR", price: 24, inventory: 12, status: "healthy" },
+    ],
   },
   {
     id: "prod_5",
@@ -61,6 +91,11 @@ let products: Product[] = [
     price: 30,
     status: "active",
     inventory: 17,
+    collectionIds: ["col_1", "col_3"],
+    variants: [
+      { id: "var_11", name: "Forest", sku: "ACC-005-FRS", price: 30, inventory: 9, status: "low" },
+      { id: "var_12", name: "Stone", sku: "ACC-005-STN", price: 30, inventory: 8, status: "low" },
+    ],
   },
   {
     id: "prod_6",
@@ -71,6 +106,11 @@ let products: Product[] = [
     price: 18,
     status: "draft",
     inventory: 54,
+    collectionIds: ["col_2"],
+    variants: [
+      { id: "var_13", name: "Clay Cover", sku: "STN-006-CLY", price: 18, inventory: 24, status: "healthy" },
+      { id: "var_14", name: "Slate Cover", sku: "STN-006-SLT", price: 18, inventory: 30, status: "healthy" },
+    ],
   },
   {
     id: "prod_7",
@@ -81,6 +121,12 @@ let products: Product[] = [
     price: 16,
     status: "active",
     inventory: 92,
+    collectionIds: ["col_1", "col_4"],
+    variants: [
+      { id: "var_15", name: "Oat / S-M", sku: "APP-007-OAT-SM", price: 16, inventory: 40, status: "healthy" },
+      { id: "var_16", name: "Oat / L-XL", sku: "APP-007-OAT-LX", price: 16, inventory: 28, status: "healthy" },
+      { id: "var_17", name: "Coal / L-XL", sku: "APP-007-COL-LX", price: 18, inventory: 24, status: "healthy" },
+    ],
   },
   {
     id: "prod_8",
@@ -91,6 +137,11 @@ let products: Product[] = [
     price: 84,
     status: "active",
     inventory: 12,
+    collectionIds: ["col_2"],
+    variants: [
+      { id: "var_18", name: "Cream", sku: "HOM-008-CRM", price: 84, inventory: 5, status: "low" },
+      { id: "var_19", name: "Black", sku: "HOM-008-BLK", price: 84, inventory: 7, status: "low" },
+    ],
   },
   {
     id: "prod_9",
@@ -101,6 +152,11 @@ let products: Product[] = [
     price: 36,
     status: "active",
     inventory: 63,
+    collectionIds: ["col_3"],
+    variants: [
+      { id: "var_20", name: "24 oz / Sage", sku: "OUT-009-SAG", price: 36, inventory: 31, status: "healthy" },
+      { id: "var_21", name: "24 oz / Slate", sku: "OUT-009-SLT", price: 38, inventory: 32, status: "healthy" },
+    ],
   },
   {
     id: "prod_10",
@@ -111,6 +167,11 @@ let products: Product[] = [
     price: 96,
     status: "archived",
     inventory: 8,
+    collectionIds: ["col_2"],
+    variants: [
+      { id: "var_22", name: "Oatmeal", sku: "HOM-010-OAT", price: 96, inventory: 3, status: "low" },
+      { id: "var_23", name: "Charcoal", sku: "HOM-010-CHR", price: 96, inventory: 5, status: "healthy" },
+    ],
   },
   {
     id: "prod_11",
@@ -121,6 +182,11 @@ let products: Product[] = [
     price: 48,
     status: "active",
     inventory: 37,
+    collectionIds: ["col_3"],
+    variants: [
+      { id: "var_24", name: "Chestnut", sku: "ACC-011-CHS", price: 48, inventory: 19, status: "healthy" },
+      { id: "var_25", name: "Black", sku: "ACC-011-BLK", price: 48, inventory: 18, status: "healthy" },
+    ],
   },
   {
     id: "prod_12",
@@ -131,6 +197,11 @@ let products: Product[] = [
     price: 42,
     status: "active",
     inventory: 29,
+    collectionIds: ["col_2"],
+    variants: [
+      { id: "var_26", name: "Moss", sku: "HOM-012-MOS", price: 42, inventory: 14, status: "healthy" },
+      { id: "var_27", name: "Sand", sku: "HOM-012-SND", price: 44, inventory: 15, status: "healthy" },
+    ],
   },
 ];
 
@@ -152,19 +223,61 @@ let inventory: InventoryItem[] = [
 ];
 
 const customers: Customer[] = [
-  { id: "cust_1", name: "Ava Johnson", email: "ava@example.com", tags: ["VIP", "Wholesale"], lifetimeSpend: 5820, notes: "Frequently requests early access to launches.", joinedAt: "2026-01-04" },
-  { id: "cust_2", name: "Liam Carter", email: "liam@example.com", tags: ["Repeat"], lifetimeSpend: 1640, notes: "Prefers express shipping.", joinedAt: "2025-11-18" },
-  { id: "cust_3", name: "Mia Thompson", email: "mia@example.com", tags: ["Newsletter"], lifetimeSpend: 920, notes: "Interested in home category drops.", joinedAt: "2025-12-03" },
-  { id: "cust_4", name: "Noah Martinez", email: "noah@example.com", tags: ["Wholesale"], lifetimeSpend: 3020, notes: "Bulk orders every quarter.", joinedAt: "2025-08-14" },
-  { id: "cust_5", name: "Emma Davis", email: "emma@example.com", tags: ["VIP"], lifetimeSpend: 4410, notes: "High lifetime spend across apparel.", joinedAt: "2025-05-29" },
-  { id: "cust_6", name: "James Wilson", email: "james@example.com", tags: ["Repeat"], lifetimeSpend: 1210, notes: "Usually responds quickly to support.", joinedAt: "2025-10-09" },
-  { id: "cust_7", name: "Sophia Lee", email: "sophia@example.com", tags: ["New"], lifetimeSpend: 280, notes: "Recent first-time buyer.", joinedAt: "2026-03-11" },
-  { id: "cust_8", name: "Benjamin Hall", email: "benjamin@example.com", tags: ["Newsletter"], lifetimeSpend: 760, notes: "Strong engagement with discount campaigns.", joinedAt: "2025-09-20" },
-  { id: "cust_9", name: "Olivia Young", email: "olivia@example.com", tags: ["VIP"], lifetimeSpend: 3890, notes: "Often buys giftable products.", joinedAt: "2025-06-30" },
-  { id: "cust_10", name: "Lucas King", email: "lucas@example.com", tags: ["Repeat"], lifetimeSpend: 1435, notes: "Mostly purchases accessories.", joinedAt: "2025-12-22" },
+  { id: "cust_1", name: "Ava Johnson", email: "ava@example.com", segment: "VIP", tags: ["VIP", "Wholesale"], lifetimeSpend: 5820, notes: "Frequently requests early access to launches.", joinedAt: "2026-01-04" },
+  { id: "cust_2", name: "Liam Carter", email: "liam@example.com", segment: "Repeat", tags: ["Repeat"], lifetimeSpend: 1640, notes: "Prefers express shipping.", joinedAt: "2025-11-18" },
+  { id: "cust_3", name: "Mia Thompson", email: "mia@example.com", segment: "At Risk", tags: ["Newsletter"], lifetimeSpend: 920, notes: "Interested in home category drops.", joinedAt: "2025-12-03" },
+  { id: "cust_4", name: "Noah Martinez", email: "noah@example.com", segment: "Wholesale", tags: ["Wholesale"], lifetimeSpend: 3020, notes: "Bulk orders every quarter.", joinedAt: "2025-08-14" },
+  { id: "cust_5", name: "Emma Davis", email: "emma@example.com", segment: "VIP", tags: ["VIP"], lifetimeSpend: 4410, notes: "High lifetime spend across apparel.", joinedAt: "2025-05-29" },
+  { id: "cust_6", name: "James Wilson", email: "james@example.com", segment: "Repeat", tags: ["Repeat"], lifetimeSpend: 1210, notes: "Usually responds quickly to support.", joinedAt: "2025-10-09" },
+  { id: "cust_7", name: "Sophia Lee", email: "sophia@example.com", segment: "New", tags: ["New"], lifetimeSpend: 280, notes: "Recent first-time buyer.", joinedAt: "2026-03-11" },
+  { id: "cust_8", name: "Benjamin Hall", email: "benjamin@example.com", segment: "At Risk", tags: ["Newsletter"], lifetimeSpend: 760, notes: "Strong engagement with discount campaigns.", joinedAt: "2025-09-20" },
+  { id: "cust_9", name: "Olivia Young", email: "olivia@example.com", segment: "VIP", tags: ["VIP"], lifetimeSpend: 3890, notes: "Often buys giftable products.", joinedAt: "2025-06-30" },
+  { id: "cust_10", name: "Lucas King", email: "lucas@example.com", segment: "Repeat", tags: ["Repeat"], lifetimeSpend: 1435, notes: "Mostly purchases accessories.", joinedAt: "2025-12-22" },
 ];
 
-let orders: Order[] = [
+type OrderSeed = Omit<Order, "shipment"> & { shipment?: Order["shipment"] };
+
+function buildShipment(status: Order["status"], index: number): Order["shipment"] {
+  if (status === "fulfilled") {
+    return {
+      carrier: index % 2 === 0 ? "UPS" : "FedEx",
+      trackingNumber: `1Z-DEM-${1000 + index}`,
+      status: "delivered",
+      shippedAt: `2026-04-${String(Math.max(1, 8 - index)).padStart(2, "0")}`,
+      estimatedDelivery: `2026-04-${String(Math.max(2, 10 - index)).padStart(2, "0")}`,
+    };
+  }
+
+  if (status === "processing") {
+    return {
+      carrier: index % 2 === 0 ? "UPS" : "USPS",
+      trackingNumber: `TRK-${1000 + index}`,
+      status: index % 3 === 0 ? "label_created" : "in_transit",
+      shippedAt: index % 3 === 0 ? null : `2026-04-${String(Math.max(1, 7 - index)).padStart(2, "0")}`,
+      estimatedDelivery: `2026-04-${String(Math.max(3, 12 - index)).padStart(2, "0")}`,
+    };
+  }
+
+  if (status === "cancelled" || status === "refunded") {
+    return {
+      carrier: "UPS",
+      trackingNumber: `VOID-${1000 + index}`,
+      status: "delayed",
+      shippedAt: null,
+      estimatedDelivery: null,
+    };
+  }
+
+  return {
+    carrier: "UPS",
+    trackingNumber: `PEND-${1000 + index}`,
+    status: "label_created",
+    shippedAt: null,
+    estimatedDelivery: null,
+  };
+}
+
+let orders: Order[] = ([
   { id: "ord_1", orderNumber: "#1001", customerId: "cust_1", customerName: "Ava Johnson", date: "2026-04-07", status: "processing", paymentStatus: "paid", total: 244, notes: "Gift wrap requested.", shippingAddress: { name: "Ava Johnson", line1: "44 Market Street", city: "San Francisco", region: "CA", postalCode: "94105", country: "USA" }, lineItems: [{ id: "li_1", productId: "prod_1", productName: "Everyday Tee", quantity: 4, price: 32 }, { id: "li_2", productId: "prod_3", productName: "Canvas Tote", quantity: 2, price: 28 }, { id: "li_3", productId: "prod_11", productName: "Leather Card Holder", quantity: 1, price: 48 }] },
   { id: "ord_2", orderNumber: "#1002", customerId: "cust_2", customerName: "Liam Carter", date: "2026-04-07", status: "fulfilled", paymentStatus: "paid", total: 104, notes: "Leave at side entrance.", shippingAddress: { name: "Liam Carter", line1: "892 Cedar Ave", city: "Portland", region: "OR", postalCode: "97205", country: "USA" }, lineItems: [{ id: "li_4", productId: "prod_4", productName: "Stoneware Mug", quantity: 2, price: 24 }, { id: "li_5", productId: "prod_5", productName: "Trail Cap", quantity: 1, price: 30 }, { id: "li_6", productId: "prod_7", productName: "Cloud Socks", quantity: 1, price: 16 }] },
   { id: "ord_3", orderNumber: "#1003", customerId: "cust_5", customerName: "Emma Davis", date: "2026-04-06", status: "pending", paymentStatus: "pending", total: 136, notes: "Awaiting payment confirmation.", shippingAddress: { name: "Emma Davis", line1: "12 Orange Lane", city: "Austin", region: "TX", postalCode: "73301", country: "USA" }, lineItems: [{ id: "li_7", productId: "prod_2", productName: "Relaxed Hoodie", quantity: 2, price: 68 }] },
@@ -185,7 +298,10 @@ let orders: Order[] = [
   { id: "ord_18", orderNumber: "#1018", customerId: "cust_10", customerName: "Lucas King", date: "2026-03-28", status: "fulfilled", paymentStatus: "paid", total: 48, notes: "Upsell from newsletter campaign.", shippingAddress: { name: "Lucas King", line1: "501 Maple Ave", city: "Atlanta", region: "GA", postalCode: "30303", country: "USA" }, lineItems: [{ id: "li_31", productId: "prod_11", productName: "Leather Card Holder", quantity: 1, price: 48 }] },
   { id: "ord_19", orderNumber: "#1019", customerId: "cust_3", customerName: "Mia Thompson", date: "2026-03-28", status: "processing", paymentStatus: "paid", total: 120, notes: "Home refresh bundle.", shippingAddress: { name: "Mia Thompson", line1: "19 Pine Road", city: "Seattle", region: "WA", postalCode: "98101", country: "USA" }, lineItems: [{ id: "li_32", productId: "prod_4", productName: "Stoneware Mug", quantity: 2, price: 24 }, { id: "li_33", productId: "prod_12", productName: "Ceramic Planter", quantity: 1, price: 42 }, { id: "li_34", productId: "prod_6", productName: "Minimal Notebook", quantity: 1, price: 18 }] },
   { id: "ord_20", orderNumber: "#1020", customerId: "cust_7", customerName: "Sophia Lee", date: "2026-03-27", status: "fulfilled", paymentStatus: "paid", total: 96, notes: "Second order after first purchase.", shippingAddress: { name: "Sophia Lee", line1: "82 River St", city: "Chicago", region: "IL", postalCode: "60601", country: "USA" }, lineItems: [{ id: "li_35", productId: "prod_10", productName: "Wool Blanket", quantity: 1, price: 96 }] },
-];
+] as OrderSeed[]).map((order, index) => ({
+  ...order,
+  shipment: order.shipment ?? buildShipment(order.status, index),
+}));
 
 let discounts: Discount[] = [
   { id: "disc_1", code: "WELCOME10", type: "percentage", value: 10, active: true, usageCount: 112, startDate: "2026-01-01", endDate: "2026-12-31" },
@@ -238,11 +354,25 @@ function deriveInventoryStatus(stockQuantity: number, reorderThreshold: number) 
   return "healthy";
 }
 
+function summarizeProduct(product: Product): Product {
+  if (!product.variants.length) return product;
+
+  return {
+    ...product,
+    price: Math.min(...product.variants.map((variant) => variant.price)),
+    inventory: product.variants.reduce((sum, variant) => sum + variant.inventory, 0),
+  };
+}
+
 export function getDashboardSummary(): DashboardSummary {
   const revenue = orders
     .filter((order) => order.paymentStatus === "paid")
     .reduce((sum, order) => sum + order.total, 0);
   const lowStockItems = inventory.filter((item) => item.status !== "healthy").length;
+  const expiringDiscounts = discounts
+    .filter((discount) => discount.active && discount.endDate <= "2026-06-30")
+    .sort((a, b) => a.endDate.localeCompare(b.endDate))
+    .slice(0, 4);
   const topProductsMap = new Map<string, { productId: string; name: string; unitsSold: number; revenue: number }>();
 
   for (const order of orders) {
@@ -267,21 +397,47 @@ export function getDashboardSummary(): DashboardSummary {
     orders: orders.length,
     customers: customers.length,
     lowStockItems,
+    notifications: {
+      lowStock: inventory.filter((item) => item.status !== "healthy").slice(0, 4),
+      expiringDiscounts,
+    },
     recentOrders: [...orders].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6),
     topProducts: [...topProductsMap.values()].sort((a, b) => b.unitsSold - a.unitsSold).slice(0, 5),
   });
 }
 
 export function listProducts() {
-  return clone(products);
+  return clone(products.map((product) => ({
+    ...product,
+    collections: product.collectionIds.flatMap((collectionId) => {
+      const collection = collections.find((entry) => entry.id === collectionId);
+      return collection ? [collection] : [];
+    }),
+  })));
 }
 
 export function getProduct(id: string) {
-  return clone(products.find((product) => product.id === id) ?? null);
+  const product = products.find((entry) => entry.id === id);
+  if (!product) return null;
+  return clone({
+    ...product,
+    collections: product.collectionIds.flatMap((collectionId) => {
+      const collection = collections.find((entry) => entry.id === collectionId);
+      return collection ? [collection] : [];
+    }),
+  });
 }
 
 export function updateProduct(id: string, payload: Partial<Product>) {
-  products = products.map((product) => (product.id === id ? { ...product, ...payload } : product));
+  products = products.map((product) => {
+    if (product.id !== id) return product;
+    return summarizeProduct({
+      ...product,
+      ...payload,
+      variants: payload.variants ?? product.variants,
+      collectionIds: payload.collectionIds ?? product.collectionIds,
+    });
+  });
   return getProduct(id);
 }
 

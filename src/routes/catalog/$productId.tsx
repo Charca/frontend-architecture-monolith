@@ -10,7 +10,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+
+function updateVariantField(
+  product: Product,
+  variantId: string,
+  field: "name" | "sku" | "price" | "inventory",
+  value: string | number,
+) {
+  return {
+    ...product,
+    variants: product.variants.map((variant) =>
+      variant.id === variantId ? { ...variant, [field]: value } : variant,
+    ),
+  };
+}
 
 export default function ProductDetailPage() {
   const { productId } = useParams({ from: "/catalog/$productId" });
@@ -107,6 +122,70 @@ export default function ProductDetailPage() {
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
               />
+            </div>
+            <div className="space-y-2">
+              <Label>Collections</Label>
+              <div className="rounded-md border px-3 py-2 text-sm text-muted-foreground">
+                {(form.collections ?? []).map((collection) => collection.name).join(", ") || "No collections assigned"}
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label>Variants</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Variant price and inventory now live alongside parent summary fields.
+                  </p>
+                </div>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Variant</TableHead>
+                    <TableHead>SKU</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Inventory</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {form.variants.map((variant) => (
+                    <TableRow key={variant.id}>
+                      <TableCell>
+                        <Input
+                          value={variant.name}
+                          onChange={(event) => setForm(updateVariantField(form, variant.id, "name", event.target.value))}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={variant.sku}
+                          onChange={(event) => setForm(updateVariantField(form, variant.id, "sku", event.target.value))}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          type="number"
+                          min="0"
+                          value={variant.price}
+                          onChange={(event) =>
+                            setForm(updateVariantField(form, variant.id, "price", Number(event.target.value)))
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          type="number"
+                          min="0"
+                          value={variant.inventory}
+                          onChange={(event) =>
+                            setForm(updateVariantField(form, variant.id, "inventory", Number(event.target.value)))
+                          }
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
             <div className="flex justify-end">
               <Button type="submit" disabled={mutation.isPending}>

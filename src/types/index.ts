@@ -3,6 +3,23 @@ export type InventoryStatus = "healthy" | "low" | "out_of_stock";
 export type OrderStatus = "pending" | "processing" | "fulfilled" | "cancelled" | "refunded";
 export type PaymentStatus = "paid" | "pending" | "refunded";
 export type DiscountType = "percentage" | "fixed_amount" | "free_shipping";
+export type CustomerSegment = "VIP" | "Wholesale" | "At Risk" | "New" | "Repeat";
+export type ShipmentStatus = "label_created" | "in_transit" | "delivered" | "delayed";
+
+export interface ProductVariant {
+  id: string;
+  name: string;
+  sku: string;
+  price: number;
+  inventory: number;
+  status: InventoryStatus;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  description: string;
+}
 
 export interface Product {
   id: string;
@@ -13,6 +30,9 @@ export interface Product {
   price: number;
   status: ProductStatus;
   inventory: number;
+  collectionIds: string[];
+  collections?: Collection[];
+  variants: ProductVariant[];
 }
 
 export interface InventoryItem {
@@ -52,6 +72,13 @@ export interface Order {
     postalCode: string;
     country: string;
   };
+  shipment: {
+    carrier: string;
+    trackingNumber: string;
+    status: ShipmentStatus;
+    shippedAt: string | null;
+    estimatedDelivery: string | null;
+  };
   lineItems: OrderLineItem[];
 }
 
@@ -59,6 +86,7 @@ export interface Customer {
   id: string;
   name: string;
   email: string;
+  segment: CustomerSegment;
   tags: string[];
   lifetimeSpend: number;
   notes: string;
@@ -82,6 +110,10 @@ export interface DashboardSummary {
   customers: number;
   lowStockItems: number;
   recentOrders: Order[];
+  notifications: {
+    lowStock: InventoryItem[];
+    expiringDiscounts: Discount[];
+  };
   topProducts: Array<{
     productId: string;
     name: string;
