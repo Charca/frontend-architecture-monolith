@@ -27,6 +27,7 @@ export default function DiscountDetailPage() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["discounts"] });
       await queryClient.invalidateQueries({ queryKey: ["discounts", discountId] });
+      await queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
     },
   });
 

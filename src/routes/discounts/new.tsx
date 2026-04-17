@@ -12,6 +12,7 @@ export default function NewDiscountPage() {
     mutationFn: (values: DiscountFormValues) => createDiscount(values),
     onSuccess: async (created) => {
       await queryClient.invalidateQueries({ queryKey: ["discounts"] });
+      await queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
       await navigate({ to: "/discounts/$discountId", params: { discountId: created.id } });
     },
   });

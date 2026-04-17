@@ -73,23 +73,59 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Top Products</CardTitle>
+            <CardTitle>Operational Alerts</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {data.topProducts.map((product) => (
-              <div key={product.productId} className="rounded-md border p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">{product.name}</div>
-                    <div className="text-sm text-muted-foreground">{product.unitsSold} units sold</div>
+            <div className="space-y-3">
+              <div className="text-sm font-medium">Low Stock</div>
+              {data.notifications.lowStock.map((item) => (
+                <div key={item.id} className="rounded-md border p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="font-medium">{item.productName}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {item.location} · reorder at {item.reorderThreshold}
+                      </div>
+                    </div>
+                    <StatusBadge status={item.status} />
                   </div>
-                  <div className="text-sm font-medium">{formatCurrency(product.revenue)}</div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="space-y-3">
+              <div className="text-sm font-medium">Expiring Discounts</div>
+              {data.notifications.expiringDiscounts.map((discount) => (
+                <div key={discount.id} className="rounded-md border p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="font-medium">{discount.code}</div>
+                      <div className="text-sm text-muted-foreground">
+                        Ends {formatDate(discount.endDate)}
+                      </div>
+                    </div>
+                    <StatusBadge status={discount.active ? "active" : "inactive"} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Top Products</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          {data.topProducts.map((product) => (
+            <div key={product.productId} className="rounded-md border p-4">
+              <div className="font-medium">{product.name}</div>
+              <div className="text-sm text-muted-foreground">{product.unitsSold} units sold</div>
+              <div className="mt-3 text-sm font-medium">{formatCurrency(product.revenue)}</div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }

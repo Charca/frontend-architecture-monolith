@@ -34,6 +34,7 @@ export default function InventoryPage() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["inventory"] });
       await queryClient.invalidateQueries({ queryKey: ["products"] });
+      await queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
     },
   });
 
