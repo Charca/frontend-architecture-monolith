@@ -15,7 +15,15 @@ const statusToneMap: Record<string, Tone> = {
   fulfilled: "success",
   cancelled: "danger",
   refunded: "warning",
+  label_created: "default",
+  in_transit: "info",
+  delivered: "success",
+  delayed: "warning",
   vip: "info",
+  wholesale: "info",
+  at_risk: "danger",
+  new: "default",
+  repeat: "success",
   inactive: "default",
 };
 

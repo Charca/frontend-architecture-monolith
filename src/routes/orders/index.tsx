@@ -50,6 +50,7 @@ export default function OrdersPage() {
                   <TableHead>Customer</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Shipment</TableHead>
                   <TableHead>Total</TableHead>
                 </TableRow>
               </TableHeader>
@@ -65,6 +66,12 @@ export default function OrdersPage() {
                     <TableCell className="table-cell-muted">{formatDate(order.date)}</TableCell>
                     <TableCell>
                       <StatusBadge status={order.status} />
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm">{order.shipment.carrier}</div>
+                      <div className="table-cell-muted">
+                        {order.shipment.status.replace("_", " ")} · {order.shipment.trackingNumber}
+                      </div>
                     </TableCell>
                     <TableCell>{formatCurrency(order.total)}</TableCell>
                   </TableRow>

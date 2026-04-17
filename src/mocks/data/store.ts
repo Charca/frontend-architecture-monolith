@@ -532,16 +532,16 @@ export function getAnalyticsOverview(): AnalyticsOverview {
     aov,
     orders: orders.length,
     conversionTrend: [
-      { label: "Week 1", value: 2.3 },
-      { label: "Week 2", value: 2.7 },
-      { label: "Week 3", value: 2.5 },
-      { label: "Week 4", value: 3.1 },
+      { label: "2026-03-10", value: 2.3 },
+      { label: "2026-03-17", value: 2.7 },
+      { label: "2026-03-24", value: 2.5 },
+      { label: "2026-03-31", value: 3.1 },
     ],
     revenueTrend: [
-      { label: "Jan", value: 12200 },
-      { label: "Feb", value: 14750 },
-      { label: "Mar", value: 16100 },
-      { label: "Apr", value: 17350 },
+      { label: "2026-01-01", value: 12200 },
+      { label: "2026-02-01", value: 14750 },
+      { label: "2026-03-01", value: 16100 },
+      { label: "2026-04-01", value: 17350 },
     ],
     topCategories: [...categoryTotals.entries()]
       .map(([label, value]) => ({ label, value }))

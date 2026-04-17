@@ -24,6 +24,7 @@ export default function OrderDetailPage() {
       await queryClient.invalidateQueries({ queryKey: ["orders"] });
       await queryClient.invalidateQueries({ queryKey: ["orders", orderId] });
       await queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
+      await queryClient.invalidateQueries({ queryKey: ["analytics", "overview"] });
     },
   });
 
@@ -122,6 +123,33 @@ export default function OrderDetailPage() {
                 {data.shippingAddress.city}, {data.shippingAddress.region} {data.shippingAddress.postalCode}
               </div>
               <div>{data.shippingAddress.country}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Shipment Tracking</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Carrier</span>
+                <span>{data.shipment.carrier}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Tracking</span>
+                <span>{data.shipment.trackingNumber}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Shipment status</span>
+                <StatusBadge status={data.shipment.status} />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Shipped</span>
+                <span>{data.shipment.shippedAt ? formatDate(data.shipment.shippedAt) : "Not shipped yet"}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Estimated delivery</span>
+                <span>{data.shipment.estimatedDelivery ? formatDate(data.shipment.estimatedDelivery) : "Pending"}</span>
+              </div>
             </CardContent>
           </Card>
           <Card>
