@@ -57,6 +57,7 @@ export default function CustomersPage() {
                   <TableHead>Customer</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Segment</TableHead>
+                  <TableHead>Price List</TableHead>
                   <TableHead>Tags</TableHead>
                   <TableHead>Lifetime Spend</TableHead>
                   <TableHead>Joined</TableHead>
@@ -74,6 +75,7 @@ export default function CustomersPage() {
                     <TableCell>
                       <StatusBadge status={customer.segment} />
                     </TableCell>
+                    <TableCell className="table-cell-muted">{customer.priceList?.name ?? "Retail default"}</TableCell>
                     <TableCell>{customer.tags.join(", ")}</TableCell>
                     <TableCell>{formatCurrency(customer.lifetimeSpend)}</TableCell>
                     <TableCell>{formatDate(customer.joinedAt)}</TableCell>

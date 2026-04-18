@@ -80,6 +80,10 @@ export default function CustomerDetailPage() {
                 <span>{data.tags.join(", ")}</span>
               </div>
               <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Price list</span>
+                <span>{data.priceList?.name ?? "Retail default"}</span>
+              </div>
+              <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Lifetime spend</span>
                 <span>{formatCurrency(data.lifetimeSpend)}</span>
               </div>

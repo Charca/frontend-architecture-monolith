@@ -28,6 +28,18 @@ export interface BundleComponent {
   quantity: number;
 }
 
+export interface PriceList {
+  id: string;
+  name: string;
+  segment: CustomerSegment | "Custom";
+}
+
+export interface PriceListPrice {
+  priceListId: string;
+  priceListName: string;
+  price: number;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -42,6 +54,7 @@ export interface Product {
   collections?: Collection[];
   variants: ProductVariant[];
   bundleComponents?: BundleComponent[];
+  priceListPrices?: PriceListPrice[];
 }
 
 export interface InventoryItem {
@@ -114,6 +127,7 @@ export interface Order {
   refunds: OrderRefund[];
   returns: OrderReturn[];
   exchanges: OrderExchange[];
+  appliedPriceListName?: string | null;
   lineItems: OrderLineItem[];
 }
 
@@ -123,6 +137,8 @@ export interface Customer {
   email: string;
   segment: CustomerSegment;
   tags: string[];
+  priceListId?: string | null;
+  priceList?: PriceList | null;
   lifetimeSpend: number;
   notes: string;
   joinedAt: string;

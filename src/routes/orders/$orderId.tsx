@@ -165,6 +165,10 @@ export default function OrderDetailPage() {
                 <span>{data.customerName}</span>
               </div>
               <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Price list</span>
+                <span>{data.appliedPriceListName ?? "Retail default"}</span>
+              </div>
+              <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Total</span>
                 <span>{formatCurrency(data.total)}</span>
               </div>

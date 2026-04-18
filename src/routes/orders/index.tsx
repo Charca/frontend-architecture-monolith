@@ -50,6 +50,7 @@ export default function OrdersPage() {
                   <TableHead>Customer</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Price List</TableHead>
                   <TableHead>Shipment</TableHead>
                   <TableHead>Aftercare</TableHead>
                   <TableHead>Total</TableHead>
@@ -68,6 +69,7 @@ export default function OrdersPage() {
                     <TableCell>
                       <StatusBadge status={order.status} />
                     </TableCell>
+                    <TableCell className="table-cell-muted">{order.appliedPriceListName ?? "Retail default"}</TableCell>
                     <TableCell>
                       <div className="text-sm">{order.shipment.carrier}</div>
                       <div className="table-cell-muted">

@@ -19,6 +19,12 @@ const collections: Collection[] = [
   { id: "col_4", name: "Wholesale Favorites", description: "Consistent performers often reordered by wholesale buyers." },
 ];
 
+const priceLists = [
+  { id: "price_1", name: "Wholesale Core", segment: "Wholesale" },
+  { id: "price_2", name: "VIP Retention", segment: "VIP" },
+  { id: "price_3", name: "Noah Martinez Custom", segment: "Custom" },
+] as const;
+
 let products: Product[] = [
   {
     id: "prod_1",
@@ -31,6 +37,11 @@ let products: Product[] = [
     status: "active",
     inventory: 118,
     collectionIds: ["col_1", "col_4"],
+    priceListPrices: [
+      { priceListId: "price_1", priceListName: "Wholesale Core", price: 27 },
+      { priceListId: "price_2", priceListName: "VIP Retention", price: 29 },
+      { priceListId: "price_3", priceListName: "Noah Martinez Custom", price: 26 },
+    ],
     variants: [
       { id: "var_1", name: "Heather Gray / S", sku: "TSH-001-GRY-S", price: 32, inventory: 34, status: "healthy" },
       { id: "var_2", name: "Heather Gray / M", sku: "TSH-001-GRY-M", price: 32, inventory: 46, status: "healthy" },
@@ -48,6 +59,10 @@ let products: Product[] = [
     status: "active",
     inventory: 42,
     collectionIds: ["col_1"],
+    priceListPrices: [
+      { priceListId: "price_1", priceListName: "Wholesale Core", price: 58 },
+      { priceListId: "price_2", priceListName: "VIP Retention", price: 62 },
+    ],
     variants: [
       { id: "var_4", name: "Bone / M", sku: "HDY-002-BNE-M", price: 68, inventory: 16, status: "healthy" },
       { id: "var_5", name: "Bone / L", sku: "HDY-002-BNE-L", price: 68, inventory: 14, status: "low" },
@@ -65,6 +80,11 @@ let products: Product[] = [
     status: "active",
     inventory: 81,
     collectionIds: ["col_3", "col_4"],
+    priceListPrices: [
+      { priceListId: "price_1", priceListName: "Wholesale Core", price: 23 },
+      { priceListId: "price_2", priceListName: "VIP Retention", price: 25 },
+      { priceListId: "price_3", priceListName: "Noah Martinez Custom", price: 22 },
+    ],
     variants: [
       { id: "var_7", name: "Natural", sku: "BAG-003-NAT", price: 28, inventory: 51, status: "healthy" },
       { id: "var_8", name: "Olive", sku: "BAG-003-OLV", price: 30, inventory: 30, status: "healthy" },
@@ -146,6 +166,10 @@ let products: Product[] = [
     status: "active",
     inventory: 12,
     collectionIds: ["col_2"],
+    priceListPrices: [
+      { priceListId: "price_1", priceListName: "Wholesale Core", price: 73 },
+      { priceListId: "price_2", priceListName: "VIP Retention", price: 78 },
+    ],
     variants: [
       { id: "var_18", name: "Cream", sku: "HOM-008-CRM", price: 84, inventory: 5, status: "low" },
       { id: "var_19", name: "Black", sku: "HOM-008-BLK", price: 84, inventory: 7, status: "low" },
@@ -162,6 +186,10 @@ let products: Product[] = [
     status: "active",
     inventory: 63,
     collectionIds: ["col_3"],
+    priceListPrices: [
+      { priceListId: "price_1", priceListName: "Wholesale Core", price: 31 },
+      { priceListId: "price_2", priceListName: "VIP Retention", price: 33 },
+    ],
     variants: [
       { id: "var_20", name: "24 oz / Sage", sku: "OUT-009-SAG", price: 36, inventory: 31, status: "healthy" },
       { id: "var_21", name: "24 oz / Slate", sku: "OUT-009-SLT", price: 38, inventory: 32, status: "healthy" },
@@ -226,6 +254,10 @@ let products: Product[] = [
     status: "active",
     inventory: 17,
     collectionIds: ["col_3", "col_4"],
+    priceListPrices: [
+      { priceListId: "price_1", priceListName: "Wholesale Core", price: 74 },
+      { priceListId: "price_3", priceListName: "Noah Martinez Custom", price: 71 },
+    ],
     variants: [],
     bundleComponents: [
       { productId: "prod_3", productName: "Canvas Tote", quantity: 1 },
@@ -244,6 +276,10 @@ let products: Product[] = [
     status: "active",
     inventory: 12,
     collectionIds: ["col_2"],
+    priceListPrices: [
+      { priceListId: "price_1", priceListName: "Wholesale Core", price: 118 },
+      { priceListId: "price_2", priceListName: "VIP Retention", price: 122 },
+    ],
     variants: [],
     bundleComponents: [
       { productId: "prod_8", productName: "Desk Lamp", quantity: 1 },
@@ -271,11 +307,11 @@ let inventory: InventoryItem[] = [
 ];
 
 const customers: Customer[] = [
-  { id: "cust_1", name: "Ava Johnson", email: "ava@example.com", segment: "VIP", tags: ["VIP", "Wholesale"], lifetimeSpend: 5820, notes: "Frequently requests early access to launches.", joinedAt: "2026-01-04" },
+  { id: "cust_1", name: "Ava Johnson", email: "ava@example.com", segment: "VIP", tags: ["VIP", "Wholesale"], priceListId: "price_2", lifetimeSpend: 5820, notes: "Frequently requests early access to launches.", joinedAt: "2026-01-04" },
   { id: "cust_2", name: "Liam Carter", email: "liam@example.com", segment: "Repeat", tags: ["Repeat"], lifetimeSpend: 1640, notes: "Prefers express shipping.", joinedAt: "2025-11-18" },
   { id: "cust_3", name: "Mia Thompson", email: "mia@example.com", segment: "At Risk", tags: ["Newsletter"], lifetimeSpend: 920, notes: "Interested in home category drops.", joinedAt: "2025-12-03" },
-  { id: "cust_4", name: "Noah Martinez", email: "noah@example.com", segment: "Wholesale", tags: ["Wholesale"], lifetimeSpend: 3020, notes: "Bulk orders every quarter.", joinedAt: "2025-08-14" },
-  { id: "cust_5", name: "Emma Davis", email: "emma@example.com", segment: "VIP", tags: ["VIP"], lifetimeSpend: 4410, notes: "High lifetime spend across apparel.", joinedAt: "2025-05-29" },
+  { id: "cust_4", name: "Noah Martinez", email: "noah@example.com", segment: "Wholesale", tags: ["Wholesale"], priceListId: "price_3", lifetimeSpend: 3020, notes: "Bulk orders every quarter.", joinedAt: "2025-08-14" },
+  { id: "cust_5", name: "Emma Davis", email: "emma@example.com", segment: "VIP", tags: ["VIP"], priceListId: "price_2", lifetimeSpend: 4410, notes: "High lifetime spend across apparel.", joinedAt: "2025-05-29" },
   { id: "cust_6", name: "James Wilson", email: "james@example.com", segment: "Repeat", tags: ["Repeat"], lifetimeSpend: 1210, notes: "Usually responds quickly to support.", joinedAt: "2025-10-09" },
   { id: "cust_7", name: "Sophia Lee", email: "sophia@example.com", segment: "New", tags: ["New"], lifetimeSpend: 280, notes: "Recent first-time buyer.", joinedAt: "2026-03-11" },
   { id: "cust_8", name: "Benjamin Hall", email: "benjamin@example.com", segment: "At Risk", tags: ["Newsletter"], lifetimeSpend: 760, notes: "Strong engagement with discount campaigns.", joinedAt: "2025-09-20" },
@@ -421,6 +457,12 @@ function getBundleInventory(product: Product) {
   }, Number.POSITIVE_INFINITY);
 }
 
+function getCustomerPriceList(customerId: string) {
+  const customer = customers.find((entry) => entry.id === customerId);
+  if (!customer?.priceListId) return null;
+  return priceLists.find((entry) => entry.id === customer.priceListId) ?? null;
+}
+
 function summarizeProduct(product: Product): Product {
   if (product.kind === "bundle") {
     return {
@@ -539,11 +581,21 @@ export function updateInventory(id: string, payload: Partial<InventoryItem>) {
 }
 
 export function listOrders() {
-  return clone([...orders].sort((a, b) => b.date.localeCompare(a.date)));
+  return clone([...orders]
+    .map((order) => ({
+      ...order,
+      appliedPriceListName: getCustomerPriceList(order.customerId)?.name ?? null,
+    }))
+    .sort((a, b) => b.date.localeCompare(a.date)));
 }
 
 export function getOrder(id: string) {
-  return clone(orders.find((order) => order.id === id) ?? null);
+  const order = orders.find((entry) => entry.id === id);
+  if (!order) return null;
+  return clone({
+    ...order,
+    appliedPriceListName: getCustomerPriceList(order.customerId)?.name ?? null,
+  });
 }
 
 export function updateOrder(id: string, payload: Partial<Order>) {
@@ -552,7 +604,10 @@ export function updateOrder(id: string, payload: Partial<Order>) {
 }
 
 export function listCustomers() {
-  return clone(customers);
+  return clone(customers.map((customer) => ({
+    ...customer,
+    priceList: customer.priceListId ? getCustomerPriceList(customer.id) : null,
+  })));
 }
 
 export function getCustomer(id: string) {
@@ -560,6 +615,7 @@ export function getCustomer(id: string) {
   if (!customer) return null;
   return clone({
     ...customer,
+    priceList: customer.priceListId ? getCustomerPriceList(customer.id) : null,
     orderHistory: orders.filter((order) => order.customerId === id).sort((a, b) => b.date.localeCompare(a.date)),
   });
 }

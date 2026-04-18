@@ -149,6 +149,38 @@ export default function ProductDetailPage() {
                 {(form.collections ?? []).map((collection) => collection.name).join(", ") || "No collections assigned"}
               </div>
             </div>
+            <div className="space-y-3">
+              <div>
+                <Label>Price Lists</Label>
+                <p className="text-sm text-muted-foreground">
+                  Wholesale and customer-specific pricing now lives next to the retail summary price.
+                </p>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Price list</TableHead>
+                    <TableHead>Price</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(form.priceListPrices ?? []).length ? (
+                    form.priceListPrices?.map((entry) => (
+                      <TableRow key={entry.priceListId}>
+                        <TableCell>{entry.priceListName}</TableCell>
+                        <TableCell>{entry.price}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={2} className="table-cell-muted">
+                        No price list overrides configured.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
             {form.kind === "bundle" ? (
               <div className="space-y-3">
                 <div>
