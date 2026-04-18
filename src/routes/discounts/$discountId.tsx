@@ -7,7 +7,7 @@ import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import type { Discount } from "@/types";
-import { normalizeDiscountValues } from "@/utils/discounts";
+import { normalizeDiscountValues, serializeDiscountValues } from "@/utils/discounts";
 
 export default function DiscountDetailPage() {
   const { discountId } = useParams({ from: "/discounts/$discountId" });
@@ -50,7 +50,7 @@ export default function DiscountDetailPage() {
         submitLabel={mutation.isPending ? "Saving..." : "Save discount"}
         initialValues={initialValues}
         onSubmit={async (values) => {
-          await mutation.mutateAsync(values);
+          await mutation.mutateAsync(serializeDiscountValues(values));
         }}
       />
     </div>

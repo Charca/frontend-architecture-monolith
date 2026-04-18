@@ -396,12 +396,12 @@ let orders: Order[] = ([
 }));
 
 let discounts: Discount[] = [
-  { id: "disc_1", code: "WELCOME10", type: "percentage", value: 10, active: true, usageCount: 112, startDate: "2026-01-01", endDate: "2026-12-31" },
-  { id: "disc_2", code: "SPRING15", type: "percentage", value: 15, active: true, usageCount: 84, startDate: "2026-03-01", endDate: "2026-05-31" },
-  { id: "disc_3", code: "FREESHIP", type: "free_shipping", value: 0, active: true, usageCount: 201, startDate: "2026-01-15", endDate: "2026-07-31" },
-  { id: "disc_4", code: "VIP25", type: "fixed_amount", value: 25, active: true, usageCount: 26, startDate: "2026-02-10", endDate: "2026-09-30" },
-  { id: "disc_5", code: "HOME20", type: "percentage", value: 20, active: false, usageCount: 39, startDate: "2025-11-01", endDate: "2026-02-28" },
-  { id: "disc_6", code: "BUNDLE5", type: "fixed_amount", value: 5, active: true, usageCount: 61, startDate: "2026-03-15", endDate: "2026-06-15" },
+  { id: "disc_1", code: "WELCOME10", type: "percentage", value: 10, active: true, usageCount: 112, startDate: "2026-01-01", endDate: "2026-12-31", rules: { minimumSpend: 0, eligibleSegments: ["New"], eligibleCategories: [] } },
+  { id: "disc_2", code: "SPRING15", type: "percentage", value: 15, active: true, usageCount: 84, startDate: "2026-03-01", endDate: "2026-05-31", rules: { minimumSpend: 75, eligibleSegments: ["VIP", "Repeat"], eligibleCategories: ["Apparel"] } },
+  { id: "disc_3", code: "FREESHIP", type: "free_shipping", value: 0, active: true, usageCount: 201, startDate: "2026-01-15", endDate: "2026-07-31", rules: { minimumSpend: 50, eligibleSegments: [], eligibleCategories: [] } },
+  { id: "disc_4", code: "VIP25", type: "fixed_amount", value: 25, active: true, usageCount: 26, startDate: "2026-02-10", endDate: "2026-09-30", rules: { minimumSpend: 120, eligibleSegments: ["VIP"], eligibleCategories: ["Accessories", "Bundles"] } },
+  { id: "disc_5", code: "HOME20", type: "percentage", value: 20, active: false, usageCount: 39, startDate: "2025-11-01", endDate: "2026-02-28", rules: { minimumSpend: 80, eligibleSegments: [], eligibleCategories: ["Home"] } },
+  { id: "disc_6", code: "BUNDLE5", type: "fixed_amount", value: 5, active: true, usageCount: 61, startDate: "2026-03-15", endDate: "2026-06-15", rules: { minimumSpend: 90, eligibleSegments: ["Wholesale", "VIP"], eligibleCategories: ["Bundles"] } },
 ];
 
 let settings: SettingsData = {

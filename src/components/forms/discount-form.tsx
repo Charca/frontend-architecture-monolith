@@ -14,6 +14,9 @@ export interface DiscountFormValues {
   startDate: string;
   endDate: string;
   active: boolean;
+  minimumSpend: number;
+  eligibleSegments: string;
+  eligibleCategories: string;
 }
 
 interface DiscountFormProps {
@@ -29,6 +32,9 @@ const defaultValues: DiscountFormValues = {
   startDate: "2026-04-01",
   endDate: "2026-06-30",
   active: true,
+  minimumSpend: 0,
+  eligibleSegments: "",
+  eligibleCategories: "",
 };
 
 export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountFormProps) {
@@ -108,6 +114,34 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
                 type="date"
                 value={values.endDate}
                 onChange={(event) => setValues((current) => ({ ...current, endDate: event.target.value }))}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="minimumSpend">Minimum spend</Label>
+              <Input
+                id="minimumSpend"
+                type="number"
+                min="0"
+                value={values.minimumSpend}
+                onChange={(event) => setValues((current) => ({ ...current, minimumSpend: Number(event.target.value) }))}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="eligibleSegments">Eligible segments</Label>
+              <Input
+                id="eligibleSegments"
+                value={values.eligibleSegments}
+                placeholder="VIP, Wholesale"
+                onChange={(event) => setValues((current) => ({ ...current, eligibleSegments: event.target.value }))}
+              />
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="eligibleCategories">Eligible categories</Label>
+              <Input
+                id="eligibleCategories"
+                value={values.eligibleCategories}
+                placeholder="Apparel, Bundles"
+                onChange={(event) => setValues((current) => ({ ...current, eligibleCategories: event.target.value }))}
               />
             </div>
           </div>

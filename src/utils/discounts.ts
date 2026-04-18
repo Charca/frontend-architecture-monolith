@@ -1,4 +1,4 @@
-import type { Discount } from "@/types";
+import type { CustomerSegment, Discount } from "@/types";
 import type { DiscountFormValues } from "@/components/forms/discount-form";
 
 export function normalizeDiscountValues(discount?: Discount): DiscountFormValues {
@@ -6,11 +6,14 @@ export function normalizeDiscountValues(discount?: Discount): DiscountFormValues
     return {
       code: "",
       type: "percentage",
-      value: 10,
-      startDate: "2026-04-01",
-      endDate: "2026-06-30",
-      active: true,
-    };
+    value: 10,
+    startDate: "2026-04-01",
+    endDate: "2026-06-30",
+    active: true,
+    minimumSpend: 0,
+    eligibleSegments: "",
+    eligibleCategories: "",
+  };
   }
 
   return {
@@ -20,5 +23,31 @@ export function normalizeDiscountValues(discount?: Discount): DiscountFormValues
     startDate: discount.startDate,
     endDate: discount.endDate,
     active: discount.active,
+    minimumSpend: discount.rules.minimumSpend,
+    eligibleSegments: discount.rules.eligibleSegments.join(", "),
+    eligibleCategories: discount.rules.eligibleCategories.join(", "),
+  };
+}
+
+function splitList(value: string) {
+  return value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+export function serializeDiscountValues(values: DiscountFormValues) {
+  return {
+    code: values.code,
+    type: values.type,
+    value: values.value,
+    startDate: values.startDate,
+    endDate: values.endDate,
+    active: values.active,
+    rules: {
+      minimumSpend: values.minimumSpend,
+      eligibleSegments: splitList(values.eligibleSegments) as CustomerSegment[],
+      eligibleCategories: splitList(values.eligibleCategories),
+    },
   };
 }

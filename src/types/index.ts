@@ -40,6 +40,12 @@ export interface PriceListPrice {
   price: number;
 }
 
+export interface DiscountRule {
+  minimumSpend: number;
+  eligibleSegments: CustomerSegment[];
+  eligibleCategories: string[];
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -153,6 +159,7 @@ export interface Discount {
   usageCount: number;
   startDate: string;
   endDate: string;
+  rules: DiscountRule;
 }
 
 export interface DashboardSummary {

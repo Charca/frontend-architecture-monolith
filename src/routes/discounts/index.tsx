@@ -44,6 +44,7 @@ export default function DiscountsPage() {
                 <TableHead>Code</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Value</TableHead>
+                <TableHead>Rules</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Usage</TableHead>
                 <TableHead>Start</TableHead>
@@ -60,6 +61,11 @@ export default function DiscountsPage() {
                   </TableCell>
                   <TableCell>{discount.type.replace("_", " ")}</TableCell>
                   <TableCell>{formatDiscountValue(discount.type, discount.value)}</TableCell>
+                  <TableCell className="table-cell-muted">
+                    {discount.rules.minimumSpend ? `Min ${discount.rules.minimumSpend}` : "No minimum"}
+                    {discount.rules.eligibleSegments.length ? ` · ${discount.rules.eligibleSegments.join(", ")}` : ""}
+                    {discount.rules.eligibleCategories.length ? ` · ${discount.rules.eligibleCategories.join(", ")}` : ""}
+                  </TableCell>
                   <TableCell>
                     <StatusBadge status={discount.active ? "active" : "inactive"} />
                   </TableCell>

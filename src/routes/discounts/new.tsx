@@ -3,13 +3,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDiscount } from "@/api/discounts";
 import { DiscountForm, type DiscountFormValues } from "@/components/forms/discount-form";
 import { PageHeader } from "@/components/shared/page-header";
+import { serializeDiscountValues } from "@/utils/discounts";
 
 export default function NewDiscountPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (values: DiscountFormValues) => createDiscount(values),
+    mutationFn: (values: DiscountFormValues) => createDiscount(serializeDiscountValues(values)),
     onSuccess: async (created) => {
       await queryClient.invalidateQueries({ queryKey: ["discounts"] });
       await queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
