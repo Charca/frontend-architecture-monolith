@@ -1,8 +1,9 @@
-import { Menu, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Command, Menu, Search } from "lucide-react";
 import { Outlet, useRouterState } from "@tanstack/react-router";
+import { CommandMenu } from "@/components/app-shell/command-menu";
 import { SidebarNav } from "@/components/navigation/sidebar-nav";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { navItems } from "@/components/navigation/nav-items";
 
@@ -14,9 +15,23 @@ function getPageTitle(pathname: string) {
 
 export function AppShell() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const [commandMenuOpen, setCommandMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setCommandMenuOpen((current) => !current);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
+      <CommandMenu open={commandMenuOpen} onOpenChange={setCommandMenuOpen} />
       <div className="flex min-h-screen">
         <aside className="hidden w-72 border-r bg-card p-4 lg:block">
           <SidebarNav />
@@ -38,10 +53,21 @@ export function AppShell() {
                 <div className="text-sm text-muted-foreground">CommerceOS Admin</div>
                 <div className="truncate text-lg font-semibold">{getPageTitle(pathname)}</div>
               </div>
-              <div className="hidden w-full max-w-sm items-center gap-2 md:flex">
-                <Search className="absolute ml-3 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search products, orders, customers..." className="pl-9" />
-              </div>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setCommandMenuOpen(true)}
+                className="hidden w-full max-w-sm items-center justify-between gap-3 md:flex"
+              >
+                <span className="flex min-w-0 items-center gap-2 text-muted-foreground">
+                  <Search className="h-4 w-4" />
+                  <span className="truncate">Search, jump, or run a command...</span>
+                </span>
+                <span className="flex items-center gap-1 rounded-md border bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+                  <Command className="h-3 w-3" />
+                  <span>K</span>
+                </span>
+              </Button>
               <div className="rounded-full bg-secondary px-3 py-1 text-sm font-medium">Merchant Ops</div>
             </div>
           </header>

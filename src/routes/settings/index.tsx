@@ -46,7 +46,7 @@ export default function SettingsPage() {
       />
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <Card>
+        <Card id="store-profile">
           <CardHeader>
             <CardTitle>Store Profile</CardTitle>
           </CardHeader>
@@ -96,7 +96,7 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card id="shipping">
           <CardHeader>
             <CardTitle>Shipping</CardTitle>
           </CardHeader>
@@ -136,7 +136,7 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card id="taxes">
           <CardHeader>
             <CardTitle>Taxes</CardTitle>
           </CardHeader>
@@ -171,7 +171,7 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card id="user-roles">
           <CardHeader>
             <CardTitle>User Roles</CardTitle>
           </CardHeader>
@@ -206,7 +206,7 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="xl:col-span-2">
+        <Card id="notifications" className="xl:col-span-2">
           <CardHeader>
             <CardTitle>Notifications</CardTitle>
           </CardHeader>
