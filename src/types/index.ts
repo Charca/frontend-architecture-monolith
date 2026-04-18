@@ -201,6 +201,8 @@ export interface DashboardSummary {
   orders: number;
   customers: number;
   lowStockItems: number;
+  salesTrend: Array<{ label: string; revenue: number }>;
+  customerSegments: Array<{ label: CustomerSegment; value: number }>;
   recentOrders: Order[];
   notifications: {
     lowStock: InventoryItem[];
@@ -218,9 +220,11 @@ export interface AnalyticsOverview {
   revenue: number;
   aov: number;
   orders: number;
+  performanceTrend: Array<{ label: string; revenue: number; orders: number }>;
   conversionTrend: Array<{ label: string; value: number }>;
-  revenueTrend: Array<{ label: string; value: number }>;
-  topCategories: Array<{ label: string; value: number }>;
+  categoryRevenue: Array<{ label: string; value: number }>;
+  customerSegments: Array<{ label: CustomerSegment; value: number }>;
+  orderStatusMix: Array<{ label: OrderStatus; value: number }>;
 }
 
 export interface AccountProfile {

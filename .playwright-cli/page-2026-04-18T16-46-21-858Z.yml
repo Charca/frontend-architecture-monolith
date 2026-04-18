@@ -1,0 +1,27 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]: CommerceOS
+      - heading "Tenant-aware auth for the fake admin app." [level=1] [ref=e8]
+      - paragraph [ref=e9]: Sign in with a seeded user to test protected routes, account switching, role-based permissions, and account-scoped data.
+    - generic [ref=e10]:
+      - button "Cross-account owner owner@northstar.demo" [ref=e11]:
+        - generic [ref=e12]: Cross-account owner
+        - generic [ref=e13]: owner@northstar.demo
+      - button "Northstar admin admin@northstar.demo" [ref=e14]:
+        - generic [ref=e15]: Northstar admin
+        - generic [ref=e16]: admin@northstar.demo
+      - button "Atelier user user@atelier.demo" [ref=e17]:
+        - generic [ref=e18]: Atelier user
+        - generic [ref=e19]: user@atelier.demo
+  - generic [ref=e20]:
+    - heading "Sign In" [level=3] [ref=e22]
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - text: Email
+        - textbox "Email" [ref=e26]: owner@northstar.demo
+      - generic [ref=e27]:
+        - text: Password
+        - textbox "Password" [ref=e28]: demo123
+      - generic [ref=e29]: "Demo password for all seeded users: demo123"
+      - button "Sign in" [ref=e30]

@@ -530,11 +530,48 @@ function deriveInventoryStatus(stockQuantity: number, reorderThreshold: number) 
   return "healthy" as const;
 }
 
+function getPerformanceTrend(accountId: string) {
+  return accountId === "acct_atelier"
+    ? [
+        { label: "2026-01-01", revenue: 14100, orders: 182 },
+        { label: "2026-02-01", revenue: 15250, orders: 196 },
+        { label: "2026-03-01", revenue: 16880, orders: 214 },
+        { label: "2026-04-01", revenue: 18120, orders: 229 },
+      ]
+    : [
+        { label: "2026-01-01", revenue: 12200, orders: 164 },
+        { label: "2026-02-01", revenue: 14750, orders: 181 },
+        { label: "2026-03-01", revenue: 16100, orders: 201 },
+        { label: "2026-04-01", revenue: 17350, orders: 216 },
+      ];
+}
+
+function getConversionTrend(accountId: string) {
+  return accountId === "acct_atelier"
+    ? [
+        { label: "2026-03-10", value: 2.8 },
+        { label: "2026-03-17", value: 3.0 },
+        { label: "2026-03-24", value: 3.2 },
+        { label: "2026-03-31", value: 3.5 },
+      ]
+    : [
+        { label: "2026-03-10", value: 2.3 },
+        { label: "2026-03-17", value: 2.7 },
+        { label: "2026-03-24", value: 2.5 },
+        { label: "2026-03-31", value: 3.1 },
+      ];
+}
+
 export function getDashboardSummary(accountId: string): DashboardSummary {
   const tenant = getTenant(accountId);
   const revenue = tenant.orders.filter((order) => order.paymentStatus === "paid").reduce((sum, order) => sum + order.total, 0);
   const lowStockItems = tenant.inventory.filter((item) => item.status !== "healthy").length;
   const topProductsMap = new Map<string, { productId: string; name: string; unitsSold: number; revenue: number }>();
+  const customerSegmentsMap = new Map<Customer["segment"], number>();
+
+  for (const customer of tenant.customers) {
+    customerSegmentsMap.set(customer.segment, (customerSegmentsMap.get(customer.segment) ?? 0) + 1);
+  }
 
   for (const order of tenant.orders) {
     for (const lineItem of order.lineItems) {
@@ -558,6 +595,8 @@ export function getDashboardSummary(accountId: string): DashboardSummary {
     orders: tenant.orders.length,
     customers: tenant.customers.length,
     lowStockItems,
+    salesTrend: getPerformanceTrend(accountId).map(({ label, revenue: monthlyRevenue }) => ({ label, revenue: monthlyRevenue })),
+    customerSegments: [...customerSegmentsMap.entries()].map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value),
     notifications: {
       lowStock: tenant.inventory.filter((item) => item.status !== "healthy").slice(0, 4),
       expiringDiscounts: tenant.discounts.filter((discount) => discount.active).slice(0, 4),
@@ -739,33 +778,35 @@ export function getAnalyticsOverview(accountId: string): AnalyticsOverview {
   const paidOrders = tenant.orders.filter((order) => order.paymentStatus === "paid");
   const revenue = paidOrders.reduce((sum, order) => sum + order.total, 0);
   const aov = paidOrders.length ? revenue / paidOrders.length : 0;
-  const categoryTotals = new Map<string, number>();
+  const categoryRevenue = new Map<string, number>();
+  const customerSegments = new Map<Customer["segment"], number>();
+  const orderStatusMix = new Map<Order["status"], number>();
 
   for (const order of paidOrders) {
     for (const item of order.lineItems) {
       const product = tenant.products.find((productEntry) => productEntry.id === item.productId);
       const category = product?.category ?? "Other";
-      categoryTotals.set(category, (categoryTotals.get(category) ?? 0) + item.quantity);
+      categoryRevenue.set(category, (categoryRevenue.get(category) ?? 0) + item.quantity * item.price);
     }
+  }
+
+  for (const customer of tenant.customers) {
+    customerSegments.set(customer.segment, (customerSegments.get(customer.segment) ?? 0) + 1);
+  }
+
+  for (const order of tenant.orders) {
+    orderStatusMix.set(order.status, (orderStatusMix.get(order.status) ?? 0) + 1);
   }
 
   return clone({
     revenue,
     aov,
     orders: tenant.orders.length,
-    conversionTrend: [
-      { label: "2026-03-10", value: accountId === "acct_atelier" ? 2.8 : 2.3 },
-      { label: "2026-03-17", value: accountId === "acct_atelier" ? 3.0 : 2.7 },
-      { label: "2026-03-24", value: accountId === "acct_atelier" ? 3.2 : 2.5 },
-      { label: "2026-03-31", value: accountId === "acct_atelier" ? 3.5 : 3.1 },
-    ],
-    revenueTrend: [
-      { label: "2026-01-01", value: accountId === "acct_atelier" ? 14100 : 12200 },
-      { label: "2026-02-01", value: accountId === "acct_atelier" ? 15250 : 14750 },
-      { label: "2026-03-01", value: accountId === "acct_atelier" ? 16880 : 16100 },
-      { label: "2026-04-01", value: accountId === "acct_atelier" ? 18120 : 17350 },
-    ],
-    topCategories: [...categoryTotals.entries()].map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 5),
+    performanceTrend: getPerformanceTrend(accountId),
+    conversionTrend: getConversionTrend(accountId),
+    categoryRevenue: [...categoryRevenue.entries()].map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 5),
+    customerSegments: [...customerSegments.entries()].map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value),
+    orderStatusMix: [...orderStatusMix.entries()].map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value),
   });
 }
 
