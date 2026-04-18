@@ -36,6 +36,8 @@ export default function OrderDetailPage() {
     await mutation.mutateAsync(payload);
   }
 
+  const refundedAmount = data.refunds.reduce((sum, refund) => sum + refund.amount, 0);
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -48,6 +50,62 @@ export default function OrderDetailPage() {
             </Link>
             <Button variant="outline" onClick={() => void runAction({ status: "fulfilled" })}>
               Mark fulfilled
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() =>
+                void runAction({
+                  refunds: [
+                    ...data.refunds,
+                    {
+                      id: `refund_${data.refunds.length + 1}`,
+                      amount: Math.min(20, data.total),
+                      reason: "Partial appeasement refund",
+                      createdAt: "2026-04-16",
+                    },
+                  ],
+                })
+              }
+            >
+              Partial refund
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() =>
+                void runAction({
+                  returns: [
+                    ...data.returns,
+                    {
+                      id: `return_${data.returns.length + 1}`,
+                      productName: data.lineItems[0]?.productName ?? "Order item",
+                      quantity: 1,
+                      status: "requested",
+                      createdAt: "2026-04-16",
+                    },
+                  ],
+                })
+              }
+            >
+              Start return
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() =>
+                void runAction({
+                  exchanges: [
+                    ...data.exchanges,
+                    {
+                      id: `exchange_${data.exchanges.length + 1}`,
+                      originalProductName: data.lineItems[0]?.productName ?? "Order item",
+                      replacementProductName: `${data.lineItems[0]?.productName ?? "Order item"} replacement`,
+                      status: "pending",
+                      createdAt: "2026-04-16",
+                    },
+                  ],
+                })
+              }
+            >
+              Create exchange
             </Button>
             <Button variant="outline" onClick={() => void runAction({ status: "cancelled", paymentStatus: "refunded" })}>
               Cancel
@@ -110,6 +168,10 @@ export default function OrderDetailPage() {
                 <span className="text-muted-foreground">Total</span>
                 <span>{formatCurrency(data.total)}</span>
               </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Refunded</span>
+                <span>{formatCurrency(refundedAmount)}</span>
+              </div>
             </CardContent>
           </Card>
           <Card>
@@ -149,6 +211,53 @@ export default function OrderDetailPage() {
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Estimated delivery</span>
                 <span>{data.shipment.estimatedDelivery ? formatDate(data.shipment.estimatedDelivery) : "Pending"}</span>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Returns and Refunds</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm">
+              <div className="space-y-2">
+                <div className="font-medium">Refunds</div>
+                {data.refunds.length ? data.refunds.map((refund) => (
+                  <div key={refund.id} className="rounded-md border p-3">
+                    <div className="flex items-center justify-between">
+                      <span>{refund.reason}</span>
+                      <span>{formatCurrency(refund.amount)}</span>
+                    </div>
+                    <div className="text-muted-foreground">{formatDate(refund.createdAt)}</div>
+                  </div>
+                )) : <div className="text-muted-foreground">No refunds recorded.</div>}
+              </div>
+              <div className="space-y-2">
+                <div className="font-medium">Returns</div>
+                {data.returns.length ? data.returns.map((entry) => (
+                  <div key={entry.id} className="rounded-md border p-3">
+                    <div className="flex items-center justify-between">
+                      <span>{entry.productName}</span>
+                      <StatusBadge status={entry.status} />
+                    </div>
+                    <div className="text-muted-foreground">
+                      Qty {entry.quantity} · {formatDate(entry.createdAt)}
+                    </div>
+                  </div>
+                )) : <div className="text-muted-foreground">No returns recorded.</div>}
+              </div>
+              <div className="space-y-2">
+                <div className="font-medium">Exchanges</div>
+                {data.exchanges.length ? data.exchanges.map((entry) => (
+                  <div key={entry.id} className="rounded-md border p-3">
+                    <div className="flex items-center justify-between">
+                      <span>{entry.originalProductName}</span>
+                      <StatusBadge status={entry.status} />
+                    </div>
+                    <div className="text-muted-foreground">
+                      For {entry.replacementProductName} · {formatDate(entry.createdAt)}
+                    </div>
+                  </div>
+                )) : <div className="text-muted-foreground">No exchanges recorded.</div>}
               </div>
             </CardContent>
           </Card>

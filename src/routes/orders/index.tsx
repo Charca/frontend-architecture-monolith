@@ -51,6 +51,7 @@ export default function OrdersPage() {
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Shipment</TableHead>
+                  <TableHead>Aftercare</TableHead>
                   <TableHead>Total</TableHead>
                 </TableRow>
               </TableHeader>
@@ -72,6 +73,9 @@ export default function OrdersPage() {
                       <div className="table-cell-muted">
                         {order.shipment.status.replace("_", " ")} · {order.shipment.trackingNumber}
                       </div>
+                    </TableCell>
+                    <TableCell className="table-cell-muted">
+                      {order.returns.length} returns · {order.refunds.length} refunds
                     </TableCell>
                     <TableCell>{formatCurrency(order.total)}</TableCell>
                   </TableRow>

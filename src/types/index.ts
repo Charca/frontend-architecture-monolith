@@ -63,6 +63,29 @@ export interface OrderLineItem {
   price: number;
 }
 
+export interface OrderRefund {
+  id: string;
+  amount: number;
+  reason: string;
+  createdAt: string;
+}
+
+export interface OrderReturn {
+  id: string;
+  productName: string;
+  quantity: number;
+  status: "requested" | "received" | "restocked";
+  createdAt: string;
+}
+
+export interface OrderExchange {
+  id: string;
+  originalProductName: string;
+  replacementProductName: string;
+  status: "pending" | "approved" | "shipped";
+  createdAt: string;
+}
+
 export interface Order {
   id: string;
   orderNumber: string;
@@ -88,6 +111,9 @@ export interface Order {
     shippedAt: string | null;
     estimatedDelivery: string | null;
   };
+  refunds: OrderRefund[];
+  returns: OrderReturn[];
+  exchanges: OrderExchange[];
   lineItems: OrderLineItem[];
 }
 
