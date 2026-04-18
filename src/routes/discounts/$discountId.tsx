@@ -6,6 +6,7 @@ import { DiscountForm, type DiscountFormValues } from "@/components/forms/discou
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Discount } from "@/types";
 import { normalizeDiscountValues, serializeDiscountValues } from "@/utils/discounts";
 
@@ -53,6 +54,23 @@ export default function DiscountDetailPage() {
           await mutation.mutateAsync(serializeDiscountValues(values));
         }}
       />
+      <Card>
+        <CardHeader>
+          <CardTitle>Activity History</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {(data?.activityHistory ?? []).map((entry) => (
+            <div key={entry.id} className="rounded-md border p-3 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="font-medium capitalize">{entry.action.replace(/_/g, " ")}</span>
+                <span className="text-muted-foreground">{entry.timestamp}</span>
+              </div>
+              <div className="text-muted-foreground">{entry.summary}</div>
+              <div className="text-xs text-muted-foreground">by {entry.actor}</div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }

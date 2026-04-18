@@ -284,6 +284,23 @@ export default function ProductDetailPage() {
           </form>
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Activity History</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {(form.activityHistory ?? []).map((entry) => (
+            <div key={entry.id} className="rounded-md border p-3 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="font-medium capitalize">{entry.action.replace(/_/g, " ")}</span>
+                <span className="text-muted-foreground">{entry.timestamp}</span>
+              </div>
+              <div className="text-muted-foreground">{entry.summary}</div>
+              <div className="text-xs text-muted-foreground">by {entry.actor}</div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }

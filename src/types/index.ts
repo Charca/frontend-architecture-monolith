@@ -46,6 +46,16 @@ export interface DiscountRule {
   eligibleCategories: string[];
 }
 
+export interface AuditLogEntry {
+  id: string;
+  entityType: "product" | "order" | "discount";
+  entityId: string;
+  action: string;
+  actor: string;
+  timestamp: string;
+  summary: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -61,6 +71,7 @@ export interface Product {
   variants: ProductVariant[];
   bundleComponents?: BundleComponent[];
   priceListPrices?: PriceListPrice[];
+  activityHistory?: AuditLogEntry[];
 }
 
 export interface InventoryItem {
@@ -134,6 +145,7 @@ export interface Order {
   returns: OrderReturn[];
   exchanges: OrderExchange[];
   appliedPriceListName?: string | null;
+  activityHistory?: AuditLogEntry[];
   lineItems: OrderLineItem[];
 }
 
@@ -160,6 +172,7 @@ export interface Discount {
   startDate: string;
   endDate: string;
   rules: DiscountRule;
+  activityHistory?: AuditLogEntry[];
 }
 
 export interface DashboardSummary {

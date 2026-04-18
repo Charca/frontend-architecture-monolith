@@ -1,4 +1,5 @@
 import type {
+  AuditLogEntry,
   AnalyticsOverview,
   Collection,
   Customer,
@@ -433,6 +434,26 @@ let settings: SettingsData = {
   },
 };
 
+let auditLog: AuditLogEntry[] = [
+  { id: "log_1", entityType: "product", entityId: "prod_13", action: "created", actor: "Merch Team", timestamp: "2026-06-14", summary: "Weekend Carry Kit launched as a bundle product." },
+  { id: "log_2", entityType: "discount", entityId: "disc_6", action: "updated", actor: "Growth Team", timestamp: "2026-06-18", summary: "Bundle discount narrowed to wholesale and VIP shoppers." },
+  { id: "log_3", entityType: "order", entityId: "ord_10", action: "refunded", actor: "Support Ops", timestamp: "2026-06-20", summary: "Full refund issued after damaged package report." },
+];
+
+function recordAuditEntry(entry: Omit<AuditLogEntry, "id">) {
+  auditLog = [
+    {
+      id: `log_${auditLog.length + 1}`,
+      ...entry,
+    },
+    ...auditLog,
+  ];
+}
+
+function getActivityHistory(entityType: AuditLogEntry["entityType"], entityId: string) {
+  return auditLog.filter((entry) => entry.entityType === entityType && entry.entityId === entityId);
+}
+
 function syncProductInventory(productId: string) {
   const total = inventory
     .filter((item) => item.productId === productId)
@@ -537,6 +558,7 @@ export function getProduct(id: string) {
   if (!product) return null;
   return clone({
     ...summarizeProduct(product),
+    activityHistory: getActivityHistory("product", id),
     collections: product.collectionIds.flatMap((collectionId) => {
       const collection = collections.find((entry) => entry.id === collectionId);
       return collection ? [collection] : [];
@@ -553,6 +575,14 @@ export function updateProduct(id: string, payload: Partial<Product>) {
       variants: payload.variants ?? product.variants,
       collectionIds: payload.collectionIds ?? product.collectionIds,
     });
+  });
+  recordAuditEntry({
+    entityType: "product",
+    entityId: id,
+    action: "updated",
+    actor: "Catalog Team",
+    timestamp: "2026-07-14",
+    summary: payload.kind === "bundle" ? "Bundle configuration updated." : "Product details updated.",
   });
   return getProduct(id);
 }
@@ -595,11 +625,30 @@ export function getOrder(id: string) {
   return clone({
     ...order,
     appliedPriceListName: getCustomerPriceList(order.customerId)?.name ?? null,
+    activityHistory: getActivityHistory("order", id),
   });
 }
 
 export function updateOrder(id: string, payload: Partial<Order>) {
   orders = orders.map((order) => (order.id === id ? { ...order, ...payload } : order));
+  const action =
+    payload.refunds ? "refunded" :
+    payload.returns ? "return_started" :
+    payload.exchanges ? "exchange_started" :
+    "updated";
+  const summary =
+    payload.refunds ? "Refund activity recorded on the order." :
+    payload.returns ? "Return request added to the order." :
+    payload.exchanges ? "Exchange created from order detail." :
+    "Order details updated.";
+  recordAuditEntry({
+    entityType: "order",
+    entityId: id,
+    action,
+    actor: "Support Ops",
+    timestamp: "2026-07-14",
+    summary,
+  });
   return getOrder(id);
 }
 
@@ -625,7 +674,12 @@ export function listDiscounts() {
 }
 
 export function getDiscount(id: string) {
-  return clone(discounts.find((discount) => discount.id === id) ?? null);
+  const discount = discounts.find((entry) => entry.id === id);
+  if (!discount) return null;
+  return clone({
+    ...discount,
+    activityHistory: getActivityHistory("discount", id),
+  });
 }
 
 export function createDiscount(payload: Omit<Discount, "id" | "usageCount">) {
@@ -635,11 +689,27 @@ export function createDiscount(payload: Omit<Discount, "id" | "usageCount">) {
     ...payload,
   };
   discounts = [next, ...discounts];
+  recordAuditEntry({
+    entityType: "discount",
+    entityId: next.id,
+    action: "created",
+    actor: "Growth Team",
+    timestamp: "2026-07-14",
+    summary: "New rule-based discount created.",
+  });
   return clone(next);
 }
 
 export function updateDiscount(id: string, payload: Partial<Discount>) {
   discounts = discounts.map((discount) => (discount.id === id ? { ...discount, ...payload } : discount));
+  recordAuditEntry({
+    entityType: "discount",
+    entityId: id,
+    action: "updated",
+    actor: "Growth Team",
+    timestamp: "2026-07-14",
+    summary: "Discount settings or eligibility rules updated.",
+  });
   return getDiscount(id);
 }
 
