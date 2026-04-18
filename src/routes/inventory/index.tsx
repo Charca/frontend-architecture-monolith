@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchInventory, updateInventory } from "@/api/inventory";
+import { useAuth } from "@/app/providers/use-auth";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -20,6 +21,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import type { InventoryItem } from "@/types";
 
 export default function InventoryPage() {
+  const { hasPermission } = useAuth();
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ["inventory"],
@@ -27,6 +29,7 @@ export default function InventoryPage() {
   });
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const [nextQuantity, setNextQuantity] = useState<number>(0);
+  const canEditInventory = hasPermission("inventory.edit");
 
   const mutation = useMutation({
     mutationFn: ({ itemId, stockQuantity }: { itemId: string; stockQuantity: number }) =>
@@ -80,6 +83,7 @@ export default function InventoryPage() {
                             setSelectedItem(item);
                             setNextQuantity(item.stockQuantity);
                           }}
+                          disabled={!canEditInventory}
                         >
                           Adjust
                         </Button>
@@ -102,7 +106,7 @@ export default function InventoryPage() {
                           <div className="flex justify-end">
                             <Button
                               onClick={() => void mutation.mutateAsync({ itemId: item.id, stockQuantity: nextQuantity })}
-                              disabled={mutation.isPending}
+                              disabled={mutation.isPending || !canEditInventory}
                             >
                               {mutation.isPending ? "Saving..." : "Save adjustment"}
                             </Button>

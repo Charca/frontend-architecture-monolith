@@ -1,7 +1,35 @@
+import { Navigate, Outlet, useRouterState } from "@tanstack/react-router";
+import { useAuth } from "@/app/providers/use-auth";
+import { LoadingState } from "@/components/feedback/loading-state";
 import { AppShell } from "@/components/app-shell/app-shell";
+import { getViewPermissionForPath } from "@/lib/auth";
 
 export function RootComponent() {
-  return <AppShell />;
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const { isLoading, isAuthenticated, hasPermission, getFallbackPath } = useAuth();
+
+  if (isLoading) {
+    return <LoadingState label="Loading account session..." />;
+  }
+
+  if (!isAuthenticated) {
+    return pathname === "/login" ? <Outlet /> : <Navigate to="/login" />;
+  }
+
+  if (pathname === "/login") {
+    return <Navigate to={getFallbackPath()} />;
+  }
+
+  const requiredPermission = getViewPermissionForPath(pathname);
+  if (!hasPermission(requiredPermission)) {
+    return <Navigate to={getFallbackPath()} />;
+  }
+
+  return (
+    <AppShell>
+      <Outlet />
+    </AppShell>
+  );
 }
 
 export function NotFoundComponent() {

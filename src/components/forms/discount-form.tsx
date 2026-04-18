@@ -23,6 +23,7 @@ interface DiscountFormProps {
   initialValues?: DiscountFormValues;
   onSubmit: (values: DiscountFormValues) => Promise<void> | void;
   submitLabel: string;
+  disabled?: boolean;
 }
 
 const defaultValues: DiscountFormValues = {
@@ -37,7 +38,7 @@ const defaultValues: DiscountFormValues = {
   eligibleCategories: "",
 };
 
-export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountFormProps) {
+export function DiscountForm({ initialValues, onSubmit, submitLabel, disabled = false }: DiscountFormProps) {
   const [values, setValues] = useState<DiscountFormValues>(initialValues ?? defaultValues);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -63,6 +64,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
               <Label htmlFor="code">Code</Label>
               <Input
                 id="code"
+                disabled={disabled}
                 value={values.code}
                 onChange={(event) => setValues((current) => ({ ...current, code: event.target.value.toUpperCase() }))}
               />
@@ -71,6 +73,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
               <Label htmlFor="type">Type</Label>
               <Select
                 id="type"
+                disabled={disabled}
                 value={values.type}
                 onChange={(event) => setValues((current) => ({ ...current, type: event.target.value as DiscountType }))}
               >
@@ -85,6 +88,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
                 id="value"
                 type="number"
                 min="0"
+                disabled={disabled}
                 value={values.value}
                 onChange={(event) => setValues((current) => ({ ...current, value: Number(event.target.value) }))}
               />
@@ -94,6 +98,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
               <div className="flex h-9 items-center">
                 <Switch
                   checked={values.active}
+                  disabled={disabled}
                   onCheckedChange={(active) => setValues((current) => ({ ...current, active }))}
                 />
               </div>
@@ -103,6 +108,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
               <Input
                 id="startDate"
                 type="date"
+                disabled={disabled}
                 value={values.startDate}
                 onChange={(event) => setValues((current) => ({ ...current, startDate: event.target.value }))}
               />
@@ -112,6 +118,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
               <Input
                 id="endDate"
                 type="date"
+                disabled={disabled}
                 value={values.endDate}
                 onChange={(event) => setValues((current) => ({ ...current, endDate: event.target.value }))}
               />
@@ -122,6 +129,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
                 id="minimumSpend"
                 type="number"
                 min="0"
+                disabled={disabled}
                 value={values.minimumSpend}
                 onChange={(event) => setValues((current) => ({ ...current, minimumSpend: Number(event.target.value) }))}
               />
@@ -130,6 +138,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
               <Label htmlFor="eligibleSegments">Eligible segments</Label>
               <Input
                 id="eligibleSegments"
+                disabled={disabled}
                 value={values.eligibleSegments}
                 placeholder="VIP, Wholesale"
                 onChange={(event) => setValues((current) => ({ ...current, eligibleSegments: event.target.value }))}
@@ -139,6 +148,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
               <Label htmlFor="eligibleCategories">Eligible categories</Label>
               <Input
                 id="eligibleCategories"
+                disabled={disabled}
                 value={values.eligibleCategories}
                 placeholder="Apparel, Bundles"
                 onChange={(event) => setValues((current) => ({ ...current, eligibleCategories: event.target.value }))}
@@ -146,7 +156,7 @@ export function DiscountForm({ initialValues, onSubmit, submitLabel }: DiscountF
             </div>
           </div>
           <div className="flex justify-end">
-            <Button type="submit" disabled={isSaving}>
+            <Button type="submit" disabled={isSaving || disabled}>
               {isSaving ? "Saving..." : submitLabel}
             </Button>
           </div>

@@ -1,11 +1,13 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDiscount } from "@/api/discounts";
+import { useAuth } from "@/app/providers/use-auth";
 import { DiscountForm, type DiscountFormValues } from "@/components/forms/discount-form";
 import { PageHeader } from "@/components/shared/page-header";
 import { serializeDiscountValues } from "@/utils/discounts";
 
 export default function NewDiscountPage() {
+  const { hasPermission } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -22,6 +24,7 @@ export default function NewDiscountPage() {
     <div className="space-y-6">
       <PageHeader title="New Discount" description="Create a mock discount offer for workshop flows." />
       <DiscountForm
+        disabled={!hasPermission("discounts.manage")}
         submitLabel={mutation.isPending ? "Saving..." : "Create discount"}
         onSubmit={async (values) => {
           await mutation.mutateAsync(values);

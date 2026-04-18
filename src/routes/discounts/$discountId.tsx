@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchDiscount, updateDiscount } from "@/api/discounts";
+import { useAuth } from "@/app/providers/use-auth";
 import { DiscountForm, type DiscountFormValues } from "@/components/forms/discount-form";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
@@ -11,6 +12,7 @@ import type { Discount } from "@/types";
 import { normalizeDiscountValues, serializeDiscountValues } from "@/utils/discounts";
 
 export default function DiscountDetailPage() {
+  const { hasPermission } = useAuth();
   const { discountId } = useParams({ from: "/discounts/$discountId" });
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
@@ -48,6 +50,7 @@ export default function DiscountDetailPage() {
         }
       />
       <DiscountForm
+        disabled={!hasPermission("discounts.manage")}
         submitLabel={mutation.isPending ? "Saving..." : "Save discount"}
         initialValues={initialValues}
         onSubmit={async (values) => {

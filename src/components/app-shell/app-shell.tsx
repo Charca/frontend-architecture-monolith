@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Command, Menu, Search } from "lucide-react";
-import { Outlet, useRouterState } from "@tanstack/react-router";
+import { useRouterState } from "@tanstack/react-router";
+import { useAuth } from "@/app/providers/use-auth";
 import { CommandMenu } from "@/components/app-shell/command-menu";
 import { SidebarNav } from "@/components/navigation/sidebar-nav";
 import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { navItems } from "@/components/navigation/nav-items";
+import { ROLE_LABELS } from "@/lib/auth";
 
 function getPageTitle(pathname: string) {
   if (pathname === "/") return "Dashboard";
@@ -13,9 +16,14 @@ function getPageTitle(pathname: string) {
   return matched?.label ?? "CommerceOS Admin";
 }
 
-export function AppShell() {
+interface AppShellProps {
+  children: ReactNode;
+}
+
+export function AppShell({ children }: AppShellProps) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const [commandMenuOpen, setCommandMenuOpen] = useState(false);
+  const { session, switchAccount } = useAuth();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -53,6 +61,21 @@ export function AppShell() {
                 <div className="text-sm text-muted-foreground">CommerceOS Admin</div>
                 <div className="truncate text-lg font-semibold">{getPageTitle(pathname)}</div>
               </div>
+              {session ? (
+                <div className="hidden min-w-[220px] lg:block">
+                  <Select
+                    value={session.activeAccount.id}
+                    onChange={(event) => void switchAccount(event.target.value)}
+                    aria-label="Active account"
+                  >
+                    {session.memberships.map((membership) => (
+                      <option key={membership.account.id} value={membership.account.id}>
+                        {membership.account.name} · {ROLE_LABELS[membership.role]}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+              ) : null}
               <Button
                 type="button"
                 variant="outline"
@@ -68,11 +91,10 @@ export function AppShell() {
                   <span>K</span>
                 </span>
               </Button>
-              <div className="rounded-full bg-secondary px-3 py-1 text-sm font-medium">Merchant Ops</div>
             </div>
           </header>
           <main className="flex-1 px-4 py-6 lg:px-8">
-            <Outlet />
+            {children}
           </main>
         </div>
       </div>

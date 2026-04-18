@@ -1,6 +1,7 @@
 import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchOrder, updateOrder } from "@/api/orders";
+import { useAuth } from "@/app/providers/use-auth";
 import type { Order } from "@/types";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
@@ -11,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function OrderDetailPage() {
+  const { hasPermission } = useAuth();
   const { orderId } = useParams({ from: "/orders/$orderId" });
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
@@ -37,6 +39,8 @@ export default function OrderDetailPage() {
   }
 
   const refundedAmount = data.refunds.reduce((sum, refund) => sum + refund.amount, 0);
+  const canManageOrders = hasPermission("orders.manage");
+  const canRefundOrders = hasPermission("orders.refund");
 
   return (
     <div className="space-y-6">
@@ -48,11 +52,12 @@ export default function OrderDetailPage() {
             <Link to="/orders">
               <Button variant="outline">Back to orders</Button>
             </Link>
-            <Button variant="outline" onClick={() => void runAction({ status: "fulfilled" })}>
+            <Button variant="outline" disabled={!canManageOrders} onClick={() => void runAction({ status: "fulfilled" })}>
               Mark fulfilled
             </Button>
             <Button
               variant="outline"
+              disabled={!canRefundOrders}
               onClick={() =>
                 void runAction({
                   refunds: [
@@ -71,6 +76,7 @@ export default function OrderDetailPage() {
             </Button>
             <Button
               variant="outline"
+              disabled={!canManageOrders}
               onClick={() =>
                 void runAction({
                   returns: [
@@ -90,6 +96,7 @@ export default function OrderDetailPage() {
             </Button>
             <Button
               variant="outline"
+              disabled={!canManageOrders}
               onClick={() =>
                 void runAction({
                   exchanges: [
@@ -107,10 +114,10 @@ export default function OrderDetailPage() {
             >
               Create exchange
             </Button>
-            <Button variant="outline" onClick={() => void runAction({ status: "cancelled", paymentStatus: "refunded" })}>
+            <Button variant="outline" disabled={!canManageOrders} onClick={() => void runAction({ status: "cancelled", paymentStatus: "refunded" })}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={() => void runAction({ status: "refunded", paymentStatus: "refunded" })}>
+            <Button variant="destructive" disabled={!canRefundOrders} onClick={() => void runAction({ status: "refunded", paymentStatus: "refunded" })}>
               Refund
             </Button>
           </>

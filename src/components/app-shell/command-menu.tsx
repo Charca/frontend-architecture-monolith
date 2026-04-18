@@ -19,10 +19,14 @@ import {
 import { fetchCustomers } from "@/api/customers";
 import { fetchOrders } from "@/api/orders";
 import { fetchProducts } from "@/api/products";
+import { fetchAccountUsers } from "@/api/accounts";
+import { useAuth } from "@/app/providers/use-auth";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { ROLE_LABELS } from "@/lib/auth";
 import { formatCurrency, formatDate, cn } from "@/lib/utils";
+import type { PermissionKey } from "@/types";
 
 interface CommandMenuProps {
   open: boolean;
@@ -36,6 +40,7 @@ interface CommandItem {
   subtitle: string;
   keywords: string;
   icon: LucideIcon;
+  permission?: PermissionKey;
   run: () => Promise<void> | void;
 }
 
@@ -62,13 +67,6 @@ const settingsSections = [
     icon: CreditCard,
   },
   {
-    id: "user-roles",
-    label: "User Roles",
-    subtitle: "Admin, manager, and support team counts",
-    keywords: "settings roles users admins managers support",
-    icon: Users,
-  },
-  {
     id: "notifications",
     label: "Notifications",
     subtitle: "Low-stock, order alert, and digest preferences",
@@ -85,6 +83,7 @@ function matchesQuery(item: Pick<CommandItem, "label" | "subtitle" | "keywords">
 
 export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
   const navigate = useNavigate();
+  const { session, hasPermission, switchAccount } = useAuth();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -92,19 +91,25 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
   const { data: products = [] } = useQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
-    enabled: open,
+    enabled: open && hasPermission("catalog.view"),
     staleTime: 60_000,
   });
   const { data: orders = [] } = useQuery({
     queryKey: ["orders"],
     queryFn: fetchOrders,
-    enabled: open,
+    enabled: open && hasPermission("orders.view"),
     staleTime: 60_000,
   });
   const { data: customers = [] } = useQuery({
     queryKey: ["customers"],
     queryFn: fetchCustomers,
-    enabled: open,
+    enabled: open && hasPermission("customers.view"),
+    staleTime: 60_000,
+  });
+  const { data: accountUsers = [] } = useQuery({
+    queryKey: ["accounts", session?.activeAccount.id, "users"],
+    queryFn: () => fetchAccountUsers(session?.activeAccount.id ?? ""),
+    enabled: open && Boolean(session?.activeAccount.id) && hasPermission("settings.users.manage"),
     staleTime: 60_000,
   });
 
@@ -120,7 +125,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
   }, [open]);
 
   const items = useMemo(() => {
-    const navigateAndClose = async (callback: () => Promise<void>) => {
+    const navigateAndClose = async (callback: () => Promise<unknown>) => {
       onOpenChange(false);
       await callback();
     };
@@ -133,6 +138,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "Overview of revenue, orders, customers, and alerts",
         keywords: "home dashboard summary overview",
         icon: LayoutDashboard,
+        permission: "dashboard.view",
         run: () => navigateAndClose(() => navigate({ to: "/" })),
       },
       {
@@ -142,6 +148,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "Browse products, pricing, and merchandising state",
         keywords: "catalog products inventory merchandise",
         icon: Package,
+        permission: "catalog.view",
         run: () => navigateAndClose(() => navigate({ to: "/catalog" })),
       },
       {
@@ -151,6 +158,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "Review warehouse quantities and stock health",
         keywords: "inventory stock warehouse low stock",
         icon: PackageSearch,
+        permission: "inventory.view",
         run: () => navigateAndClose(() => navigate({ to: "/inventory" })),
       },
       {
@@ -160,6 +168,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "Track order flow, fulfillment, and aftercare",
         keywords: "orders fulfillment shipment returns refunds",
         icon: Receipt,
+        permission: "orders.view",
         run: () => navigateAndClose(() => navigate({ to: "/orders" })),
       },
       {
@@ -169,6 +178,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "Browse customer profiles, segments, and spend",
         keywords: "customers people buyers segments spend",
         icon: Users,
+        permission: "customers.view",
         run: () => navigateAndClose(() => navigate({ to: "/customers" })),
       },
       {
@@ -178,6 +188,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "Manage active and archived discount rules",
         keywords: "discounts promotions coupons offers",
         icon: CreditCard,
+        permission: "discounts.view",
         run: () => navigateAndClose(() => navigate({ to: "/discounts" })),
       },
       {
@@ -187,6 +198,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "View revenue, AOV, conversion, and category trends",
         keywords: "analytics revenue charts reports",
         icon: ChartColumn,
+        permission: "analytics.view",
         run: () => navigateAndClose(() => navigate({ to: "/analytics" })),
       },
       {
@@ -196,7 +208,38 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "Open store configuration and operations settings",
         keywords: "settings configuration preferences store profile shipping taxes",
         icon: Settings,
+        permission: "settings.view",
         run: () => navigateAndClose(() => navigate({ to: "/settings" })),
+      },
+      {
+        id: "go-users",
+        label: "Go to Users",
+        section: "Navigate",
+        subtitle: "Manage account members and role assignments",
+        keywords: "users team members roles access account",
+        icon: Users,
+        permission: "settings.users.manage",
+        run: () => navigateAndClose(() => navigate({ to: "/users" })),
+      },
+      {
+        id: "go-profile",
+        label: "Go to Profile",
+        section: "Navigate",
+        subtitle: "Edit your own name, email, title, and avatar",
+        keywords: "profile me account avatar personal settings",
+        icon: Users,
+        permission: "dashboard.view",
+        run: () => navigateAndClose(() => navigate({ to: "/profile" })),
+      },
+      {
+        id: "go-roles-permissions",
+        label: "Go to Roles & Permissions",
+        section: "Navigate",
+        subtitle: "Customize Admin and User permission sets",
+        keywords: "users roles permissions access policy admin user",
+        icon: Settings,
+        permission: "settings.permissions.manage",
+        run: () => navigateAndClose(() => navigate({ to: "/users/roles-permissions" })),
       },
       {
         id: "new-discount",
@@ -205,6 +248,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: "Open the new discount flow",
         keywords: "create new add discount promotion coupon",
         icon: FilePlus2,
+        permission: "discounts.manage",
         run: () => navigateAndClose(() => navigate({ to: "/discounts/new" })),
       },
       ...settingsSections.map((section) => ({
@@ -214,8 +258,25 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         subtitle: section.subtitle,
         keywords: section.keywords,
         icon: section.icon,
+        permission:
+          section.id === "store-profile" ? "settings.account_profile.manage" :
+          section.id === "shipping" ? "settings.shipping.manage" :
+          section.id === "taxes" ? "settings.tax.manage" :
+          section.id === "notifications" ? "settings.notifications.manage" :
+          "settings.view",
         run: () => navigateAndClose(() => navigate({ to: "/settings", hash: section.id })),
       })),
+      ...(session?.memberships.length
+        ? session.memberships.map((membership) => ({
+            id: `account-${membership.account.id}`,
+            label: `Switch to ${membership.account.name}`,
+            section: "Accounts",
+            subtitle: ROLE_LABELS[membership.role],
+            keywords: `${membership.account.name} account switch tenant ${membership.role}`,
+            icon: Cog,
+            run: () => navigateAndClose(() => switchAccount(membership.account.id)),
+          }))
+        : []),
     ];
 
     const productItems: CommandItem[] = products.map((product) => ({
@@ -225,6 +286,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
       subtitle: `${product.sku} · ${product.category} · ${formatCurrency(product.price)}`,
       keywords: `product ${product.name} ${product.sku} ${product.category} ${product.status}`,
       icon: Package,
+      permission: "catalog.view",
       run: () => navigateAndClose(() => navigate({ to: "/catalog/$productId", params: { productId: product.id } })),
     }));
 
@@ -235,6 +297,7 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
       subtitle: `${formatDate(order.date)} · ${order.status} · ${formatCurrency(order.total)}`,
       keywords: `order ${order.orderNumber} ${order.customerName} ${order.status} ${order.paymentStatus} ${order.shipment.carrier}`,
       icon: Receipt,
+      permission: "orders.view",
       run: () => navigateAndClose(() => navigate({ to: "/orders/$orderId", params: { orderId: order.id } })),
     }));
 
@@ -245,21 +308,40 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
       subtitle: `${customer.email} · ${customer.segment} · ${formatCurrency(customer.lifetimeSpend)}`,
       keywords: `customer ${customer.name} ${customer.email} ${customer.segment} ${customer.tags.join(" ")}`,
       icon: Users,
+      permission: "customers.view",
       run: () => navigateAndClose(() => navigate({ to: "/customers/$customerId", params: { customerId: customer.id } })),
     }));
 
-    const filteredBaseItems = baseItems.filter((item) => matchesQuery(item, query));
-    const filteredProductItems = productItems.filter((item) => matchesQuery(item, query)).slice(0, query ? 6 : 4);
-    const filteredOrderItems = orderItems.filter((item) => matchesQuery(item, query)).slice(0, query ? 6 : 4);
-    const filteredCustomerItems = customerItems.filter((item) => matchesQuery(item, query)).slice(0, query ? 6 : 4);
+    const userItems: CommandItem[] = accountUsers.map((user) => ({
+      id: `user-${user.userId}`,
+      label: user.name,
+      section: "Users",
+      subtitle: `${user.email} · ${ROLE_LABELS[user.role]} · ${user.title}`,
+      keywords: `user ${user.name} ${user.email} ${user.title} ${user.role} team member account`,
+      icon: Users,
+      permission: "settings.users.manage",
+      run: () => navigateAndClose(() => navigate({ to: "/users/$userId", params: { userId: user.userId } })),
+    }));
+
+    const filterItems = (itemsToFilter: CommandItem[]) =>
+      itemsToFilter
+        .filter((item) => !item.permission || hasPermission(item.permission))
+        .filter((item) => matchesQuery(item, query));
+
+    const filteredBaseItems = filterItems(baseItems);
+    const filteredProductItems = filterItems(productItems).slice(0, query ? 6 : 4);
+    const filteredOrderItems = filterItems(orderItems).slice(0, query ? 6 : 4);
+    const filteredCustomerItems = filterItems(customerItems).slice(0, query ? 6 : 4);
+    const filteredUserItems = filterItems(userItems).slice(0, query ? 6 : 4);
 
     return [
       ...filteredBaseItems,
       ...filteredProductItems,
       ...filteredOrderItems,
       ...filteredCustomerItems,
+      ...filteredUserItems,
     ];
-  }, [customers, navigate, onOpenChange, orders, products, query]);
+  }, [accountUsers, customers, hasPermission, navigate, onOpenChange, orders, products, query, session?.memberships, switchAccount]);
 
   useEffect(() => {
     if (!items.length) {

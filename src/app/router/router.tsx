@@ -2,6 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, createRoute, createRouter } from "@tanstack/react-router";
 import { NotFoundComponent, RootComponent } from "@/routes/__root";
 import DashboardPage from "@/routes/index";
+import LoginPage from "@/routes/login";
 import CatalogPage from "@/routes/catalog/index";
 import ProductDetailPage from "@/routes/catalog/$productId";
 import InventoryPage from "@/routes/inventory/index";
@@ -14,6 +15,10 @@ import NewDiscountPage from "@/routes/discounts/new";
 import DiscountDetailPage from "@/routes/discounts/$discountId";
 import AnalyticsPage from "@/routes/analytics/index";
 import SettingsPage from "@/routes/settings/index";
+import UsersPage from "@/routes/users/index";
+import RolesPermissionsPage from "@/routes/users/roles-permissions";
+import UserDetailPage from "@/routes/users/$userId";
+import ProfilePage from "@/routes/profile/index";
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -28,6 +33,12 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: DashboardPage,
+});
+
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/login",
+  component: LoginPage,
 });
 
 const catalogRoute = createRoute({
@@ -102,8 +113,33 @@ const settingsRoute = createRoute({
   component: SettingsPage,
 });
 
+const usersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/users",
+  component: UsersPage,
+});
+
+const userDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/users/$userId",
+  component: UserDetailPage,
+});
+
+const rolesPermissionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/users/roles-permissions",
+  component: RolesPermissionsPage,
+});
+
+const profileRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/profile",
+  component: ProfilePage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  loginRoute,
   catalogRoute,
   productRoute,
   inventoryRoute,
@@ -115,6 +151,10 @@ const routeTree = rootRoute.addChildren([
   newDiscountRoute,
   discountDetailRoute,
   analyticsRoute,
+  usersRoute,
+  userDetailRoute,
+  rolesPermissionsRoute,
+  profileRoute,
   settingsRoute,
 ]);
 

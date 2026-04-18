@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchSettings, updateSettings } from "@/api/settings";
-import type { SettingsData } from "@/types";
+import {
+  fetchAccount,
+  fetchAccountSettings,
+  updateAccount,
+  updateAccountSettings,
+} from "@/api/accounts";
+import { useAuth } from "@/app/providers/use-auth";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
@@ -9,55 +14,74 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import type { Account, SettingsData } from "@/types";
 
 export default function SettingsPage() {
+  const { session, hasPermission } = useAuth();
   const queryClient = useQueryClient();
-  const { data, isLoading } = useQuery({
-    queryKey: ["settings"],
-    queryFn: fetchSettings,
+  const accountId = session?.activeAccount.id ?? "";
+
+  const accountQuery = useQuery({
+    queryKey: ["accounts", accountId],
+    queryFn: () => fetchAccount(accountId),
+    enabled: Boolean(accountId),
   });
-  const [form, setForm] = useState<SettingsData | null>(null);
+  const settingsQuery = useQuery({
+    queryKey: ["accounts", accountId, "settings"],
+    queryFn: () => fetchAccountSettings(accountId),
+    enabled: Boolean(accountId),
+  });
+  const [accountForm, setAccountForm] = useState<Account | null>(null);
+  const [settingsForm, setSettingsForm] = useState<SettingsData | null>(null);
 
   useEffect(() => {
-    if (data) setForm(data);
-  }, [data]);
+    if (accountQuery.data) setAccountForm(accountQuery.data);
+  }, [accountQuery.data]);
 
-  const mutation = useMutation({
-    mutationFn: (payload: Partial<SettingsData>) => updateSettings(payload),
+  useEffect(() => {
+    if (settingsQuery.data) setSettingsForm(settingsQuery.data);
+  }, [settingsQuery.data]);
+
+  const accountMutation = useMutation({
+    mutationFn: (payload: Partial<Account>) => updateAccount(accountId, payload),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["settings"] });
+      await queryClient.invalidateQueries({ queryKey: ["accounts", accountId] });
+      await queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
     },
   });
+  const settingsMutation = useMutation({
+    mutationFn: (payload: Partial<SettingsData>) => updateAccountSettings(accountId, payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["accounts", accountId, "settings"] });
+    },
+  });
+  const canManageProfile = hasPermission("settings.account_profile.manage");
+  const canManageShipping = hasPermission("settings.shipping.manage");
+  const canManageTaxes = hasPermission("settings.tax.manage");
+  const canManageNotifications = hasPermission("settings.notifications.manage");
 
-  if (isLoading || !form) {
+  if (!accountForm || !settingsForm || accountQuery.isLoading || settingsQuery.isLoading) {
     return <LoadingState label="Loading settings..." />;
   }
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Settings"
-        description="Store configuration for profile, shipping, taxes, roles, and notifications."
-        actions={
-          <Button onClick={() => void mutation.mutateAsync(form)} disabled={mutation.isPending}>
-            {mutation.isPending ? "Saving..." : "Save settings"}
-          </Button>
-        }
-      />
+      <PageHeader title="Settings" description={`Operational settings for ${accountForm.name}.`} />
 
       <div className="grid gap-6 xl:grid-cols-2">
         <Card id="store-profile">
           <CardHeader>
-            <CardTitle>Store Profile</CardTitle>
+            <CardTitle>Account Profile</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4">
+          <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="storeName">Store name</Label>
               <Input
                 id="storeName"
-                value={form.storeProfile.storeName}
+                disabled={!canManageProfile}
+                value={accountForm.profile.storeName}
                 onChange={(event) =>
-                  setForm({ ...form, storeProfile: { ...form.storeProfile, storeName: event.target.value } })
+                  setAccountForm({ ...accountForm, profile: { ...accountForm.profile, storeName: event.target.value } })
                 }
               />
             </div>
@@ -65,9 +89,10 @@ export default function SettingsPage() {
               <Label htmlFor="supportEmail">Support email</Label>
               <Input
                 id="supportEmail"
-                value={form.storeProfile.supportEmail}
+                disabled={!canManageProfile}
+                value={accountForm.profile.supportEmail}
                 onChange={(event) =>
-                  setForm({ ...form, storeProfile: { ...form.storeProfile, supportEmail: event.target.value } })
+                  setAccountForm({ ...accountForm, profile: { ...accountForm.profile, supportEmail: event.target.value } })
                 }
               />
             </div>
@@ -76,9 +101,10 @@ export default function SettingsPage() {
                 <Label htmlFor="currency">Currency</Label>
                 <Input
                   id="currency"
-                  value={form.storeProfile.currency}
+                  disabled={!canManageProfile}
+                  value={accountForm.profile.currency}
                   onChange={(event) =>
-                    setForm({ ...form, storeProfile: { ...form.storeProfile, currency: event.target.value } })
+                    setAccountForm({ ...accountForm, profile: { ...accountForm.profile, currency: event.target.value } })
                   }
                 />
               </div>
@@ -86,12 +112,21 @@ export default function SettingsPage() {
                 <Label htmlFor="timezone">Timezone</Label>
                 <Input
                   id="timezone"
-                  value={form.storeProfile.timezone}
+                  disabled={!canManageProfile}
+                  value={accountForm.profile.timezone}
                   onChange={(event) =>
-                    setForm({ ...form, storeProfile: { ...form.storeProfile, timezone: event.target.value } })
+                    setAccountForm({ ...accountForm, profile: { ...accountForm.profile, timezone: event.target.value } })
                   }
                 />
               </div>
+            </div>
+            <div className="flex justify-end">
+              <Button
+                disabled={!canManageProfile || accountMutation.isPending}
+                onClick={() => void accountMutation.mutateAsync({ profile: accountForm.profile })}
+              >
+                {accountMutation.isPending ? "Saving..." : "Save profile"}
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -100,13 +135,16 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Shipping</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4">
+          <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="carrier">Default carrier</Label>
               <Input
                 id="carrier"
-                value={form.shipping.defaultCarrier}
-                onChange={(event) => setForm({ ...form, shipping: { ...form.shipping, defaultCarrier: event.target.value } })}
+                disabled={!canManageShipping}
+                value={settingsForm.shipping.defaultCarrier}
+                onChange={(event) =>
+                  setSettingsForm({ ...settingsForm, shipping: { ...settingsForm.shipping, defaultCarrier: event.target.value } })
+                }
               />
             </div>
             <div className="grid gap-4 md:grid-cols-2">
@@ -115,9 +153,10 @@ export default function SettingsPage() {
                 <Input
                   id="standardRate"
                   type="number"
-                  value={form.shipping.standardRate}
+                  disabled={!canManageShipping}
+                  value={settingsForm.shipping.standardRate}
                   onChange={(event) =>
-                    setForm({ ...form, shipping: { ...form.shipping, standardRate: Number(event.target.value) } })
+                    setSettingsForm({ ...settingsForm, shipping: { ...settingsForm.shipping, standardRate: Number(event.target.value) } })
                   }
                 />
               </div>
@@ -126,12 +165,21 @@ export default function SettingsPage() {
                 <Input
                   id="expressRate"
                   type="number"
-                  value={form.shipping.expressRate}
+                  disabled={!canManageShipping}
+                  value={settingsForm.shipping.expressRate}
                   onChange={(event) =>
-                    setForm({ ...form, shipping: { ...form.shipping, expressRate: Number(event.target.value) } })
+                    setSettingsForm({ ...settingsForm, shipping: { ...settingsForm.shipping, expressRate: Number(event.target.value) } })
                   }
                 />
               </div>
+            </div>
+            <div className="flex justify-end">
+              <Button
+                disabled={!canManageShipping || settingsMutation.isPending}
+                onClick={() => void settingsMutation.mutateAsync({ shipping: settingsForm.shipping })}
+              >
+                {settingsMutation.isPending ? "Saving..." : "Save shipping"}
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -140,13 +188,16 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Taxes</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4">
+          <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="nexus">Nexus region</Label>
               <Input
                 id="nexus"
-                value={form.taxes.nexusRegion}
-                onChange={(event) => setForm({ ...form, taxes: { ...form.taxes, nexusRegion: event.target.value } })}
+                disabled={!canManageTaxes}
+                value={settingsForm.taxes.nexusRegion}
+                onChange={(event) =>
+                  setSettingsForm({ ...settingsForm, taxes: { ...settingsForm.taxes, nexusRegion: event.target.value } })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -154,8 +205,11 @@ export default function SettingsPage() {
               <Input
                 id="taxRate"
                 type="number"
-                value={form.taxes.defaultRate}
-                onChange={(event) => setForm({ ...form, taxes: { ...form.taxes, defaultRate: Number(event.target.value) } })}
+                disabled={!canManageTaxes}
+                value={settingsForm.taxes.defaultRate}
+                onChange={(event) =>
+                  setSettingsForm({ ...settingsForm, taxes: { ...settingsForm.taxes, defaultRate: Number(event.target.value) } })
+                }
               />
             </div>
             <div className="flex items-center justify-between rounded-md border p-3">
@@ -164,62 +218,39 @@ export default function SettingsPage() {
                 <div className="text-sm text-muted-foreground">Toggle inclusive pricing for storefront display.</div>
               </div>
               <Switch
-                checked={form.taxes.pricesIncludeTax}
-                onCheckedChange={(checked) => setForm({ ...form, taxes: { ...form.taxes, pricesIncludeTax: checked } })}
+                disabled={!canManageTaxes}
+                checked={settingsForm.taxes.pricesIncludeTax}
+                onCheckedChange={(checked) =>
+                  setSettingsForm({ ...settingsForm, taxes: { ...settingsForm.taxes, pricesIncludeTax: checked } })
+                }
               />
+            </div>
+            <div className="flex justify-end">
+              <Button
+                disabled={!canManageTaxes || settingsMutation.isPending}
+                onClick={() => void settingsMutation.mutateAsync({ taxes: settingsForm.taxes })}
+              >
+                {settingsMutation.isPending ? "Saving..." : "Save tax settings"}
+              </Button>
             </div>
           </CardContent>
         </Card>
 
-        <Card id="user-roles">
-          <CardHeader>
-            <CardTitle>User Roles</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-3">
-            <div className="space-y-2">
-              <Label htmlFor="admins">Admins</Label>
-              <Input
-                id="admins"
-                type="number"
-                value={form.userRoles.admins}
-                onChange={(event) => setForm({ ...form, userRoles: { ...form.userRoles, admins: Number(event.target.value) } })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="managers">Managers</Label>
-              <Input
-                id="managers"
-                type="number"
-                value={form.userRoles.managers}
-                onChange={(event) => setForm({ ...form, userRoles: { ...form.userRoles, managers: Number(event.target.value) } })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="support">Support</Label>
-              <Input
-                id="support"
-                type="number"
-                value={form.userRoles.support}
-                onChange={(event) => setForm({ ...form, userRoles: { ...form.userRoles, support: Number(event.target.value) } })}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card id="notifications" className="xl:col-span-2">
+        <Card id="notifications">
           <CardHeader>
             <CardTitle>Notifications</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-3">
+          <CardContent className="space-y-4">
             <div className="flex items-center justify-between rounded-md border p-3">
               <div>
                 <div className="font-medium">Low stock</div>
                 <div className="text-sm text-muted-foreground">Alert merchants when inventory dips below thresholds.</div>
               </div>
               <Switch
-                checked={form.notifications.lowStock}
+                disabled={!canManageNotifications}
+                checked={settingsForm.notifications.lowStock}
                 onCheckedChange={(checked) =>
-                  setForm({ ...form, notifications: { ...form.notifications, lowStock: checked } })
+                  setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, lowStock: checked } })
                 }
               />
             </div>
@@ -229,26 +260,37 @@ export default function SettingsPage() {
                 <div className="text-sm text-muted-foreground">Send updates for new and delayed orders.</div>
               </div>
               <Switch
-                checked={form.notifications.orderAlerts}
+                disabled={!canManageNotifications}
+                checked={settingsForm.notifications.orderAlerts}
                 onCheckedChange={(checked) =>
-                  setForm({ ...form, notifications: { ...form.notifications, orderAlerts: checked } })
+                  setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, orderAlerts: checked } })
                 }
               />
             </div>
             <div className="flex items-center justify-between rounded-md border p-3">
               <div>
                 <div className="font-medium">Weekly digest</div>
-                <div className="text-sm text-muted-foreground">Summarize operational activity each week.</div>
+                <div className="text-sm text-muted-foreground">Send one summary report each week.</div>
               </div>
               <Switch
-                checked={form.notifications.weeklyDigest}
+                disabled={!canManageNotifications}
+                checked={settingsForm.notifications.weeklyDigest}
                 onCheckedChange={(checked) =>
-                  setForm({ ...form, notifications: { ...form.notifications, weeklyDigest: checked } })
+                  setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, weeklyDigest: checked } })
                 }
               />
             </div>
+            <div className="flex justify-end">
+              <Button
+                disabled={!canManageNotifications || settingsMutation.isPending}
+                onClick={() => void settingsMutation.mutateAsync({ notifications: settingsForm.notifications })}
+              >
+                {settingsMutation.isPending ? "Saving..." : "Save notifications"}
+              </Button>
+            </div>
           </CardContent>
         </Card>
+
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProduct, updateProduct } from "@/api/products";
+import { useAuth } from "@/app/providers/use-auth";
 import type { Product } from "@/types";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
@@ -37,6 +38,7 @@ function updateBundleComponentQuantity(product: Product, productId: string, quan
 }
 
 export default function ProductDetailPage() {
+  const { hasPermission } = useAuth();
   const { productId } = useParams({ from: "/catalog/$productId" });
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
@@ -44,6 +46,7 @@ export default function ProductDetailPage() {
     queryFn: () => fetchProduct(productId),
   });
   const [form, setForm] = useState<Product | null>(null);
+  const canEditCatalog = hasPermission("catalog.edit");
 
   useEffect(() => {
     if (data) setForm(data);
@@ -87,20 +90,21 @@ export default function ProductDetailPage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} />
+                <Input id="name" disabled={!canEditCatalog} value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="sku">SKU</Label>
-                <Input id="sku" value={form.sku} onChange={(event) => setForm({ ...form, sku: event.target.value })} />
+                <Input id="sku" disabled={!canEditCatalog} value={form.sku} onChange={(event) => setForm({ ...form, sku: event.target.value })} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Input id="category" value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} />
+                <Input id="category" disabled={!canEditCatalog} value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="kind">Kind</Label>
                 <Select
                   id="kind"
+                  disabled={!canEditCatalog}
                   value={form.kind}
                   onChange={(event) => setForm({ ...form, kind: event.target.value as Product["kind"] })}
                 >
@@ -114,6 +118,7 @@ export default function ProductDetailPage() {
                   id="price"
                   type="number"
                   min="0"
+                  disabled={!canEditCatalog}
                   value={form.price}
                   onChange={(event) => setForm({ ...form, price: Number(event.target.value) })}
                 />
@@ -122,6 +127,7 @@ export default function ProductDetailPage() {
                 <Label htmlFor="status">Status</Label>
                 <Select
                   id="status"
+                  disabled={!canEditCatalog}
                   value={form.status}
                   onChange={(event) => setForm({ ...form, status: event.target.value as Product["status"] })}
                 >
@@ -139,6 +145,7 @@ export default function ProductDetailPage() {
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
+                disabled={!canEditCatalog}
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
               />
@@ -204,6 +211,7 @@ export default function ProductDetailPage() {
                           <Input
                             type="number"
                             min="1"
+                            disabled={!canEditCatalog}
                             value={component.quantity}
                             onChange={(event) =>
                               setForm(updateBundleComponentQuantity(form, component.productId, Number(event.target.value)))
@@ -240,12 +248,14 @@ export default function ProductDetailPage() {
                       <TableRow key={variant.id}>
                         <TableCell>
                           <Input
+                            disabled={!canEditCatalog}
                             value={variant.name}
                             onChange={(event) => setForm(updateVariantField(form, variant.id, "name", event.target.value))}
                           />
                         </TableCell>
                         <TableCell>
                           <Input
+                            disabled={!canEditCatalog}
                             value={variant.sku}
                             onChange={(event) => setForm(updateVariantField(form, variant.id, "sku", event.target.value))}
                           />
@@ -254,6 +264,7 @@ export default function ProductDetailPage() {
                           <Input
                             type="number"
                             min="0"
+                            disabled={!canEditCatalog}
                             value={variant.price}
                             onChange={(event) =>
                               setForm(updateVariantField(form, variant.id, "price", Number(event.target.value)))
@@ -264,6 +275,7 @@ export default function ProductDetailPage() {
                           <Input
                             type="number"
                             min="0"
+                            disabled={!canEditCatalog}
                             value={variant.inventory}
                             onChange={(event) =>
                               setForm(updateVariantField(form, variant.id, "inventory", Number(event.target.value)))
@@ -277,7 +289,7 @@ export default function ProductDetailPage() {
               </div>
             ) : null}
             <div className="flex justify-end">
-              <Button type="submit" disabled={mutation.isPending}>
+              <Button type="submit" disabled={mutation.isPending || !canEditCatalog}>
                 {mutation.isPending ? "Saving..." : "Save product"}
               </Button>
             </div>

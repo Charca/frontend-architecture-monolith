@@ -1,14 +1,22 @@
+import { getStoredAuthToken } from "@/lib/auth";
+
 async function request<T>(input: string, init?: RequestInit): Promise<T> {
   const response = await fetch(input, {
     headers: {
       "Content-Type": "application/json",
+      ...(getStoredAuthToken() ? { Authorization: `Bearer ${getStoredAuthToken()}` } : {}),
       ...init?.headers,
     },
     ...init,
   });
 
   if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
+    const body = (await response.json().catch(() => null)) as { message?: string } | null;
+    throw new Error(body?.message ?? `Request failed with status ${response.status}`);
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   return response.json() as Promise<T>;
