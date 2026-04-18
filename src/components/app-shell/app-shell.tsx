@@ -38,13 +38,13 @@ export function AppShell({ children }: AppShellProps) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen overflow-hidden bg-background">
       <CommandMenu open={commandMenuOpen} onOpenChange={setCommandMenuOpen} />
-      <div className="flex min-h-screen">
-        <aside className="hidden w-72 border-r bg-card p-4 lg:block">
+      <div className="flex h-full">
+        <aside className="hidden h-full w-72 overflow-y-auto border-r bg-card p-4 lg:block">
           <SidebarNav />
         </aside>
-        <div className="flex min-h-screen flex-1 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
           <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
             <div className="flex items-center gap-3 px-4 py-3 lg:px-8">
               <Sheet>
@@ -93,7 +93,7 @@ export function AppShell({ children }: AppShellProps) {
               </Button>
             </div>
           </header>
-          <main className="flex-1 px-4 py-6 lg:px-8">
+          <main className="min-h-0 flex-1 overflow-y-auto px-4 py-6 lg:px-8">
             {children}
           </main>
         </div>

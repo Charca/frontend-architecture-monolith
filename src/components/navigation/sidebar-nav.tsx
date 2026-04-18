@@ -51,12 +51,12 @@ export function SidebarNav() {
         })}
       </nav>
       {session ? (
-        <div className="rounded-2xl border bg-card p-2 shadow-sm">
-          <div className="flex items-center gap-3 rounded-xl px-2 py-2">
+        <div className="rounded-xl border bg-card p-2 shadow-sm">
+          <div className="flex items-center gap-3 rounded-lg px-2 py-2">
             {session.user.avatarUrl ? (
-              <img src={session.user.avatarUrl} alt={session.user.name} className="h-12 w-12 rounded-full object-cover" />
+              <img src={session.user.avatarUrl} alt={session.user.name} className="h-10 w-10 rounded-full object-cover" />
             ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-sm font-semibold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-sm font-semibold">
                 {session.user.initials}
               </div>
             )}
@@ -73,40 +73,30 @@ export function SidebarNav() {
                   <EllipsisVertical className="h-5 w-5" />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[19rem] p-0">
-                <DropdownMenuLabel className="flex items-center gap-3 rounded-t-3xl px-5 py-5">
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="flex items-center gap-3">
                   {session.user.avatarUrl ? (
-                    <img src={session.user.avatarUrl} alt={session.user.name} className="h-14 w-14 rounded-2xl object-cover" />
+                    <img src={session.user.avatarUrl} alt={session.user.name} className="h-10 w-10 rounded-md object-cover" />
                   ) : (
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary text-base font-semibold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-secondary text-sm font-semibold">
                       {session.user.initials}
                     </div>
                   )}
                   <div className="min-w-0">
-                    <div className="truncate text-2xl font-semibold leading-none">{session.user.name}</div>
-                    <div className="mt-2 truncate text-lg text-muted-foreground">{session.user.email}</div>
+                    <div className="truncate text-sm font-semibold leading-none">{session.user.name}</div>
+                    <div className="mt-1 truncate text-xs text-muted-foreground">{session.user.email}</div>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <div className="p-2">
-                  <DropdownMenuItem
-                    onClick={() => void navigate({ to: "/profile" })}
-                    className="text-[1.05rem]"
-                  >
-                    <CircleUserRound className="h-5 w-5 text-muted-foreground" />
-                    <span>Account</span>
-                  </DropdownMenuItem>
-                </div>
+                <DropdownMenuItem onClick={() => void navigate({ to: "/profile" })}>
+                  <CircleUserRound className="h-4 w-4 text-muted-foreground" />
+                  <span>Account</span>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <div className="p-2">
-                  <DropdownMenuItem
-                    onClick={() => void logout()}
-                    className="text-[1.05rem]"
-                  >
-                    <LogOut className="h-5 w-5 text-muted-foreground" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </div>
+                <DropdownMenuItem onClick={() => void logout()}>
+                  <LogOut className="h-4 w-4 text-muted-foreground" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
