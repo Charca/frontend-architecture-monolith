@@ -4,6 +4,7 @@ import { NotFoundComponent, RootComponent } from "@/routes/__root";
 import DashboardPage from "@/routes/index";
 import LoginPage from "@/routes/login";
 import CatalogPage from "@/routes/catalog/index";
+import NewProductPage from "@/routes/catalog/new";
 import ProductDetailPage from "@/routes/catalog/$productId";
 import InventoryPage from "@/routes/inventory/index";
 import OrdersPage from "@/routes/orders/index";
@@ -51,6 +52,12 @@ const productRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/catalog/$productId",
   component: ProductDetailPage,
+});
+
+const newProductRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/catalog/new",
+  component: NewProductPage,
 });
 
 const inventoryRoute = createRoute({
@@ -141,6 +148,7 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
   catalogRoute,
+  newProductRoute,
   productRoute,
   inventoryRoute,
   ordersRoute,

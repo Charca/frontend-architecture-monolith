@@ -83,6 +83,7 @@ export interface Product {
   sku: string;
   category: string;
   description: string;
+  imageUrl?: string | null;
   kind: ProductKind;
   price: number;
   status: ProductStatus;

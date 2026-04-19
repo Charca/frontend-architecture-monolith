@@ -2,6 +2,7 @@ import { delay, http, HttpResponse } from "msw";
 import {
   authenticateUser,
   createDiscount,
+  createProduct,
   getAccount,
   getAccountPermissions,
   getAccountUser,
@@ -122,6 +123,13 @@ export const handlers = [
     if ("error" in result) return result.error;
     await delay(200);
     return HttpResponse.json(listProducts(result.session.activeAccount.id));
+  }),
+  http.post("/api/products", async ({ request }) => {
+    const result = requirePermission(request, "catalog.edit");
+    if ("error" in result) return result.error;
+    const payload = (await request.json()) as Omit<Product, "id">;
+    await delay(250);
+    return HttpResponse.json(createProduct(result.session.activeAccount.id, payload), { status: 201 });
   }),
   http.get("/api/products/:id", async ({ params, request }) => {
     const result = requirePermission(request, "catalog.view");

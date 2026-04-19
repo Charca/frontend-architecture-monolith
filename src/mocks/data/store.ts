@@ -21,8 +21,44 @@ import type {
 } from "@/types";
 
 const DEMO_PASSWORD = "demo123";
+const STORE_PERSISTENCE_KEY = "commerceos.mock.store.v1";
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+
+function readPersistedStore() {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = window.localStorage.getItem(STORE_PERSISTENCE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as {
+      usersById?: Record<string, AuthUser & { password: string }>;
+      memberships?: Array<{
+        userId: string;
+        accountId: string;
+        role: RoleKey;
+        status: "active" | "inactive";
+        lastActiveAt: string;
+      }>;
+      tenantDataByAccountId?: Record<string, TenantData>;
+    };
+  } catch {
+    return null;
+  }
+}
+
+function persistStore() {
+  if (typeof window === "undefined") return;
+
+  window.localStorage.setItem(
+    STORE_PERSISTENCE_KEY,
+    JSON.stringify({
+      usersById,
+      memberships,
+      tenantDataByAccountId,
+    }),
+  );
+}
 
 const collections: Collection[] = [
   { id: "col_1", name: "Seasonal Essentials", description: "Core products for the current merchandising calendar." },
@@ -60,7 +96,7 @@ const accountsById: Record<string, Account> = {
   },
 };
 
-const usersById: Record<string, AuthUser & { password: string }> = {
+const defaultUsersById: Record<string, AuthUser & { password: string }> = {
   user_owner: {
     id: "user_owner",
     name: "Avery Stone",
@@ -90,7 +126,7 @@ const usersById: Record<string, AuthUser & { password: string }> = {
   },
 };
 
-let memberships: Array<{
+const defaultMemberships: Array<{
   userId: string;
   accountId: string;
   role: RoleKey;
@@ -102,6 +138,21 @@ let memberships: Array<{
   { userId: "user_admin", accountId: "acct_northstar", role: "admin", status: "active", lastActiveAt: "2026-04-17" },
   { userId: "user_member", accountId: "acct_atelier", role: "user", status: "active", lastActiveAt: "2026-04-16" },
 ];
+
+const persistedStore = readPersistedStore();
+
+const usersById: Record<string, AuthUser & { password: string }> = {
+  ...defaultUsersById,
+  ...persistedStore?.usersById,
+};
+
+let memberships: Array<{
+  userId: string;
+  accountId: string;
+  role: RoleKey;
+  status: "active" | "inactive";
+  lastActiveAt: string;
+}> = persistedStore?.memberships ? clone(persistedStore.memberships) : clone(defaultMemberships);
 
 const permissionPoliciesByAccountId: Record<string, AccountPermissionPolicy> = {
   acct_northstar: {
@@ -505,6 +556,7 @@ function buildTenantData({
       sku: `${codePrefix.toUpperCase()}-TSH-001`,
       category: "Apparel",
       description: "Soft cotton tee designed for daily wear.",
+      imageUrl: null,
       kind: "standard",
       price: 32 + priceDelta,
       status: "active",
@@ -526,6 +578,7 @@ function buildTenantData({
       sku: `${codePrefix.toUpperCase()}-HDY-002`,
       category: "Apparel",
       description: "Midweight fleece hoodie with a brushed interior.",
+      imageUrl: null,
       kind: "standard",
       price: 68 + priceDelta,
       status: "active",
@@ -542,6 +595,7 @@ function buildTenantData({
       sku: `${codePrefix.toUpperCase()}-BAG-003`,
       category: "Accessories",
       description: "Structured tote with reinforced straps.",
+      imageUrl: null,
       kind: "standard",
       price: 28 + priceDelta,
       status: "active",
@@ -558,6 +612,7 @@ function buildTenantData({
       sku: `${codePrefix.toUpperCase()}-HOM-004`,
       category: "Home",
       description: "Powder-coated desk lamp with warm light tone.",
+      imageUrl: null,
       kind: "standard",
       price: 84 + priceDelta,
       status: "active",
@@ -574,6 +629,7 @@ function buildTenantData({
       sku: `${codePrefix.toUpperCase()}-KIT-005`,
       category: "Bundles",
       description: "Bundle pairing a tee, tote, and lamp for gifting.",
+      imageUrl: null,
       kind: "bundle",
       price: 126 + priceDelta,
       status: "active",
@@ -671,7 +727,7 @@ function buildTenantData({
   return { products, inventory, customers, orders, discounts, settings, auditLog };
 }
 
-const tenantDataByAccountId: Record<string, TenantData> = {
+const defaultTenantDataByAccountId: Record<string, TenantData> = {
   acct_northstar: buildTenantData({
     codePrefix: "north",
     categoryAccent: "Summit",
@@ -687,6 +743,13 @@ const tenantDataByAccountId: Record<string, TenantData> = {
     priceDelta: 6,
   }),
 };
+
+const tenantDataByAccountId: Record<string, TenantData> = persistedStore?.tenantDataByAccountId
+  ? {
+      ...defaultTenantDataByAccountId,
+      ...persistedStore.tenantDataByAccountId,
+    }
+  : defaultTenantDataByAccountId;
 
 function getTenant(accountId: string) {
   const tenant = tenantDataByAccountId[accountId];
@@ -968,6 +1031,7 @@ export function updateProduct(accountId: string, id: string, payload: Partial<Pr
         })
       : product,
   );
+  persistStore();
   recordAuditEntry(accountId, {
     entityType: "product",
     entityId: id,
@@ -977,6 +1041,29 @@ export function updateProduct(accountId: string, id: string, payload: Partial<Pr
     summary: "Product details updated.",
   });
   return getProduct(accountId, id);
+}
+
+export function createProduct(accountId: string, payload: Omit<Product, "id">) {
+  const tenant = getTenant(accountId);
+  const nextId = `${accountId}_prod_${tenant.products.length + 1}`;
+  const nextProduct = summarizeProduct({
+    ...payload,
+    id: nextId,
+    collectionIds: payload.collectionIds ?? [],
+    variants: payload.variants ?? [],
+  });
+
+  tenant.products = [nextProduct, ...tenant.products];
+  persistStore();
+  recordAuditEntry(accountId, {
+    entityType: "product",
+    entityId: nextId,
+    action: "created",
+    actor: "Catalog Team",
+    timestamp: "2026-04-19",
+    summary: "New product created.",
+  });
+  return getProduct(accountId, nextId);
 }
 
 export function listInventory(accountId: string) {
@@ -1222,6 +1309,7 @@ export function updateAccountUser(accountId: string, userId: string, payload: Pa
         }
       : membership,
   );
+  persistStore();
   const updated = getAccountUser(accountId, userId);
   return updated ? clone(updated) : null;
 }
@@ -1251,6 +1339,7 @@ export function updateCurrentUser(userId: string, payload: Partial<AuthUser>) {
     avatarUrl: payload.avatarUrl ?? current.avatarUrl ?? null,
     initials: payload.initials ?? deriveInitials(nextName),
   };
+  persistStore();
   return getCurrentUser(userId);
 }
 

@@ -3,6 +3,7 @@ import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProduct, updateProduct } from "@/api/products";
 import { useAuth } from "@/app/providers/use-auth";
+import { ProductImageField } from "@/components/products/product-image-field";
 import type { Product } from "@/types";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { ActivityHistoryCard } from "@/components/shared/activity-history-card";
@@ -85,6 +86,15 @@ export default function ProductDetailPage() {
             }}
           >
             <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2 md:col-span-2">
+                <Label>Product Image</Label>
+                <ProductImageField
+                  imageUrl={form.imageUrl}
+                  productName={form.name}
+                  disabled={!canEditCatalog}
+                  onChange={(imageUrl) => setForm({ ...form, imageUrl })}
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <Input id="name" disabled={!canEditCatalog} value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} />

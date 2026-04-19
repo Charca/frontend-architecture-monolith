@@ -120,6 +120,7 @@ export const VIEW_PERMISSION_BY_PATH: Array<{ prefix: string; permission: Permis
   { prefix: "/customers", permission: "customers.view" },
   { prefix: "/orders", permission: "orders.view" },
   { prefix: "/inventory", permission: "inventory.view" },
+  { prefix: "/catalog/new", permission: "catalog.edit" },
   { prefix: "/catalog", permission: "catalog.view" },
   { prefix: "/", permission: "dashboard.view" },
 ];
