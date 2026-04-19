@@ -201,8 +201,8 @@ export interface DashboardSummary {
   orders: number;
   customers: number;
   lowStockItems: number;
-  salesTrend: Array<{ label: string; revenue: number }>;
-  customerSegments: Array<{ label: CustomerSegment; value: number }>;
+  recentOrderRevenueTrend: Array<{ label: string; revenue: number; orders: number }>;
+  orderDistribution: Array<{ label: OrderStatus; value: number }>;
   recentOrders: Order[];
   notifications: {
     lowStock: InventoryItem[];

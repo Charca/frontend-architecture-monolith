@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, DollarSign, ShoppingCart, Users } from "lucide-react";
-import { Area, AreaChart, Cell, Pie, PieChart } from "recharts";
+import { Area, Bar, BarChart, CartesianGrid, Cell, ComposedChart, LabelList, Line, XAxis, YAxis } from "recharts";
 import { fetchDashboardSummary } from "@/api/dashboard";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
@@ -11,9 +11,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency, formatDate, formatNumber } from "@/lib/utils";
-import { formatAnalyticsMonth } from "@/utils/analytics-date";
 
 const SEGMENT_COLORS = ["hsl(217 91% 60%)", "hsl(173 58% 39%)", "hsl(38 92% 50%)", "hsl(262 83% 58%)", "hsl(8 84% 60%)"];
+
+function formatStatusLabel(value: string) {
+  return value
+    .split("_")
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+}
 
 export default function DashboardPage() {
   const { data, isLoading } = useQuery({
@@ -25,13 +31,14 @@ export default function DashboardPage() {
     return <LoadingState label="Loading dashboard..." />;
   }
 
-  const salesTrend = data.salesTrend.map((item) => ({
+  const recentOrderRevenueTrend = data.recentOrderRevenueTrend.map((item) => ({
     ...item,
-    label: formatAnalyticsMonth(item.label),
+    label: new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(`${item.label}T00:00:00`)),
   }));
 
-  const customerSegments = data.customerSegments.map((item, index) => ({
+  const orderDistribution = data.orderDistribution.map((item, index) => ({
     ...item,
+    label: formatStatusLabel(item.label),
     fill: SEGMENT_COLORS[index % SEGMENT_COLORS.length],
   }));
 
@@ -52,55 +59,77 @@ export default function DashboardPage() {
       <div className="grid gap-6 xl:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Revenue Momentum</CardTitle>
+            <CardTitle>Orders And Revenue · Last 14 Days</CardTitle>
           </CardHeader>
           <CardContent>
             <ChartContainer
               config={{
                 revenue: { label: "Revenue", color: "hsl(217 91% 60%)" },
+                orders: { label: "Orders", color: "hsl(173 58% 39%)" },
               }}
               className="h-[220px]"
             >
-              <AreaChart data={salesTrend}>
+              <ComposedChart data={recentOrderRevenueTrend}>
                 <defs>
                   <linearGradient id="dashboard-revenue-fill" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="var(--color-revenue)" stopOpacity={0.24} />
                     <stop offset="95%" stopColor="var(--color-revenue)" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
-                <ChartTooltip content={<ChartTooltipContent formatter={(value) => formatCurrency(Number(value))} />} />
-                <Area type="monotone" dataKey="revenue" stroke="var(--color-revenue)" strokeWidth={3} fill="url(#dashboard-revenue-fill)" />
-              </AreaChart>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={24} />
+                <YAxis yAxisId="left" tickLine={false} axisLine={false} tickFormatter={(value) => `$${Math.round(Number(value))}`} />
+                <YAxis yAxisId="right" orientation="right" tickLine={false} axisLine={false} allowDecimals={false} />
+                <ChartTooltip
+                  content={
+                    <ChartTooltipContent
+                      formatter={(value, name) => {
+                        if (name === "revenue") return formatCurrency(Number(value));
+                        if (name === "orders") return `${value} orders`;
+                        return String(value);
+                      }}
+                    />
+                  }
+                />
+                <Bar yAxisId="right" dataKey="orders" fill="var(--color-orders)" radius={[8, 8, 0, 0]} barSize={16} />
+                <Area yAxisId="left" type="monotone" dataKey="revenue" stroke="var(--color-revenue)" strokeWidth={3} fill="url(#dashboard-revenue-fill)" />
+                <Line yAxisId="left" type="monotone" dataKey="revenue" stroke="var(--color-revenue)" strokeWidth={3} dot={false} activeDot={{ r: 4 }} />
+              </ComposedChart>
             </ChartContainer>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Customer Segment Mix</CardTitle>
+            <CardTitle>Order Distribution</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-[1fr,0.9fr]">
-            <ChartContainer config={{ value: { label: "Customers" } }} className="h-[220px]">
-              <PieChart>
-                <ChartTooltip content={<ChartTooltipContent hideLabel formatter={(value) => `${value} customers`} />} />
-                <Pie data={customerSegments} dataKey="value" nameKey="label" innerRadius={54} outerRadius={84} paddingAngle={3}>
-                  {customerSegments.map((entry) => (
+          <CardContent>
+            <ChartContainer config={{ value: { label: "Orders", color: "hsl(217 91% 60%)" } }} className="h-[220px]">
+              <BarChart data={orderDistribution} layout="vertical" margin={{ left: 8, right: 32 }}>
+                <CartesianGrid horizontal={false} />
+                <XAxis type="number" hide />
+                <YAxis type="category" dataKey="label" hide />
+                <ChartTooltip content={<ChartTooltipContent hideLabel formatter={(value) => `${value} orders`} />} />
+                <Bar dataKey="value" radius={10}>
+                  {orderDistribution.map((entry) => (
                     <Cell key={entry.label} fill={entry.fill} />
                   ))}
-                </Pie>
-              </PieChart>
+                  <LabelList
+                    dataKey="label"
+                    position="insideLeft"
+                    offset={12}
+                    className="fill-white text-[12px] font-medium"
+                  />
+                  <LabelList
+                    dataKey="value"
+                    position="right"
+                    offset={8}
+                    className="fill-muted-foreground text-[12px] font-medium"
+                    formatter={(value) => `${value ?? ""}`}
+                  />
+                </Bar>
+              </BarChart>
             </ChartContainer>
-            <div className="space-y-3">
-              {customerSegments.map((segment) => (
-                <div key={segment.label} className="flex items-center justify-between rounded-lg border px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: segment.fill }} />
-                    <span className="text-sm font-medium">{segment.label}</span>
-                  </div>
-                  <span className="text-sm text-muted-foreground">{segment.value}</span>
-                </div>
-              ))}
-            </div>
           </CardContent>
         </Card>
       </div>
