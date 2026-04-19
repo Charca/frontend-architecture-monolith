@@ -26,6 +26,7 @@ import {
   updateAccount,
   updateAccountPermissions,
   updateAccountUser,
+  updateCustomer,
   updateCurrentUser,
   updateDiscount,
   updateInventory,
@@ -33,7 +34,7 @@ import {
   updateProduct,
   updateSettings,
 } from "@/mocks/data/store";
-import type { Account, AccountMember, AccountPermissionPolicy, Discount, InventoryItem, Order, Product, SettingsData } from "@/types";
+import type { Account, AccountMember, AccountPermissionPolicy, Customer, Discount, InventoryItem, Order, Product, SettingsData } from "@/types";
 
 function getToken(request: Request) {
   const header = request.headers.get("Authorization");
@@ -193,6 +194,14 @@ export const handlers = [
     if ("error" in result) return result.error;
     await delay(150);
     const customer = getCustomer(result.session.activeAccount.id, String(params.id));
+    return customer ? HttpResponse.json(customer) : HttpResponse.json({ message: "Not found" }, { status: 404 });
+  }),
+  http.patch("/api/customers/:id", async ({ params, request }) => {
+    const result = requirePermission(request, "customers.view");
+    if ("error" in result) return result.error;
+    const payload = (await request.json()) as Partial<Customer>;
+    await delay(220);
+    const customer = updateCustomer(result.session.activeAccount.id, String(params.id), payload);
     return customer ? HttpResponse.json(customer) : HttpResponse.json({ message: "Not found" }, { status: 404 });
   }),
   http.get("/api/discounts", async ({ request }) => {

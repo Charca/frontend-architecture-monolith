@@ -1147,6 +1147,21 @@ export function getCustomer(accountId: string, id: string) {
   });
 }
 
+export function updateCustomer(accountId: string, id: string, payload: Partial<Customer>) {
+  const tenant = getTenant(accountId);
+  tenant.customers = tenant.customers.map((customer) =>
+    customer.id === id
+      ? {
+          ...customer,
+          ...payload,
+          tags: payload.tags ?? customer.tags,
+        }
+      : customer,
+  );
+  persistStore();
+  return getCustomer(accountId, id);
+}
+
 export function listDiscounts(accountId: string) {
   return clone(getTenant(accountId).discounts);
 }
