@@ -4,10 +4,12 @@ import { fetchOrder, updateOrder } from "@/api/orders";
 import { useAuth } from "@/app/providers/use-auth";
 import type { Order } from "@/types";
 import { LoadingState } from "@/components/feedback/loading-state";
+import { ActivityHistoryCard } from "@/components/shared/activity-history-card";
+import { KeyValueList } from "@/components/shared/key-value-list";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -125,11 +127,7 @@ export default function OrderDetailPage() {
       />
 
       <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
-        <Card>
-          <CardHeader>
-            <CardTitle>Line Items</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <SectionCard title="Line Items">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -150,86 +148,44 @@ export default function OrderDetailPage() {
                 ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
+        </SectionCard>
 
         <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Order status</span>
-                <StatusBadge status={data.status} />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Payment</span>
-                <StatusBadge status={data.paymentStatus} />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Customer</span>
-                <span>{data.customerName}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Price list</span>
-                <span>{data.appliedPriceListName ?? "Retail default"}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Total</span>
-                <span>{formatCurrency(data.total)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Refunded</span>
-                <span>{formatCurrency(refundedAmount)}</span>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Shipping Info</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1 text-sm">
-              <div>{data.shippingAddress.name}</div>
-              <div>{data.shippingAddress.line1}</div>
-              <div>
-                {data.shippingAddress.city}, {data.shippingAddress.region} {data.shippingAddress.postalCode}
-              </div>
-              <div>{data.shippingAddress.country}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Shipment Tracking</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Carrier</span>
-                <span>{data.shipment.carrier}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Tracking</span>
-                <span>{data.shipment.trackingNumber}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Shipment status</span>
-                <StatusBadge status={data.shipment.status} />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Shipped</span>
-                <span>{data.shipment.shippedAt ? formatDate(data.shipment.shippedAt) : "Not shipped yet"}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Estimated delivery</span>
-                <span>{data.shipment.estimatedDelivery ? formatDate(data.shipment.estimatedDelivery) : "Pending"}</span>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Returns and Refunds</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
+          <SectionCard title="Summary">
+            <KeyValueList
+              items={[
+                { label: "Order status", value: <StatusBadge status={data.status} /> },
+                { label: "Payment", value: <StatusBadge status={data.paymentStatus} /> },
+                { label: "Customer", value: data.customerName },
+                { label: "Price list", value: data.appliedPriceListName ?? "Retail default" },
+                { label: "Total", value: formatCurrency(data.total) },
+                { label: "Refunded", value: formatCurrency(refundedAmount) },
+              ]}
+            />
+          </SectionCard>
+          <SectionCard title="Shipping Info" contentClassName="space-y-1 text-sm">
+            <div>{data.shippingAddress.name}</div>
+            <div>{data.shippingAddress.line1}</div>
+            <div>
+              {data.shippingAddress.city}, {data.shippingAddress.region} {data.shippingAddress.postalCode}
+            </div>
+            <div>{data.shippingAddress.country}</div>
+          </SectionCard>
+          <SectionCard title="Shipment Tracking">
+            <KeyValueList
+              items={[
+                { label: "Carrier", value: data.shipment.carrier },
+                { label: "Tracking", value: data.shipment.trackingNumber },
+                { label: "Shipment status", value: <StatusBadge status={data.shipment.status} /> },
+                { label: "Shipped", value: data.shipment.shippedAt ? formatDate(data.shipment.shippedAt) : "Not shipped yet" },
+                {
+                  label: "Estimated delivery",
+                  value: data.shipment.estimatedDelivery ? formatDate(data.shipment.estimatedDelivery) : "Pending",
+                },
+              ]}
+            />
+          </SectionCard>
+          <SectionCard title="Returns and Refunds" contentClassName="space-y-4 text-sm">
               <div className="space-y-2">
                 <div className="font-medium">Refunds</div>
                 {data.refunds.length ? data.refunds.map((refund) => (
@@ -270,31 +226,11 @@ export default function OrderDetailPage() {
                   </div>
                 )) : <div className="text-muted-foreground">No exchanges recorded.</div>}
               </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Notes</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">{data.notes || "No notes available."}</CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Activity History</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {(data.activityHistory ?? []).map((entry) => (
-                <div key={entry.id} className="rounded-md border p-3 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium capitalize">{entry.action.replace(/_/g, " ")}</span>
-                    <span className="text-muted-foreground">{entry.timestamp}</span>
-                  </div>
-                  <div className="text-muted-foreground">{entry.summary}</div>
-                  <div className="text-xs text-muted-foreground">by {entry.actor}</div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          </SectionCard>
+          <SectionCard title="Notes" contentClassName="text-sm text-muted-foreground">
+            {data.notes || "No notes available."}
+          </SectionCard>
+          <ActivityHistoryCard entries={data.activityHistory} />
         </div>
       </div>
     </div>

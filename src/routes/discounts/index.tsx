@@ -4,9 +4,9 @@ import { fetchDiscounts } from "@/api/discounts";
 import { useAuth } from "@/app/providers/use-auth";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatDate } from "@/lib/utils";
 
@@ -40,8 +40,7 @@ export default function DiscountsPage() {
           ) : null
         }
       />
-      <Card>
-        <CardContent className="pt-6">
+      <SectionCard>
           <Table>
             <TableHeader>
               <TableRow>
@@ -80,8 +79,7 @@ export default function DiscountsPage() {
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+      </SectionCard>
     </div>
   );
 }

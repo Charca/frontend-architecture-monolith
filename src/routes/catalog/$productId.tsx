@@ -5,9 +5,10 @@ import { fetchProduct, updateProduct } from "@/api/products";
 import { useAuth } from "@/app/providers/use-auth";
 import type { Product } from "@/types";
 import { LoadingState } from "@/components/feedback/loading-state";
+import { ActivityHistoryCard } from "@/components/shared/activity-history-card";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -75,11 +76,7 @@ export default function ProductDetailPage() {
           </Link>
         }
       />
-      <Card>
-        <CardHeader>
-          <CardTitle>Product Details</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <SectionCard title="Product Details">
           <form
             className="space-y-6"
             onSubmit={(event) => {
@@ -294,25 +291,8 @@ export default function ProductDetailPage() {
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Activity History</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {(form.activityHistory ?? []).map((entry) => (
-            <div key={entry.id} className="rounded-md border p-3 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="font-medium capitalize">{entry.action.replace(/_/g, " ")}</span>
-                <span className="text-muted-foreground">{entry.timestamp}</span>
-              </div>
-              <div className="text-muted-foreground">{entry.summary}</div>
-              <div className="text-xs text-muted-foreground">by {entry.actor}</div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      </SectionCard>
+      <ActivityHistoryCard entries={form.activityHistory} />
     </div>
   );
 }

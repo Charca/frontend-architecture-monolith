@@ -4,6 +4,7 @@ import { fetchInventory, updateInventory } from "@/api/inventory";
 import { useAuth } from "@/app/providers/use-auth";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -48,8 +48,7 @@ export default function InventoryPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Inventory" description="Track stock levels across warehouse locations and adjust counts." />
-      <Card>
-        <CardContent className="pt-6">
+      <SectionCard>
           <Table>
             <TableHeader>
               <TableRow>
@@ -64,7 +63,14 @@ export default function InventoryPage() {
             </TableHeader>
             <TableBody>
               {data.map((item) => (
-                <TableRow key={item.id} className={item.status !== "healthy" ? "bg-amber-50/60 hover:bg-amber-50" : undefined}>
+                <TableRow
+                  key={item.id}
+                  className={
+                    item.status !== "healthy"
+                      ? "bg-amber-50/60 hover:bg-amber-50 dark:bg-amber-500/10 dark:hover:bg-amber-500/14"
+                      : undefined
+                  }
+                >
                   <TableCell className="font-medium">{item.productName}</TableCell>
                   <TableCell className="table-cell-muted">{item.sku}</TableCell>
                   <TableCell>{item.location}</TableCell>
@@ -119,8 +125,7 @@ export default function InventoryPage() {
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+      </SectionCard>
     </div>
   );
 }

@@ -5,8 +5,8 @@ import { fetchCustomers } from "@/api/customers";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { StatusBadge } from "@/components/shared/status-badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -37,8 +37,7 @@ export default function CustomersPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Customers" description="Browse customer records, spend, and order activity." />
-      <Card>
-        <CardContent className="space-y-4 pt-6">
+      <SectionCard contentClassName="space-y-4">
           <div className="grid gap-4 md:grid-cols-[minmax(0,1fr),220px]">
             <Input placeholder="Search by customer name or email" value={search} onChange={(event) => setSearch(event.target.value)} />
             <Select value={segment} onChange={(event) => setSegment(event.target.value)}>
@@ -86,8 +85,7 @@ export default function CustomersPage() {
           ) : (
             <EmptyState title="No customers found" description="Try a different search query." />
           )}
-        </CardContent>
-      </Card>
+      </SectionCard>
     </div>
   );
 }

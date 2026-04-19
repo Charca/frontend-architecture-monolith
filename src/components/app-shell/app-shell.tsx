@@ -4,6 +4,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/app/providers/use-auth";
 import { CommandMenu } from "@/components/app-shell/command-menu";
 import { SidebarNav } from "@/components/navigation/sidebar-nav";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -76,6 +77,7 @@ export function AppShell({ children }: AppShellProps) {
                   </Select>
                 </div>
               ) : null}
+              <ThemeToggle />
               <Button
                 type="button"
                 variant="outline"

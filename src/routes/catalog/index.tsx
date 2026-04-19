@@ -6,8 +6,8 @@ import { EmptyState } from "@/components/feedback/empty-state";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { useCatalogFilters } from "@/hooks/use-catalog-filters";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { StatusBadge } from "@/components/shared/status-badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -36,8 +36,7 @@ export default function CatalogPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Catalog" description="Manage product details, pricing, and merchandising status." />
-      <Card>
-        <CardContent className="space-y-4 pt-6">
+      <SectionCard contentClassName="space-y-4">
           <div className="grid gap-4 md:grid-cols-4">
             <Input placeholder="Search by product name" value={search} onChange={(event) => setSearch(event.target.value)} />
             <Select value={category} onChange={(event) => setCategory(event.target.value)}>
@@ -106,8 +105,7 @@ export default function CatalogPage() {
           ) : (
             <EmptyState title="No matching products" description="Try adjusting your search or filter controls." />
           )}
-        </CardContent>
-      </Card>
+      </SectionCard>
     </div>
   );
 }

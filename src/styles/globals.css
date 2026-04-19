@@ -31,8 +31,41 @@
 }
 
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --color-border: hsl(217 19% 24%);
+    --color-input: hsl(217 19% 24%);
+    --color-ring: hsl(213 94% 68%);
+    --color-background: hsl(222 47% 11%);
+    --color-foreground: hsl(210 40% 96%);
+    --color-primary: hsl(213 94% 68%);
+    --color-primary-foreground: hsl(222 47% 11%);
+    --color-secondary: hsl(217 19% 18%);
+    --color-secondary-foreground: hsl(210 40% 96%);
+    --color-muted: hsl(217 19% 18%);
+    --color-muted-foreground: hsl(215 20% 72%);
+    --color-accent: hsl(217 19% 20%);
+    --color-accent-foreground: hsl(210 40% 96%);
+    --color-card: hsl(222 39% 14%);
+    --color-card-foreground: hsl(210 40% 96%);
+    --color-destructive: hsl(0 72% 56%);
+    --color-destructive-foreground: hsl(210 40% 98%);
+
+    --shadow-panel:
+      0 1px 2px rgba(2, 6, 23, 0.45),
+      0 18px 44px rgba(2, 6, 23, 0.34);
+  }
+
   * {
     @apply border-border;
+  }
+
+  html {
+    @apply bg-background;
   }
 
   body {

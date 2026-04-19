@@ -5,9 +5,10 @@ import { fetchAccountUsers, updateAccountUser } from "@/api/accounts";
 import { useAuth } from "@/app/providers/use-auth";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { StatCard } from "@/components/shared/stat-card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ROLE_LABELS } from "@/lib/auth";
@@ -61,31 +62,12 @@ export default function UsersPage() {
       />
 
       <div className="grid gap-3 md:grid-cols-3">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-sm text-muted-foreground">Account Owners</div>
-            <div className="mt-2 text-2xl font-semibold">{roleSummaries.account_owner}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-sm text-muted-foreground">Admins</div>
-            <div className="mt-2 text-2xl font-semibold">{roleSummaries.admin}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-sm text-muted-foreground">Users</div>
-            <div className="mt-2 text-2xl font-semibold">{roleSummaries.user}</div>
-          </CardContent>
-        </Card>
+        <StatCard title="Account Owners" value={String(roleSummaries.account_owner)} detail="Members with full access" />
+        <StatCard title="Admins" value={String(roleSummaries.admin)} detail="Operational managers" />
+        <StatCard title="Users" value={String(roleSummaries.user)} detail="Standard workspace access" />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Account Members</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <SectionCard title="Account Members">
           <Table>
             <TableHeader>
               <TableRow>
@@ -127,8 +109,7 @@ export default function UsersPage() {
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+      </SectionCard>
     </div>
   );
 }

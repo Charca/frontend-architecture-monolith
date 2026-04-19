@@ -4,8 +4,8 @@ import { fetchProfile, updateProfile } from "@/api/users";
 import { AvatarField } from "@/components/users/avatar-field";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { AuthUser } from "@/types";
@@ -39,11 +39,7 @@ export default function ProfilePage() {
     <div className="space-y-6">
       <PageHeader title="Profile" description="Customize your own account details and avatar." />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Your Profile</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <SectionCard title="Your Profile" contentClassName="space-y-6">
           <AvatarField
             avatarUrl={form.avatarUrl}
             initials={form.initials}
@@ -70,8 +66,7 @@ export default function ProfilePage() {
               {mutation.isPending ? "Saving..." : "Save profile"}
             </Button>
           </div>
-        </CardContent>
-      </Card>
+      </SectionCard>
     </div>
   );
 }

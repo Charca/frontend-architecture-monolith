@@ -6,8 +6,8 @@ import { useAuth } from "@/app/providers/use-auth";
 import { AvatarField } from "@/components/users/avatar-field";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -58,11 +58,7 @@ export default function UserDetailPage() {
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>User Details</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <SectionCard title="User Details" contentClassName="space-y-6">
           <AvatarField
             avatarUrl={form.avatarUrl}
             initials={form.initials}
@@ -119,8 +115,7 @@ export default function UserDetailPage() {
               {mutation.isPending ? "Saving..." : "Save user"}
             </Button>
           </div>
-        </CardContent>
-      </Card>
+      </SectionCard>
     </div>
   );
 }

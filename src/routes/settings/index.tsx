@@ -9,11 +9,11 @@ import {
 import { useAuth } from "@/app/providers/use-auth";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
+import { ToggleSettingRow } from "@/components/shared/toggle-setting-row";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import type { Account, SettingsData } from "@/types";
 
 export default function SettingsPage() {
@@ -69,11 +69,7 @@ export default function SettingsPage() {
       <PageHeader title="Settings" description={`Operational settings for ${accountForm.name}.`} />
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <Card id="store-profile">
-          <CardHeader>
-            <CardTitle>Account Profile</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <SectionCard id="store-profile" title="Account Profile" contentClassName="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="storeName">Store name</Label>
               <Input
@@ -128,14 +124,9 @@ export default function SettingsPage() {
                 {accountMutation.isPending ? "Saving..." : "Save profile"}
               </Button>
             </div>
-          </CardContent>
-        </Card>
+        </SectionCard>
 
-        <Card id="shipping">
-          <CardHeader>
-            <CardTitle>Shipping</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <SectionCard id="shipping" title="Shipping" contentClassName="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="carrier">Default carrier</Label>
               <Input
@@ -181,14 +172,9 @@ export default function SettingsPage() {
                 {settingsMutation.isPending ? "Saving..." : "Save shipping"}
               </Button>
             </div>
-          </CardContent>
-        </Card>
+        </SectionCard>
 
-        <Card id="taxes">
-          <CardHeader>
-            <CardTitle>Taxes</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <SectionCard id="taxes" title="Taxes" contentClassName="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="nexus">Nexus region</Label>
               <Input
@@ -212,19 +198,15 @@ export default function SettingsPage() {
                 }
               />
             </div>
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <div>
-                <div className="font-medium">Prices include tax</div>
-                <div className="text-sm text-muted-foreground">Toggle inclusive pricing for storefront display.</div>
-              </div>
-              <Switch
-                disabled={!canManageTaxes}
-                checked={settingsForm.taxes.pricesIncludeTax}
-                onCheckedChange={(checked) =>
-                  setSettingsForm({ ...settingsForm, taxes: { ...settingsForm.taxes, pricesIncludeTax: checked } })
-                }
-              />
-            </div>
+            <ToggleSettingRow
+              title="Prices include tax"
+              description="Toggle inclusive pricing for storefront display."
+              disabled={!canManageTaxes}
+              checked={settingsForm.taxes.pricesIncludeTax}
+              onCheckedChange={(checked) =>
+                setSettingsForm({ ...settingsForm, taxes: { ...settingsForm.taxes, pricesIncludeTax: checked } })
+              }
+            />
             <div className="flex justify-end">
               <Button
                 disabled={!canManageTaxes || settingsMutation.isPending}
@@ -233,53 +215,36 @@ export default function SettingsPage() {
                 {settingsMutation.isPending ? "Saving..." : "Save tax settings"}
               </Button>
             </div>
-          </CardContent>
-        </Card>
+        </SectionCard>
 
-        <Card id="notifications">
-          <CardHeader>
-            <CardTitle>Notifications</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <div>
-                <div className="font-medium">Low stock</div>
-                <div className="text-sm text-muted-foreground">Alert merchants when inventory dips below thresholds.</div>
-              </div>
-              <Switch
-                disabled={!canManageNotifications}
-                checked={settingsForm.notifications.lowStock}
-                onCheckedChange={(checked) =>
-                  setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, lowStock: checked } })
-                }
-              />
-            </div>
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <div>
-                <div className="font-medium">Order alerts</div>
-                <div className="text-sm text-muted-foreground">Send updates for new and delayed orders.</div>
-              </div>
-              <Switch
-                disabled={!canManageNotifications}
-                checked={settingsForm.notifications.orderAlerts}
-                onCheckedChange={(checked) =>
-                  setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, orderAlerts: checked } })
-                }
-              />
-            </div>
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <div>
-                <div className="font-medium">Weekly digest</div>
-                <div className="text-sm text-muted-foreground">Send one summary report each week.</div>
-              </div>
-              <Switch
-                disabled={!canManageNotifications}
-                checked={settingsForm.notifications.weeklyDigest}
-                onCheckedChange={(checked) =>
-                  setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, weeklyDigest: checked } })
-                }
-              />
-            </div>
+        <SectionCard id="notifications" title="Notifications" contentClassName="space-y-4">
+            <ToggleSettingRow
+              title="Low stock"
+              description="Alert merchants when inventory dips below thresholds."
+              disabled={!canManageNotifications}
+              checked={settingsForm.notifications.lowStock}
+              onCheckedChange={(checked) =>
+                setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, lowStock: checked } })
+              }
+            />
+            <ToggleSettingRow
+              title="Order alerts"
+              description="Send updates for new and delayed orders."
+              disabled={!canManageNotifications}
+              checked={settingsForm.notifications.orderAlerts}
+              onCheckedChange={(checked) =>
+                setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, orderAlerts: checked } })
+              }
+            />
+            <ToggleSettingRow
+              title="Weekly digest"
+              description="Send one summary report each week."
+              disabled={!canManageNotifications}
+              checked={settingsForm.notifications.weeklyDigest}
+              onCheckedChange={(checked) =>
+                setSettingsForm({ ...settingsForm, notifications: { ...settingsForm.notifications, weeklyDigest: checked } })
+              }
+            />
             <div className="flex justify-end">
               <Button
                 disabled={!canManageNotifications || settingsMutation.isPending}
@@ -288,8 +253,7 @@ export default function SettingsPage() {
                 {settingsMutation.isPending ? "Saving..." : "Save notifications"}
               </Button>
             </div>
-          </CardContent>
-        </Card>
+        </SectionCard>
 
       </div>
     </div>

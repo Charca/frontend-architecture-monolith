@@ -2,10 +2,11 @@ import { Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCustomer } from "@/api/customers";
 import { LoadingState } from "@/components/feedback/loading-state";
+import { KeyValueList } from "@/components/shared/key-value-list";
 import { PageHeader } from "@/components/shared/page-header";
+import { SectionCard } from "@/components/shared/section-card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -32,11 +33,7 @@ export default function CustomerDetailPage() {
         }
       />
       <div className="grid gap-6 xl:grid-cols-[1.3fr,1fr]">
-        <Card>
-          <CardHeader>
-            <CardTitle>Order History</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <SectionCard title="Order History">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -59,46 +56,23 @@ export default function CustomerDetailPage() {
                 ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
+        </SectionCard>
         <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Email</span>
-                <span>{data.email}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Segment</span>
-                <StatusBadge status={data.segment} />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Tags</span>
-                <span>{data.tags.join(", ")}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Price list</span>
-                <span>{data.priceList?.name ?? "Retail default"}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Lifetime spend</span>
-                <span>{formatCurrency(data.lifetimeSpend)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Joined</span>
-                <span>{formatDate(data.joinedAt)}</span>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Notes</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">{data.notes}</CardContent>
-          </Card>
+          <SectionCard title="Profile">
+            <KeyValueList
+              items={[
+                { label: "Email", value: data.email },
+                { label: "Segment", value: <StatusBadge status={data.segment} /> },
+                { label: "Tags", value: data.tags.join(", ") },
+                { label: "Price list", value: data.priceList?.name ?? "Retail default" },
+                { label: "Lifetime spend", value: formatCurrency(data.lifetimeSpend) },
+                { label: "Joined", value: formatDate(data.joinedAt) },
+              ]}
+            />
+          </SectionCard>
+          <SectionCard title="Notes" contentClassName="text-sm text-muted-foreground">
+            {data.notes}
+          </SectionCard>
         </div>
       </div>
     </div>
