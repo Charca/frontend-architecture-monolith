@@ -22,7 +22,15 @@ export function OrderLineItemsTable({ items, className }: OrderLineItemsTablePro
       <TableBody>
         {items.map((item) => (
           <TableRow key={item.id}>
-            <TableCell><Link to="/catalog/$productId" params={{ productId: item.productId }} className="font-medium text-primary hover:underline">{item.productName}</Link></TableCell>
+            <TableCell>
+              <Link
+                to="/catalog/$productId"
+                params={{ productId: item.productId }}
+                className="font-medium text-primary hover:underline"
+              >
+                {item.productName}
+              </Link>
+            </TableCell>
             <TableCell>{item.quantity}</TableCell>
             <TableCell>{formatCurrency(item.price)}</TableCell>
             <TableCell>{formatCurrency(item.quantity * item.price)}</TableCell>
