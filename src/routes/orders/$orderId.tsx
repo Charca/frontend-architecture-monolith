@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchOrder, updateOrder } from "@/api/orders";
 import { useAuth } from "@/app/providers/use-auth";
 import type { Order } from "@/types";
+import { OrderLineItemsTable } from "@/components/orders/order-line-items-table";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { ActivityHistoryCard } from "@/components/shared/activity-history-card";
 import { KeyValueList } from "@/components/shared/key-value-list";
@@ -10,7 +11,6 @@ import { PageHeader } from "@/components/shared/page-header";
 import { SectionCard } from "@/components/shared/section-card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function OrderDetailPage() {
@@ -128,26 +128,7 @@ export default function OrderDetailPage() {
 
       <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
         <SectionCard title="Line Items">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Product</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.lineItems.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.productName}</TableCell>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>{formatCurrency(item.price)}</TableCell>
-                    <TableCell>{formatCurrency(item.quantity * item.price)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <OrderLineItemsTable items={data.lineItems} />
         </SectionCard>
 
         <div className="space-y-6">

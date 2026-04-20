@@ -3,6 +3,7 @@ import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchCustomer, updateCustomer } from "@/api/customers";
 import { useAuth } from "@/app/providers/use-auth";
+import { OrderHistoryOrderLink } from "@/components/customers/order-history-order-link";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
 import { SectionCard } from "@/components/shared/section-card";
@@ -77,13 +78,15 @@ export default function CustomerDetailPage() {
                 <TableHead>Total</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {data.orderHistory.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell>{order.orderNumber}</TableCell>
-                  <TableCell className="table-cell-muted">{formatDate(order.date)}</TableCell>
-                  <TableCell>
-                    <StatusBadge status={order.status} />
+              <TableBody>
+                {data.orderHistory.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell>
+                      <OrderHistoryOrderLink order={order} />
+                    </TableCell>
+                    <TableCell className="table-cell-muted">{formatDate(order.date)}</TableCell>
+                    <TableCell>
+                      <StatusBadge status={order.status} />
                   </TableCell>
                   <TableCell>{formatCurrency(order.total)}</TableCell>
                 </TableRow>
