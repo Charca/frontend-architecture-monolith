@@ -1,11 +1,11 @@
 import { useState } from "react";
-import type { DiscountType } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import type { DiscountType } from "@/types";
 
 export interface DiscountFormValues {
   code: string;

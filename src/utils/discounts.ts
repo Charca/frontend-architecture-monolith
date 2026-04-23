@@ -1,5 +1,5 @@
 import type { CustomerSegment, Discount } from "@/types";
-import type { DiscountFormValues } from "@/components/forms/discount-form";
+import type { DiscountFormValues } from "@/modules/discounts/components/discount-form";
 
 export function normalizeDiscountValues(discount?: Discount): DiscountFormValues {
   if (!discount) {
