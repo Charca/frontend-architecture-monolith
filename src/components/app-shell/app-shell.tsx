@@ -2,7 +2,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import { Command, Menu, Search } from "lucide-react";
 import { useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/app/providers/use-auth";
-import { CommandMenu } from "@/components/app-shell/command-menu";
+import { CommandMenu } from "@/modules/search/components/command-menu";
 import { SidebarNav } from "@/components/navigation/sidebar-nav";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Button } from "@/components/ui/button";
