@@ -1,1 +1,1 @@
-export { RolesPermissionsScreen as default } from "@/modules/users/screens/roles-permissions-screen";
+export { RolesPermissionsScreen as default } from "@/modules/roles-permissions/screens/roles-permissions-screen";

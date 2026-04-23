@@ -7,7 +7,7 @@ import { LoadingState } from "@/components/feedback/loading-state";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RolePermissionsCard } from "@/modules/users/features/roles-permissions/role-permissions-card";
+import { RolePermissionsCard } from "@/modules/roles-permissions/features/permissions-policy/role-permissions-card";
 import type { AccountPermissionPolicy } from "@/types";
 
 export function RolesPermissionsScreen() {
