@@ -37,6 +37,11 @@ export default tseslint.config(
           pattern: "src/utils/**/*",
           mode: "full",
         },
+        {
+          type: "routes",
+          pattern: "src/routes/**/*",
+          mode: "full",
+        },
       ],
     },
     rules: {
@@ -53,7 +58,13 @@ export default tseslint.config(
               ]
             }
           },
-
+          {
+            from: { type: "routes" }, allow: {
+              to: [
+                { type: "module", elementPath: "**/screens/**/*" }
+              ]
+            },
+          }
         ],
       }],
     },

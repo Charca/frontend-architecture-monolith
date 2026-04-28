@@ -1,1 +1,2 @@
 export { AnalyticsScreen as default } from "@/modules/analytics/screens/analytics-screen";
+export { RolePermissionsCard } from "@/modules/roles-permissions/features/permissions-policy/role-permissions-card";
