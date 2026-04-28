@@ -44,7 +44,14 @@ export default tseslint.config(
       "boundaries/dependencies": ["error", {
         default: "disallow",
         rules: [
-          { from: { type: "module" }, allow: { to: { type: ["module", "utils"] } } },
+          {
+            from: { type: "module" }, allow: {
+              to: [
+                { type: "utils" },
+              ]
+            }
+          },
+
         ],
       }],
     },
