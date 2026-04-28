@@ -48,6 +48,7 @@ export default tseslint.config(
             from: { type: "module" }, allow: {
               to: [
                 { type: "utils" },
+                { type: "module" },
               ]
             }
           },
