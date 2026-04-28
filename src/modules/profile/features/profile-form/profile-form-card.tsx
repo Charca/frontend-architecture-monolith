@@ -6,6 +6,10 @@ import { Label } from "@/components/ui/label";
 import { AvatarField } from "@/modules/users/components/avatar-field";
 import type { AuthUser } from "@/types";
 
+import { ProfileScreen } from "../../screens/profile-screen";
+
+console.log(ProfileScreen);
+
 interface ProfileFormCardProps {
   form: AuthUser;
   mutation: UseMutationResult<unknown, Error, Partial<AuthUser>>;
