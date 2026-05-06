@@ -26,7 +26,7 @@ export default tseslint.config(
         },
       },
       "boundaries/elements": [
-        { type: "modules", pattern: "src/modules/**/*", mode: "full" },
+        { type: "modules", pattern: "src/modules/*/**/*", mode: "full", capture: ["moduleName"] },
         { type: "utils", pattern: "src/utils/**/*", mode: "full" },
       ]
     },
@@ -42,7 +42,10 @@ export default tseslint.config(
           },
           {
             from: { type: "modules" },
-            allow: { to: { type: ["modules", "utils"] } }
+            allow: [
+              { to: { type: ["utils"] } },
+              { to: { type: ["modules"], captured: { moduleName: "{{ from.captured.moduleName }}" } } },
+            ]
           },
         ]
       }]
