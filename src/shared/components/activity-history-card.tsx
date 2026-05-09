@@ -1,4 +1,4 @@
-import type { AuditLogEntry } from "@/types";
+import type { AuditLogEntry } from "@/shared/domain/audit-log.types";
 import { SectionCard } from "@/shared/components/section-card";
 
 interface ActivityHistoryCardProps {

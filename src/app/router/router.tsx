@@ -1,22 +1,21 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, createRoute, createRouter } from "@tanstack/react-router";
-import { NotFoundComponent, RootComponent } from "@/routes/__root";
-import DashboardPage from "@/routes/index";
-import LoginPage from "@/routes/login";
+import { NotFoundComponent, RootComponent } from "@/app/router/root";
+import { DashboardPage } from "@/modules/dashboard";
+import {
+  LoginPage,
+  ProfilePage,
+  RolesPermissionsPage,
+  UserDetailPage,
+  UsersPage,
+} from "@/modules/identity";
 import { CatalogPage, NewProductPage, ProductDetailPage } from "@/modules/catalog";
-import InventoryPage from "@/routes/inventory/index";
+import { InventoryPage } from "@/modules/inventory";
 import { OrderDetailPage, OrdersPage } from "@/modules/orders";
-import CustomersPage from "@/routes/customers/index";
-import CustomerDetailPage from "@/routes/customers/$customerId";
-import DiscountsPage from "@/routes/discounts/index";
-import NewDiscountPage from "@/routes/discounts/new";
-import DiscountDetailPage from "@/routes/discounts/$discountId";
-import AnalyticsPage from "@/routes/analytics/index";
-import SettingsPage from "@/routes/settings/index";
-import UsersPage from "@/routes/users/index";
-import RolesPermissionsPage from "@/routes/users/roles-permissions";
-import UserDetailPage from "@/routes/users/$userId";
-import ProfilePage from "@/routes/profile/index";
+import { CustomerDetailPage, CustomersPage } from "@/modules/customers";
+import { DiscountDetailPage, DiscountsPage, NewDiscountPage } from "@/modules/discounts";
+import { AnalyticsPage } from "@/modules/analytics";
+import { SettingsPage } from "@/modules/settings";
 
 export interface RouterContext {
   queryClient: QueryClient;

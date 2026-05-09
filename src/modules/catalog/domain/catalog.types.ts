@@ -1,4 +1,6 @@
-import type { AuditLogEntry, CustomerSegment, InventoryStatus } from "@/types";
+import type { CustomerSegment } from "@/modules/customers";
+import type { InventoryStatus } from "@/modules/inventory";
+import type { AuditLogEntry } from "@/shared/domain/audit-log.types";
 
 export type ProductStatus = "active" | "draft" | "archived";
 export type ProductKind = "standard" | "bundle";

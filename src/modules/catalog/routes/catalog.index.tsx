@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../api/products.api";
-import { useAuth } from "@/app/providers/use-auth";
+import { useAuth } from "@/modules/identity";
 import { EmptyState } from "@/shared/components/feedback/empty-state";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { useCatalogFilters } from "../hooks/use-catalog-filters";
