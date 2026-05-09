@@ -26,8 +26,9 @@ export default tseslint.config(
         },
       },
       "boundaries/elements": [
-        { type: "modules", pattern: "src/modules/**/*", mode: "full" },
-        { type: "shared", pattern: "src/shared/**/*", mode: "full" },
+        { type: "authentication", category: "platform", pattern: "src/modules/authentication/**/*", mode: "full" },
+        { type: "shared", category: "platform", pattern: "src/shared/**/*", mode: "full" },
+        { type: "modules", pattern: "src/modules/*/**/*", capture: ["moduleName"], mode: "full" },
       ]
     },
     rules: {
@@ -37,12 +38,15 @@ export default tseslint.config(
         default: "disallow",
         rules: [
           {
-            from: { type: "shared" },
-            allow: { to: { type: ["shared"] } }
+            from: { category: "platform" },
+            allow: { to: { category: ["platform"] } }
           },
           {
             from: { type: "modules" },
-            allow: { to: { type: ["modules", "shared"] } }
+            allow: [
+              { to: { category: "platform" } },
+              { to: { type: ["modules"], captured: { moduleName: "{{ from.captured.moduleName }}" } } },
+            ]
           }
         ]
       }]
