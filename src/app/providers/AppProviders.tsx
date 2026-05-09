@@ -1,7 +1,7 @@
 import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { AuthProvider } from "@/modules/identity";
+import { AuthProvider } from "@/modules/identity/providers/auth-provider";
 import { ThemeProvider } from "@/app/providers/theme-provider";
 
 export function AppProviders({ children }: PropsWithChildren) {

@@ -1,5 +1,5 @@
-import type { PriceList } from "@/modules/catalog";
-import type { Order } from "@/modules/orders";
+import type { PriceList } from "@/modules/catalog/domain/catalog.types";
+import type { Order } from "@/modules/orders/domain/orders.types";
 
 export type CustomerSegment = "VIP" | "Wholesale" | "At Risk" | "New" | "Repeat";
 

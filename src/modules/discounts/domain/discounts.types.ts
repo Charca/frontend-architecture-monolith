@@ -1,4 +1,4 @@
-import type { CustomerSegment } from "@/modules/customers";
+import type { CustomerSegment } from "@/modules/customers/domain/customers.types";
 import type { AuditLogEntry } from "@/shared/domain/audit-log.types";
 
 export type DiscountType = "percentage" | "fixed_amount" | "free_shipping";

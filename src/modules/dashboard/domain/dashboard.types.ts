@@ -1,6 +1,6 @@
-import type { Discount } from "@/modules/discounts";
-import type { InventoryItem } from "@/modules/inventory";
-import type { Order, OrderStatus } from "@/modules/orders";
+import type { Discount } from "@/modules/discounts/domain/discounts.types";
+import type { InventoryItem } from "@/modules/inventory/domain/inventory.types";
+import type { Order, OrderStatus } from "@/modules/orders/domain/orders.types";
 
 export interface DashboardSummary {
   revenue: number;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { OrderLineItemsTable } from "@/modules/orders";
-import type { Order } from "@/modules/orders";
+import { OrderLineItemsTable } from "@/modules/orders/components/order-line-items-table";
+import type { Order } from "@/modules/orders/domain/orders.types";
 
 interface OrderHistoryOrderLinkProps {
   order: Order;

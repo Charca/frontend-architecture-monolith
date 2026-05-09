@@ -1,21 +1,25 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, createRoute, createRouter } from "@tanstack/react-router";
 import { NotFoundComponent, RootComponent } from "@/app/router/root";
-import { DashboardPage } from "@/modules/dashboard";
-import {
-  LoginPage,
-  ProfilePage,
-  RolesPermissionsPage,
-  UserDetailPage,
-  UsersPage,
-} from "@/modules/identity";
-import { CatalogPage, NewProductPage, ProductDetailPage } from "@/modules/catalog";
-import { InventoryPage } from "@/modules/inventory";
-import { OrderDetailPage, OrdersPage } from "@/modules/orders";
-import { CustomerDetailPage, CustomersPage } from "@/modules/customers";
-import { DiscountDetailPage, DiscountsPage, NewDiscountPage } from "@/modules/discounts";
-import { AnalyticsPage } from "@/modules/analytics";
-import { SettingsPage } from "@/modules/settings";
+import DashboardPage from "@/modules/dashboard/screens/dashboard.index";
+import LoginPage from "@/modules/identity/screens/login/login";
+import ProfilePage from "@/modules/identity/screens/profile/profile.index";
+import RolesPermissionsPage from "@/modules/identity/screens/users/roles-permissions";
+import UserDetailPage from "@/modules/identity/screens/users/users.detail";
+import UsersPage from "@/modules/identity/screens/users/users.index";
+import CatalogPage from "@/modules/catalog/screens/catalog.index";
+import NewProductPage from "@/modules/catalog/screens/catalog.new";
+import ProductDetailPage from "@/modules/catalog/screens/catalog.detail";
+import InventoryPage from "@/modules/inventory/screens/inventory.index";
+import OrderDetailPage from "@/modules/orders/screens/orders.detail";
+import OrdersPage from "@/modules/orders/screens/orders.index";
+import CustomerDetailPage from "@/modules/customers/screens/customers.detail";
+import CustomersPage from "@/modules/customers/screens/customers.index";
+import DiscountDetailPage from "@/modules/discounts/screens/discounts.detail";
+import DiscountsPage from "@/modules/discounts/screens/discounts.index";
+import NewDiscountPage from "@/modules/discounts/screens/discounts.new";
+import AnalyticsPage from "@/modules/analytics/screens/analytics.index";
+import SettingsPage from "@/modules/settings/screens/settings.index";
 
 export interface RouterContext {
   queryClient: QueryClient;

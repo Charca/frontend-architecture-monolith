@@ -7,7 +7,7 @@ export type {
   ProductKind,
   ProductStatus,
   ProductVariant,
-} from "@/modules/catalog";
+} from "@/modules/catalog/domain/catalog.types";
 
 export type {
   Order,
@@ -18,14 +18,14 @@ export type {
   OrderStatus,
   PaymentStatus,
   ShipmentStatus,
-} from "@/modules/orders";
+} from "@/modules/orders/domain/orders.types";
 
-export type { InventoryItem, InventoryStatus } from "@/modules/inventory";
-export type { Customer, CustomerDetail, CustomerSegment } from "@/modules/customers";
-export type { Discount, DiscountRule, DiscountType } from "@/modules/discounts";
-export type { AnalyticsOverview } from "@/modules/analytics";
-export type { DashboardSummary } from "@/modules/dashboard";
-export type { Account, AccountProfile, SettingsData } from "@/modules/settings";
+export type { InventoryItem, InventoryStatus } from "@/modules/inventory/domain/inventory.types";
+export type { Customer, CustomerDetail, CustomerSegment } from "@/modules/customers/domain/customers.types";
+export type { Discount, DiscountRule, DiscountType } from "@/modules/discounts/domain/discounts.types";
+export type { AnalyticsOverview } from "@/modules/analytics/domain/analytics.types";
+export type { DashboardSummary } from "@/modules/dashboard/domain/dashboard.types";
+export type { Account, AccountProfile, SettingsData } from "@/modules/settings/domain/settings.types";
 export type {
   AccountMember,
   AccountPermissionPolicy,
@@ -34,5 +34,5 @@ export type {
   PermissionKey,
   RoleKey,
   SessionMembership,
-} from "@/modules/identity";
+} from "@/modules/identity/domain/identity.types";
 export type { AuditLogEntry } from "@/shared/domain/audit-log.types";

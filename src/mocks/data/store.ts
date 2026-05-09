@@ -1,4 +1,4 @@
-import { ALL_PERMISSIONS, DEFAULT_PERMISSION_POLICY } from "@/modules/identity";
+import { ALL_PERMISSIONS, DEFAULT_PERMISSION_POLICY } from "@/modules/identity/lib/auth";
 import type {
   Account,
   AccountMember,

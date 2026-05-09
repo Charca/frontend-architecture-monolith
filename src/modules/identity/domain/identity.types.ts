@@ -1,4 +1,4 @@
-import type { Account } from "@/modules/settings";
+import type { Account } from "@/modules/settings/domain/settings.types";
 
 export type RoleKey = "account_owner" | "admin" | "user";
 

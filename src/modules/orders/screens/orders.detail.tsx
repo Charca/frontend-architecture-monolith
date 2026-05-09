@@ -1,7 +1,7 @@
 import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchOrder, updateOrder } from "../api/orders.api";
-import { useAuth } from "@/modules/identity";
+import { useAuth } from "@/modules/identity/providers/use-auth";
 import type { Order } from "../domain/orders.types";
 import { OrderLineItemsTable } from "../components/order-line-items-table";
 import { LoadingState } from "@/shared/components/feedback/loading-state";

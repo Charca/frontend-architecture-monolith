@@ -1,5 +1,5 @@
-import type { CustomerSegment } from "@/modules/customers";
-import type { OrderStatus } from "@/modules/orders";
+import type { CustomerSegment } from "@/modules/customers/domain/customers.types";
+import type { OrderStatus } from "@/modules/orders/domain/orders.types";
 
 export interface AnalyticsOverview {
   revenue: number;

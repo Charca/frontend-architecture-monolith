@@ -16,17 +16,17 @@ import {
   Truck,
   Users,
 } from "lucide-react";
-import { fetchCustomers } from "@/modules/customers";
-import { fetchOrders } from "@/modules/orders";
-import { fetchProducts } from "@/modules/catalog";
-import { fetchAccountUsers } from "@/modules/identity";
-import { useAuth } from "@/modules/identity";
+import { fetchCustomers } from "@/modules/customers/api/customers.api";
+import { fetchOrders } from "@/modules/orders/api/orders.api";
+import { fetchProducts } from "@/modules/catalog/api/products.api";
+import { fetchAccountUsers } from "@/modules/identity/api/account-access.api";
+import { useAuth } from "@/modules/identity/providers/use-auth";
 import { Button } from "@/shared/ui/button";
 import { Dialog, DialogContent } from "@/shared/ui/dialog";
 import { Input } from "@/shared/ui/input";
-import { ROLE_LABELS } from "@/modules/identity";
+import { ROLE_LABELS } from "@/modules/identity/lib/auth";
 import { formatCurrency, formatDate, cn } from "@/shared/lib/utils";
-import type { PermissionKey } from "@/modules/identity";
+import type { PermissionKey } from "@/modules/identity/domain/identity.types";
 
 interface CommandMenuProps {
   open: boolean;

@@ -6,7 +6,7 @@ import {
   updateAccount,
   updateAccountSettings,
 } from "../../api/settings.api";
-import { useAuth } from "@/modules/identity";
+import { useAuth } from "@/modules/identity/providers/use-auth";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { PageHeader } from "@/shared/components/page-header";
 import { SectionCard } from "@/shared/components/section-card";

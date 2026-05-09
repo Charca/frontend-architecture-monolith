@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDiscount } from "../api/discounts.api";
-import { useAuth } from "@/modules/identity";
+import { useAuth } from "@/modules/identity/providers/use-auth";
 import { DiscountForm, type DiscountFormValues } from "../components/discount-form";
 import { PageHeader } from "@/shared/components/page-header";
 import { serializeDiscountValues } from "../utils/discounts";
