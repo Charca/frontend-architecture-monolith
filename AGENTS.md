@@ -14,14 +14,14 @@ This repo is a single React + TypeScript frontend monolith. Application code liv
 Use the `@/` import alias for internal modules instead of long relative paths.
 
 ## Build, Test, and Development Commands
-Prefer Bun for local work; `package-lock.json` exists, but `packageManager` is set to `bun@1.2.8`.
+Use npm for local work.
 
-- `bun install`: install dependencies
-- `bun run dev`: start the Vite dev server with MSW enabled in development
-- `bun run build`: run TypeScript checks, then create a production build in `dist/`
-- `bun run typecheck`: run `tsc --noEmit`
-- `bun run lint`: run ESLint across the repo
-- `bun run preview`: serve the built app locally
+- `npm install`: install dependencies
+- `npm run dev`: start the Vite dev server with MSW enabled in development
+- `npm run build`: run TypeScript checks, then create a production build in `dist/`
+- `npm run typecheck`: run `tsc --noEmit`
+- `npm run lint`: run ESLint across the repo
+- `npm run preview`: serve the built app locally
 
 ## Coding Style & Naming Conventions
 Use TypeScript and function components. Follow the existing style: 2-space indentation, double quotes, semicolons, and trailing commas where the formatter leaves them. Keep route files aligned with URL structure (`catalog/index.tsx`, `catalog/$productId.tsx`).
@@ -29,7 +29,7 @@ Use TypeScript and function components. Follow the existing style: 2-space inden
 Component files are typically kebab-case (`app-shell.tsx`, `status-badge.tsx`), while exported React components and TypeScript interfaces use PascalCase. Keep domain helpers close to their area (`src/api/orders.ts`, `src/utils/discounts.ts`).
 
 ## Testing Guidelines
-There is no dedicated automated test runner configured yet. Until one is added, every change should pass `bun run lint`, `bun run typecheck`, and, when relevant, `bun run build`.
+There is no dedicated automated test runner configured yet. Until one is added, every change should pass `npm run lint`, `npm run typecheck`, and, when relevant, `npm run build`.
 
 When adding tests, keep them next to the feature or under a focused `src/**/__tests__/` folder, and name files `*.test.ts` or `*.test.tsx`.
 

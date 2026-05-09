@@ -12,3 +12,5 @@ public/uploads/
 
 .idea/
 .vscode/
+
+.playwright-cli/
