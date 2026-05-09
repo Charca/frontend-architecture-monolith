@@ -1,4 +1,4 @@
-import type { Order } from "@/types";
+import type { Order } from "../domain/orders.types";
 import { apiClient } from "@/shared/api/client";
 
 export function fetchOrders() {

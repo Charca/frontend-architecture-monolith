@@ -17,7 +17,7 @@ import {
   Users,
 } from "lucide-react";
 import { fetchCustomers } from "@/api/customers";
-import { fetchOrders } from "@/api/orders";
+import { fetchOrders } from "@/modules/orders";
 import { fetchProducts } from "@/api/products";
 import { fetchAccountUsers } from "@/api/accounts";
 import { useAuth } from "@/app/providers/use-auth";

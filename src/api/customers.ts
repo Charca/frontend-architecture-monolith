@@ -1,4 +1,5 @@
-import type { Customer, Order } from "@/types";
+import type { Order } from "@/modules/orders";
+import type { Customer } from "@/types";
 import { apiClient } from "@/shared/api/client";
 
 export interface CustomerDetail extends Customer {
