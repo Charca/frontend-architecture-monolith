@@ -26,10 +26,37 @@ module.exports = {
         path: "^src/modules/(?!authentication/)[^/]+/",
       },
     },
+    //   {
+    //     name: "shared-minimum-dependents",
+    //     comment:
+    //       "Shared modules should be depended on by at least 2 modules.",
+    //     severity: "error",
+    //     module: {
+    //       path: "^src/shared/",
+    //       numberOfDependentsLessThan: 2, // <- Change this to "1" to check if any modules are actually used
+    //     },
+    //     from: {
+    //       path: "^src/",
+    //     },
+    //   },
+    // ],
+    // required: [
+    //   {
+    //     name: "module-api-must-use-shared-client",
+    //     comment:
+    //       "Module API files must use the shared API client.",
+    //     severity: "error",
+    //     module: {
+    //       path: "^src/modules/[^/]+/api/",
+    //     },
+    //     to: {
+    //       path: "^src/shared/api/client(\\.tsx?)?$",
+    //     },
+    //   },
   ],
   options: {
     includeOnly: "^src",
-    tsPreCompilationDeps: true,
+    // tsPreCompilationDeps: true,
     tsConfig: {
       fileName: "tsconfig.json",
     },
