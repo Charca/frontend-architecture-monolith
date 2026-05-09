@@ -37,6 +37,7 @@ export default tseslint.config(
       "boundaries/dependencies": ["error", {
         default: "disallow",
         rules: [
+          { allow: { dependency: { kind: 'type' } } },
           {
             from: { category: "platform" },
             allow: { to: { category: ["platform"] } }
