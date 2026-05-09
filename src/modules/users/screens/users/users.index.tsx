@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAccountUsers, updateAccountUser } from "../../api/account-access.api";
-import { useAuth } from "../../providers/use-auth";
+import { useAuth } from "@/modules/authentication/providers/use-auth";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { PageHeader } from "@/shared/components/page-header";
 import { SectionCard } from "@/shared/components/section-card";
@@ -11,8 +11,8 @@ import { StatCard } from "@/shared/components/stat-card";
 import { Button } from "@/shared/ui/button";
 import { Select } from "@/shared/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { ROLE_LABELS } from "../../lib/auth";
-import type { RoleKey } from "../../domain/identity.types";
+import { ROLE_LABELS } from "../../lib/permissions";
+import type { RoleKey } from "../../domain/users.types";
 
 export default function UsersPage() {
   const { session, hasPermission } = useAuth();
@@ -68,47 +68,47 @@ export default function UsersPage() {
       </div>
 
       <SectionCard title="Account Members">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Last Active</TableHead>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Last Active</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.map((member) => (
+              <TableRow key={member.userId}>
+                <TableCell>
+                  <Link to="/users/$userId" params={{ userId: member.userId }} className="font-medium text-primary hover:underline">
+                    {member.name}
+                  </Link>
+                  <div className="text-xs text-muted-foreground">{member.title}</div>
+                </TableCell>
+                <TableCell className="table-cell-muted">{member.email}</TableCell>
+                <TableCell className="w-[180px]">
+                  <Select
+                    disabled={!canManageUsers || member.role === "account_owner" || mutation.isPending}
+                    value={member.role}
+                    onChange={(event) =>
+                      void mutation.mutateAsync({ userId: member.userId, role: event.target.value as RoleKey })
+                    }
+                  >
+                    <option value="account_owner">{ROLE_LABELS.account_owner}</option>
+                    <option value="admin">{ROLE_LABELS.admin}</option>
+                    <option value="user">{ROLE_LABELS.user}</option>
+                  </Select>
+                </TableCell>
+                <TableCell>
+                  <StatusBadge status={member.status} />
+                </TableCell>
+                <TableCell className="table-cell-muted">{member.lastActiveAt}</TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((member) => (
-                <TableRow key={member.userId}>
-                  <TableCell>
-                    <Link to="/users/$userId" params={{ userId: member.userId }} className="font-medium text-primary hover:underline">
-                      {member.name}
-                    </Link>
-                    <div className="text-xs text-muted-foreground">{member.title}</div>
-                  </TableCell>
-                  <TableCell className="table-cell-muted">{member.email}</TableCell>
-                  <TableCell className="w-[180px]">
-                    <Select
-                      disabled={!canManageUsers || member.role === "account_owner" || mutation.isPending}
-                      value={member.role}
-                      onChange={(event) =>
-                        void mutation.mutateAsync({ userId: member.userId, role: event.target.value as RoleKey })
-                      }
-                    >
-                      <option value="account_owner">{ROLE_LABELS.account_owner}</option>
-                      <option value="admin">{ROLE_LABELS.admin}</option>
-                      <option value="user">{ROLE_LABELS.user}</option>
-                    </Select>
-                  </TableCell>
-                  <TableCell>
-                    <StatusBadge status={member.status} />
-                  </TableCell>
-                  <TableCell className="table-cell-muted">{member.lastActiveAt}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+            ))}
+          </TableBody>
+        </Table>
       </SectionCard>
     </div>
   );

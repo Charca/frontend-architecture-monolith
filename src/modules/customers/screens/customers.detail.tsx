@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchCustomer, updateCustomer } from "../api/customers.api";
-import { useAuth } from "@/modules/identity/providers/use-auth";
+import { useAuth } from "@/modules/authentication/providers/use-auth";
 import { OrderHistoryOrderLink } from "../components/order-history-order-link";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { PageHeader } from "@/shared/components/page-header";

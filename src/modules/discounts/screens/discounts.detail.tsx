@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchDiscount, updateDiscount } from "../api/discounts.api";
-import { useAuth } from "@/modules/identity/providers/use-auth";
+import { useAuth } from "@/modules/authentication/providers/use-auth";
 import { DiscountForm, type DiscountFormValues } from "../components/discount-form";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { ActivityHistoryCard } from "@/shared/components/activity-history-card";

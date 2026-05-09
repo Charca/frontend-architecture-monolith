@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { AuthSession, PermissionKey } from "../domain/identity.types";
+import type { AuthSession, PermissionKey } from "@/modules/users/domain/users.types";
 import type { LoginPayload } from "../api/auth.api";
 
 export interface AuthContextValue {

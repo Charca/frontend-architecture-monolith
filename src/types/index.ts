@@ -34,5 +34,5 @@ export type {
   PermissionKey,
   RoleKey,
   SessionMembership,
-} from "@/modules/identity/domain/identity.types";
+} from "@/modules/users/domain/users.types";
 export type { AuditLogEntry } from "@/shared/domain/audit-log.types";

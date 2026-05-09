@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchInventory, updateInventory } from "../api/inventory.api";
-import { useAuth } from "@/modules/identity/providers/use-auth";
+import { useAuth } from "@/modules/authentication/providers/use-auth";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { PageHeader } from "@/shared/components/page-header";
 import { SectionCard } from "@/shared/components/section-card";

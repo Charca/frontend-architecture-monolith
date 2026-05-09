@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { Command, Menu, Search } from "lucide-react";
 import { useRouterState } from "@tanstack/react-router";
-import { useAuth } from "@/modules/identity/providers/use-auth";
+import { useAuth } from "@/modules/authentication/providers/use-auth";
 import { CommandMenu } from "./command-menu";
 import { SidebarNav } from "./sidebar-nav";
 import { ThemeToggle } from "./theme-toggle";
@@ -9,7 +9,7 @@ import { Button } from "@/shared/ui/button";
 import { Select } from "@/shared/ui/select";
 import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet";
 import { navItems } from "./nav-items";
-import { ROLE_LABELS } from "@/modules/identity/lib/auth";
+import { ROLE_LABELS } from "@/modules/users/lib/permissions";
 
 function getPageTitle(pathname: string) {
   if (pathname === "/") return "Dashboard";

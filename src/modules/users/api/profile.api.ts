@@ -1,4 +1,4 @@
-import type { AuthUser } from "../domain/identity.types";
+import type { AuthUser } from "../domain/users.types";
 import { apiClient } from "@/shared/api/client";
 
 export function fetchProfile() {

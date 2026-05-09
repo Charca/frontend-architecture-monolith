@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import type { PermissionKey } from "@/modules/identity/domain/identity.types";
+import type { PermissionKey } from "@/modules/users/domain/users.types";
 import {
   BarChart3,
   LayoutDashboard,

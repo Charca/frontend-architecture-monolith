@@ -1,4 +1,4 @@
-import type { AccountMember, AccountPermissionPolicy } from "../domain/identity.types";
+import type { AccountMember, AccountPermissionPolicy } from "../domain/users.types";
 import { apiClient } from "@/shared/api/client";
 
 export function fetchAccountUsers(accountId: string) {

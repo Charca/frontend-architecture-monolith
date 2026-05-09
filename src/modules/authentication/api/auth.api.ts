@@ -1,4 +1,4 @@
-import type { AuthSession } from "../domain/identity.types";
+import type { AuthSession } from "@/modules/users/domain/users.types";
 import { apiClient } from "@/shared/api/client";
 
 export interface LoginPayload {
