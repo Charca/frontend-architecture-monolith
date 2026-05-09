@@ -1,4 +1,16 @@
+import type { PriceList } from "@/modules/catalog";
 import type { Order, OrderStatus } from "@/modules/orders";
+
+export type {
+  BundleComponent,
+  Collection,
+  PriceList,
+  PriceListPrice,
+  Product,
+  ProductKind,
+  ProductStatus,
+  ProductVariant,
+} from "@/modules/catalog";
 
 export type {
   Order,
@@ -11,11 +23,9 @@ export type {
   ShipmentStatus,
 } from "@/modules/orders";
 
-export type ProductStatus = "active" | "draft" | "archived";
 export type InventoryStatus = "healthy" | "low" | "out_of_stock";
 export type DiscountType = "percentage" | "fixed_amount" | "free_shipping";
 export type CustomerSegment = "VIP" | "Wholesale" | "At Risk" | "New" | "Repeat";
-export type ProductKind = "standard" | "bundle";
 export type RoleKey = "account_owner" | "admin" | "user";
 export type PermissionKey =
   | "dashboard.view"
@@ -38,39 +48,6 @@ export type PermissionKey =
   | "settings.users.manage"
   | "settings.permissions.manage";
 
-export interface ProductVariant {
-  id: string;
-  name: string;
-  sku: string;
-  price: number;
-  inventory: number;
-  status: InventoryStatus;
-}
-
-export interface Collection {
-  id: string;
-  name: string;
-  description: string;
-}
-
-export interface BundleComponent {
-  productId: string;
-  productName: string;
-  quantity: number;
-}
-
-export interface PriceList {
-  id: string;
-  name: string;
-  segment: CustomerSegment | "Custom";
-}
-
-export interface PriceListPrice {
-  priceListId: string;
-  priceListName: string;
-  price: number;
-}
-
 export interface DiscountRule {
   minimumSpend: number;
   eligibleSegments: CustomerSegment[];
@@ -85,25 +62,6 @@ export interface AuditLogEntry {
   actor: string;
   timestamp: string;
   summary: string;
-}
-
-export interface Product {
-  id: string;
-  name: string;
-  sku: string;
-  category: string;
-  description: string;
-  imageUrl?: string | null;
-  kind: ProductKind;
-  price: number;
-  status: ProductStatus;
-  inventory: number;
-  collectionIds: string[];
-  collections?: Collection[];
-  variants: ProductVariant[];
-  bundleComponents?: BundleComponent[];
-  priceListPrices?: PriceListPrice[];
-  activityHistory?: AuditLogEntry[];
 }
 
 export interface InventoryItem {

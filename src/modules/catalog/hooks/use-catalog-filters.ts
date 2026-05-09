@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { Product } from "@/types";
+import type { Product } from "../domain/catalog.types";
 
 export function useCatalogFilters(
   products: Product[] | undefined,

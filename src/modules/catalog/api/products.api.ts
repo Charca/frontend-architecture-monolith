@@ -1,4 +1,4 @@
-import type { Product } from "@/types";
+import type { Product } from "../domain/catalog.types";
 import { apiClient } from "@/shared/api/client";
 
 export function fetchProducts() {

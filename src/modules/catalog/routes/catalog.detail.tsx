@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchProduct, updateProduct } from "@/api/products";
+import { fetchProduct, updateProduct } from "../api/products.api";
 import { useAuth } from "@/app/providers/use-auth";
-import { ProductImageField } from "@/components/products/product-image-field";
-import type { Product } from "@/types";
+import { ProductImageField } from "../components/product-image-field";
+import type { Product } from "../domain/catalog.types";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { ActivityHistoryCard } from "@/shared/components/activity-history-card";
 import { PageHeader } from "@/shared/components/page-header";

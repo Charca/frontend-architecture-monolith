@@ -3,9 +3,7 @@ import { createRootRouteWithContext, createRoute, createRouter } from "@tanstack
 import { NotFoundComponent, RootComponent } from "@/routes/__root";
 import DashboardPage from "@/routes/index";
 import LoginPage from "@/routes/login";
-import CatalogPage from "@/routes/catalog/index";
-import NewProductPage from "@/routes/catalog/new";
-import ProductDetailPage from "@/routes/catalog/$productId";
+import { CatalogPage, NewProductPage, ProductDetailPage } from "@/modules/catalog";
 import InventoryPage from "@/routes/inventory/index";
 import { OrderDetailPage, OrdersPage } from "@/modules/orders";
 import CustomersPage from "@/routes/customers/index";

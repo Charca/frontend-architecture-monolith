@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createProduct } from "@/api/products";
+import { createProduct } from "../api/products.api";
 import { useAuth } from "@/app/providers/use-auth";
-import { ProductImageField } from "@/components/products/product-image-field";
+import { ProductImageField } from "../components/product-image-field";
 import { PageHeader } from "@/shared/components/page-header";
 import { SectionCard } from "@/shared/components/section-card";
 import { Button } from "@/shared/ui/button";
@@ -11,7 +11,7 @@ import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
-import type { Product } from "@/types";
+import type { Product } from "../domain/catalog.types";
 
 function buildInitialProduct(): Omit<Product, "id"> {
   return {
