@@ -7,7 +7,7 @@ CommerceOS Admin is a simple ecommerce admin panel starter app built for fronten
 - React
 - TypeScript
 - Vite
-- Bun
+- npm
 - TanStack Router
 - TanStack Query
 - Tailwind CSS
@@ -18,17 +18,17 @@ CommerceOS Admin is a simple ecommerce admin panel starter app built for fronten
 ## Run
 
 ```bash
-bun install
-bun run dev
+npm install
+npm run dev
 ```
 
 ## Scripts
 
 ```bash
-bun run dev
-bun run build
-bun run lint
-bun run typecheck
+npm run dev
+npm run build
+npm run lint
+npm run typecheck
 ```
 
 ## Notes
