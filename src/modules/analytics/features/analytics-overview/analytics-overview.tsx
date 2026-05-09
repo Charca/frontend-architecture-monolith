@@ -15,14 +15,14 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { fetchAnalyticsOverview } from "../api/analytics.api";
+import { fetchAnalyticsOverview } from "../../api/analytics.api";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { PageHeader } from "@/shared/components/page-header";
 import { StatCard } from "@/shared/components/stat-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { formatCurrency, formatNumber } from "@/shared/lib/utils";
-import { formatAnalyticsMonth, formatAnalyticsWeek } from "../utils/analytics-date";
+import { formatAnalyticsMonth, formatAnalyticsWeek } from "../../utils/analytics-date";
 
 const CATEGORY_COLORS = ["hsl(217 91% 60%)", "hsl(199 89% 48%)", "hsl(172 66% 50%)", "hsl(38 92% 50%)", "hsl(262 83% 58%)"];
 const SEGMENT_COLORS = ["hsl(217 91% 60%)", "hsl(173 58% 39%)", "hsl(38 92% 50%)", "hsl(262 83% 58%)", "hsl(8 84% 60%)"];

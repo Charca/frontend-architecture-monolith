@@ -29,11 +29,11 @@ export {
 } from "./lib/auth";
 export { AuthProvider } from "./providers/auth-provider";
 export { AuthContext, useAuth, type AuthContextValue } from "./providers/use-auth";
-export { default as LoginPage } from "./routes/login/login";
-export { default as ProfilePage } from "./routes/profile/profile.index";
-export { default as RolesPermissionsPage } from "./routes/users/roles-permissions";
-export { default as UserDetailPage } from "./routes/users/users.detail";
-export { default as UsersPage } from "./routes/users/users.index";
+export { default as LoginPage } from "./screens/login/login";
+export { default as ProfilePage } from "./screens/profile/profile.index";
+export { default as RolesPermissionsPage } from "./screens/users/roles-permissions";
+export { default as UserDetailPage } from "./screens/users/users.detail";
+export { default as UsersPage } from "./screens/users/users.index";
 export type {
   AccountMember,
   AccountPermissionPolicy,

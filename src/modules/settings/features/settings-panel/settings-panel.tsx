@@ -5,7 +5,7 @@ import {
   fetchAccountSettings,
   updateAccount,
   updateAccountSettings,
-} from "../api/settings.api";
+} from "../../api/settings.api";
 import { useAuth } from "@/modules/identity";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { PageHeader } from "@/shared/components/page-header";
@@ -14,7 +14,7 @@ import { ToggleSettingRow } from "@/shared/components/toggle-setting-row";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-import type { Account, SettingsData } from "../domain/settings.types";
+import type { Account, SettingsData } from "../../domain/settings.types";
 
 export default function SettingsPage() {
   const { session, hasPermission } = useAuth();

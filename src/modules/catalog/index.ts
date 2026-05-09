@@ -1,9 +1,9 @@
 export { createProduct, fetchProduct, fetchProducts, updateProduct } from "./api/products.api";
 export { ProductImageField } from "./components/product-image-field";
 export { useCatalogFilters } from "./hooks/use-catalog-filters";
-export { default as CatalogPage } from "./routes/catalog.index";
-export { default as NewProductPage } from "./routes/catalog.new";
-export { default as ProductDetailPage } from "./routes/catalog.detail";
+export { default as CatalogPage } from "./screens/catalog.index";
+export { default as NewProductPage } from "./screens/catalog.new";
+export { default as ProductDetailPage } from "./screens/catalog.detail";
 export type {
   BundleComponent,
   Collection,
