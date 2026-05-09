@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProfile, updateProfile } from "@/api/users";
 import { AvatarField } from "@/components/users/avatar-field";
-import { LoadingState } from "@/components/feedback/loading-state";
-import { PageHeader } from "@/components/shared/page-header";
-import { SectionCard } from "@/components/shared/section-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { LoadingState } from "@/shared/components/feedback/loading-state";
+import { PageHeader } from "@/shared/components/page-header";
+import { SectionCard } from "@/shared/components/section-card";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
 import type { AuthUser } from "@/types";
 
 export default function ProfilePage() {

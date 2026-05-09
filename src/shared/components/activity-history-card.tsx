@@ -1,5 +1,5 @@
 import type { AuditLogEntry } from "@/types";
-import { SectionCard } from "@/components/shared/section-card";
+import { SectionCard } from "@/shared/components/section-card";
 
 interface ActivityHistoryCardProps {
   entries?: AuditLogEntry[];

@@ -3,17 +3,17 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "@/api/products";
 import { useAuth } from "@/app/providers/use-auth";
-import { EmptyState } from "@/components/feedback/empty-state";
-import { LoadingState } from "@/components/feedback/loading-state";
+import { EmptyState } from "@/shared/components/feedback/empty-state";
+import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { useCatalogFilters } from "@/hooks/use-catalog-filters";
-import { PageHeader } from "@/components/shared/page-header";
-import { SectionCard } from "@/components/shared/section-card";
-import { StatusBadge } from "@/components/shared/status-badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { formatCurrency } from "@/lib/utils";
+import { PageHeader } from "@/shared/components/page-header";
+import { SectionCard } from "@/shared/components/section-card";
+import { StatusBadge } from "@/shared/components/status-badge";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Select } from "@/shared/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { formatCurrency } from "@/shared/lib/utils";
 
 export default function CatalogPage() {
   const { hasPermission } = useAuth();

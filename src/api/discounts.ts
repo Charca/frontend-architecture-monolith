@@ -1,5 +1,5 @@
 import type { Discount } from "@/types";
-import { apiClient } from "@/api/client";
+import { apiClient } from "@/shared/api/client";
 
 export function fetchDiscounts() {
   return apiClient.get<Discount[]>("/api/discounts");

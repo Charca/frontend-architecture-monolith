@@ -5,9 +5,9 @@ import { useAuth } from "@/app/providers/use-auth";
 import { CommandMenu } from "@/components/app-shell/command-menu";
 import { SidebarNav } from "@/components/navigation/sidebar-nav";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
-import { Button } from "@/components/ui/button";
-import { Select } from "@/components/ui/select";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/shared/ui/button";
+import { Select } from "@/shared/ui/select";
+import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet";
 import { navItems } from "@/components/navigation/nav-items";
 import { ROLE_LABELS } from "@/lib/auth";
 

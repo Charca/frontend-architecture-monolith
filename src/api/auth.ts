@@ -1,5 +1,5 @@
 import type { AuthSession } from "@/types";
-import { apiClient } from "@/api/client";
+import { apiClient } from "@/shared/api/client";
 
 export interface LoginPayload {
   email: string;

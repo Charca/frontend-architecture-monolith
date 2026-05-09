@@ -6,9 +6,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from "@/shared/ui/dropdown-menu";
+import { Button } from "@/shared/ui/button";
+import { cn } from "@/shared/lib/utils";
 
 const themeOptions: Array<{ value: Theme; label: string; icon: typeof Sun }> = [
   { value: "light", label: "Light", icon: Sun },

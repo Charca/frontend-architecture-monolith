@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/app/providers/use-auth";
-import { LoadingState } from "@/components/feedback/loading-state";
+import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { AppShell } from "@/components/app-shell/app-shell";
 import { getViewPermissionForPath } from "@/lib/auth";
 

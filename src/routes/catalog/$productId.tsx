@@ -5,16 +5,16 @@ import { fetchProduct, updateProduct } from "@/api/products";
 import { useAuth } from "@/app/providers/use-auth";
 import { ProductImageField } from "@/components/products/product-image-field";
 import type { Product } from "@/types";
-import { LoadingState } from "@/components/feedback/loading-state";
-import { ActivityHistoryCard } from "@/components/shared/activity-history-card";
-import { PageHeader } from "@/components/shared/page-header";
-import { SectionCard } from "@/components/shared/section-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
+import { LoadingState } from "@/shared/components/feedback/loading-state";
+import { ActivityHistoryCard } from "@/shared/components/activity-history-card";
+import { PageHeader } from "@/shared/components/page-header";
+import { SectionCard } from "@/shared/components/section-card";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Select } from "@/shared/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { Textarea } from "@/shared/ui/textarea";
 
 function updateVariantField(
   product: Product,

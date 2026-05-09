@@ -1,5 +1,5 @@
 import type { Customer, Order } from "@/types";
-import { apiClient } from "@/api/client";
+import { apiClient } from "@/shared/api/client";
 
 export interface CustomerDetail extends Customer {
   orderHistory: Order[];

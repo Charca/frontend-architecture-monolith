@@ -3,11 +3,11 @@ import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAccountPermissions, updateAccountPermissions } from "@/api/accounts";
 import { useAuth } from "@/app/providers/use-auth";
-import { LoadingState } from "@/components/feedback/loading-state";
-import { PageHeader } from "@/components/shared/page-header";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
+import { LoadingState } from "@/shared/components/feedback/loading-state";
+import { PageHeader } from "@/shared/components/page-header";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Switch } from "@/shared/ui/switch";
 import { PERMISSION_GROUPS, ROLE_LABELS } from "@/lib/auth";
 import type { AccountPermissionPolicy } from "@/types";
 

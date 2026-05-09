@@ -1,5 +1,5 @@
 import type { SettingsData } from "@/types";
-import { apiClient } from "@/api/client";
+import { apiClient } from "@/shared/api/client";
 
 export function fetchSettings() {
   return apiClient.get<SettingsData>("/api/settings");

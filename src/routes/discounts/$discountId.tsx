@@ -4,10 +4,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchDiscount, updateDiscount } from "@/api/discounts";
 import { useAuth } from "@/app/providers/use-auth";
 import { DiscountForm, type DiscountFormValues } from "@/components/forms/discount-form";
-import { LoadingState } from "@/components/feedback/loading-state";
-import { ActivityHistoryCard } from "@/components/shared/activity-history-card";
-import { PageHeader } from "@/components/shared/page-header";
-import { Button } from "@/components/ui/button";
+import { LoadingState } from "@/shared/components/feedback/loading-state";
+import { ActivityHistoryCard } from "@/shared/components/activity-history-card";
+import { PageHeader } from "@/shared/components/page-header";
+import { Button } from "@/shared/ui/button";
 import type { Discount } from "@/types";
 import { normalizeDiscountValues, serializeDiscountValues } from "@/utils/discounts";
 

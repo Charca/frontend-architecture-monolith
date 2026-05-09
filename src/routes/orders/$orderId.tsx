@@ -4,14 +4,14 @@ import { fetchOrder, updateOrder } from "@/api/orders";
 import { useAuth } from "@/app/providers/use-auth";
 import type { Order } from "@/types";
 import { OrderLineItemsTable } from "@/components/orders/order-line-items-table";
-import { LoadingState } from "@/components/feedback/loading-state";
-import { ActivityHistoryCard } from "@/components/shared/activity-history-card";
-import { KeyValueList } from "@/components/shared/key-value-list";
-import { PageHeader } from "@/components/shared/page-header";
-import { SectionCard } from "@/components/shared/section-card";
-import { StatusBadge } from "@/components/shared/status-badge";
-import { Button } from "@/components/ui/button";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { LoadingState } from "@/shared/components/feedback/loading-state";
+import { ActivityHistoryCard } from "@/shared/components/activity-history-card";
+import { KeyValueList } from "@/shared/components/key-value-list";
+import { PageHeader } from "@/shared/components/page-header";
+import { SectionCard } from "@/shared/components/section-card";
+import { StatusBadge } from "@/shared/components/status-badge";
+import { Button } from "@/shared/ui/button";
+import { formatCurrency, formatDate } from "@/shared/lib/utils";
 
 export default function OrderDetailPage() {
   const { hasPermission } = useAuth();

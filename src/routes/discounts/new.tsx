@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDiscount } from "@/api/discounts";
 import { useAuth } from "@/app/providers/use-auth";
 import { DiscountForm, type DiscountFormValues } from "@/components/forms/discount-form";
-import { PageHeader } from "@/components/shared/page-header";
+import { PageHeader } from "@/shared/components/page-header";
 import { serializeDiscountValues } from "@/utils/discounts";
 
 export default function NewDiscountPage() {

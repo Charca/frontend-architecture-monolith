@@ -1,5 +1,5 @@
 import type { Account, AccountMember, AccountPermissionPolicy, SettingsData } from "@/types";
-import { apiClient } from "@/api/client";
+import { apiClient } from "@/shared/api/client";
 
 export function fetchAccount(accountId: string) {
   return apiClient.get<Account>(`/api/accounts/${accountId}`);

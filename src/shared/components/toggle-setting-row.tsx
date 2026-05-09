@@ -1,4 +1,4 @@
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/shared/ui/switch";
 
 interface ToggleSettingRowProps {
   title: string;

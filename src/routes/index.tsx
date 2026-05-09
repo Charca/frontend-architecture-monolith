@@ -3,14 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, DollarSign, ShoppingCart, Users } from "lucide-react";
 import { Area, Bar, BarChart, CartesianGrid, Cell, ComposedChart, LabelList, Line, XAxis, YAxis } from "recharts";
 import { fetchDashboardSummary } from "@/api/dashboard";
-import { LoadingState } from "@/components/feedback/loading-state";
-import { PageHeader } from "@/components/shared/page-header";
-import { StatCard } from "@/components/shared/stat-card";
-import { StatusBadge } from "@/components/shared/status-badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { formatCurrency, formatDate, formatNumber } from "@/lib/utils";
+import { LoadingState } from "@/shared/components/feedback/loading-state";
+import { PageHeader } from "@/shared/components/page-header";
+import { StatCard } from "@/shared/components/stat-card";
+import { StatusBadge } from "@/shared/components/status-badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { formatCurrency, formatDate, formatNumber } from "@/shared/lib/utils";
 
 const SEGMENT_COLORS = ["hsl(217 91% 60%)", "hsl(173 58% 39%)", "hsl(38 92% 50%)", "hsl(262 83% 58%)", "hsl(8 84% 60%)"];
 

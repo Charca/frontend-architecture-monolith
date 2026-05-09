@@ -21,11 +21,11 @@ import { fetchOrders } from "@/api/orders";
 import { fetchProducts } from "@/api/products";
 import { fetchAccountUsers } from "@/api/accounts";
 import { useAuth } from "@/app/providers/use-auth";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Dialog, DialogContent } from "@/shared/ui/dialog";
+import { Input } from "@/shared/ui/input";
 import { ROLE_LABELS } from "@/lib/auth";
-import { formatCurrency, formatDate, cn } from "@/lib/utils";
+import { formatCurrency, formatDate, cn } from "@/shared/lib/utils";
 import type { PermissionKey } from "@/types";
 
 interface CommandMenuProps {
