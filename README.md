@@ -1,6 +1,6 @@
 # CommerceOS Admin
 
-This is an example e-commerce admin platform built for the Frontend Architecture: Monoliths to Micro-Frontends workshop on Frontend Masters.
+This is an example e-commerce admin platform built for the [Frontend Architecture: Monoliths to Micro-Frontends](https://github.com/Charca/fem-frontend-architecture) workshop on Frontend Masters.
 
 This repo will serve as a foundation for the exercises in the workshop, as well as providing a concrete implementation when discussing architectural concepts.
 
